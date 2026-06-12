@@ -1,0 +1,1352 @@
+<html lang="es"><head>
+<meta charset="UTF-8">
+<title>DOH LRP 2026–2031 | Walmart Chile</title>
+<style>
+@font-face{font-family:'Everyday Sans';src:local('Everyday Sans');}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Everyday Sans','Helvetica Neue',Arial,sans-serif;background:#f0f4f8;color:#001E60;font-size:13px;}
+
+.hdr{background:#001E60;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+.hdr-left .title{font-size:16px;font-weight:700;}
+.hdr-left .sub{font-size:10px;color:#a0b4d0;margin-top:3px;}
+.spark{background:#ffc220;color:#001E60;font-weight:700;font-size:9px;padding:2px 9px;border-radius:10px;}
+.hdr-meta{font-size:9px;color:#7090b0;text-align:right;line-height:1.7;}
+
+.seg-tabs{display:flex;gap:0;padding:0 24px;background:#fff;border-bottom:2px solid #e4ecf5;}
+.seg-tab{padding:9px 22px;cursor:pointer;font-weight:700;font-size:12px;border:none;background:none;
+          border-bottom:3px solid transparent;transition:all .15s;color:#8099bb;}
+.seg-tab:hover{color:#001E60;}
+.seg-tab.active[data-seg=WC]{color:#0053e2;border-color:#0053e2;}
+.seg-tab.active[data-seg=ACP]{color:#FF6D00;border-color:#FF6D00;}
+.seg-tab.active[data-seg=GM]{color:#C62828;border-color:#C62828;}
+.seg-tab.active[data-seg=PPS]{color:#2E7D32;border-color:#2E7D32;}
+
+.main{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 24px;}
+.panel{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,30,96,.07);padding:14px;}
+.panel-full{grid-column:1/-1;}
+.p-title{font-size:11px;font-weight:700;color:#001E60;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.badge{font-size:8.5px;background:#003FA8;color:#fff;padding:2px 7px;border-radius:8px;font-weight:600;}
+.badge-seg{font-size:8.5px;padding:2px 9px;border-radius:8px;font-weight:700;}
+
+/* KPIs */
+.kpi-row{display:flex;gap:7px;margin-bottom:10px;}
+.kpi{flex:1;background:#f5f8ff;border-radius:8px;padding:7px 10px;border-top:3px solid transparent;}
+.kpi .yr{font-size:8px;color:#7090b0;font-weight:600;margin-bottom:2px;}
+.kpi .val{font-size:18px;font-weight:700;line-height:1;}
+.kpi .delta{font-size:9px;font-weight:600;margin-top:3px;}
+.pos{color:#2a8703;}.neg{color:#ea1100;}.neu{color:#001E60;}
+
+/* Charts */
+.chart-h200{position:relative;height:200px;}
+.chart-h260{position:relative;height:260px;}
+.chart-h300{position:relative;height:300px;}
+
+/* Waterfall controls */
+.wf-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;align-items:center;}
+.wf-btn{padding:4px 11px;border:1.5px solid #d0daea;border-radius:14px;background:#fff;
+          cursor:pointer;font-size:10px;font-weight:600;color:#6080a0;transition:all .12s;}
+.wf-btn.active{background:#001E60;color:#fff;border-color:#001E60;}
+
+/* Summary table */
+.stbl{width:100%;border-collapse:collapse;font-size:11px;}
+.stbl th{background:#003FA8;color:#fff;padding:5px 10px;text-align:center;font-weight:600;font-size:10px;}
+.stbl th:first-child{text-align:left;padding-left:12px;}
+.stbl td{padding:5px 10px;text-align:center;border-bottom:1px solid #e8eef6;}
+.stbl td:first-child{text-align:left;font-weight:700;padding-left:12px;}
+.stbl tr.total-row{background:#fff8e1;}
+.stbl tr.total-row td{font-weight:700;border-top:2px solid #ffc220;}
+
+/* Comp detail table */
+.ctbl{width:100%;border-collapse:collapse;font-size:10px;}
+.ctbl th{background:#f0f4f8;color:#5a7db5;padding:4px 8px;text-align:right;font-weight:600;border-bottom:1px solid #e0e8f4;}
+.ctbl th:first-child{text-align:left;}
+.ctbl td{padding:4px 8px;text-align:right;border-bottom:1px solid #f0f4f8;}
+.ctbl td:first-child{text-align:left;color:#334;}
+.ctbl tr.total-row td{font-weight:700;background:#f5f8ff;border-top:1px solid #d0daea;}
+.ctbl .pos-v{color:#2a8703;}.ctbl .neg-v{color:#ea1100;}
+
+/* Legend */
+.leg{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:9px;color:#6080a0;}
+.leg-dot{width:9px;height:9px;border-radius:50%;}
+
+/* Footer */
+.footer{text-align:center;padding:10px;font-size:9px;color:#9aaccf;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="title">📦 DOH LRP 2026–2031 &nbsp;<span class="spark">WATERFALL</span></div>
+    <div class="sub">Fuente: Base Dic · Metodología 1pt · DOH = INV Neto Dic / COGS Año × Días · Walmart Chile</div>
+  </div>
+  <div class="hdr-meta">
+    <a href="https://puppy.walmart.com/sharing/cretam3/lrp-hip" target="_blank" style="display:inline-block;background:#ffc220;color:#001E60;font-weight:700;font-size:10px;padding:5px 11px;border-radius:14px;text-decoration:none;margin-bottom:6px;">
+       🔗 Ver LRP HIP ↗
+    </a><br>
+    LRP DOH 2IT Sub 1 Rebase.xlsx<br>
+    Segmentos: ACP · GM · PPS · WC<br>
+    Generado automáticamente
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="seg-tabs">
+  <button class="seg-tab active" data-seg="WC">🌎 Walmart Chile</button>
+  <button class="seg-tab" data-seg="ACP">🛒 ACP</button>
+  <button class="seg-tab" data-seg="GM">🏠 GM</button>
+  <button class="seg-tab" data-seg="PPS">🥩 PPS</button>
+  <button class="seg-tab" data-seg="SUPUESTOS">📚 Supuestos</button>
+</div>
+
+<div class="main">
+
+  <!-- Panel 1: KPIs + Evolución -->
+  <div class="panel panel-full">
+    <div class="p-title">
+      📈 Evolución DOH &nbsp;
+      <span class="badge-seg" id="seg-badge" style="background:#EEF4FF;color:#0053e2">Walmart Chile</span>
+    </div>
+    <div class="kpi-row" id="kpi-row"><div class="kpi" style="border-top-color:#b0b8c4;background:#f1f3f7;">
+      <div style="font-size:7px;color:#9aa5b5;font-weight:700;letter-spacing:.5px;margin-bottom:1px;">HIST</div>
+      <div class="yr" style="color:#9aa5b5;">2023</div>
+      <div class="val" style="color:#7a8595;">41.0d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;opacity:.7;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA <span style="font-size:6px;color:#9aaccf;">vs 2022</span></div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+3.8%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">-5.8%</div>
+          </div>
+        </div>
+    </div><div class="kpi" style="border-top-color:#b0b8c4;background:#f1f3f7;">
+      <div style="font-size:7px;color:#9aa5b5;font-weight:700;letter-spacing:.5px;margin-bottom:1px;">HIST</div>
+      <div class="yr" style="color:#9aa5b5;">2024</div>
+      <div class="val" style="color:#7a8595;">40.6d</div><div class="delta pos" style="opacity:.65;">▼ 0.4d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;opacity:.7;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+6.9%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+4.7%</div>
+          </div>
+        </div>
+    </div><div class="kpi" style="border-top-color:#b0b8c4;background:#f1f3f7;">
+      <div style="font-size:7px;color:#9aa5b5;font-weight:700;letter-spacing:.5px;margin-bottom:1px;">HIST</div>
+      <div class="yr" style="color:#9aa5b5;">2025</div>
+      <div class="val" style="color:#7a8595;">41.4d</div><div class="delta neg" style="opacity:.65;">▲ 0.8d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;opacity:.7;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+9.3%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#ea1100;">+11.5%</div>
+          </div>
+        </div>
+    </div><div class="kpi" style="border-top-color:#0053e2;background:#f5f8ff;">
+      
+      <div class="yr" style="color:#7090b0;">2026</div>
+      <div class="val" style="color:#0053e2;">41.8d</div><div class="delta neg" style="">▲ 0.4d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+6.4%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#ea1100;">+8.4%</div>
+          </div>
+        </div>
+    </div><div class="kpi" style="border-top-color:#0053e2;background:#f5f8ff;">
+      
+      <div class="yr" style="color:#7090b0;">2027</div>
+      <div class="val" style="color:#0053e2;">42.4d</div><div class="delta neg" style="">▲ 0.5d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+6.2%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#ea1100;">+7.6%</div>
+          </div>
+        </div>
+    </div><div class="kpi" style="border-top-color:#0053e2;background:#f5f8ff;">
+      
+      <div class="yr" style="color:#7090b0;">2028</div>
+      <div class="val" style="color:#0053e2;">42.7d</div><div class="delta neg" style="">▲ 0.3d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+7.6%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#ea1100;">+8.1%</div>
+          </div>
+        </div>
+    </div><div class="kpi" style="border-top-color:#0053e2;background:#f5f8ff;">
+      
+      <div class="yr" style="color:#7090b0;">2029</div>
+      <div class="val" style="color:#0053e2;">42.9d</div><div class="delta neg" style="">▲ 0.2d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+9.8%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#ea1100;">+11.2%</div>
+          </div>
+        </div>
+    </div><div class="kpi" style="border-top-color:#0053e2;background:#f5f8ff;">
+      
+      <div class="yr" style="color:#7090b0;">2030</div>
+      <div class="val" style="color:#0053e2;">43.7d</div><div class="delta neg" style="">▲ 0.8d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+8.4%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#ea1100;">+10.7%</div>
+          </div>
+        </div>
+    </div><div class="kpi" style="border-top-color:#0053e2;background:#f5f8ff;">
+      
+      <div class="yr" style="color:#7090b0;">2031</div>
+      <div class="val" style="color:#0053e2;">44.3d</div><div class="delta neg" style="">▲ 0.6d</div>
+      
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA</div>
+            <div style="font-size:10px;font-weight:700;color:#2a8703;">+9.7%</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:#ea1100;">+11.3%</div>
+          </div>
+        </div>
+    </div></div>
+    <div class="chart-h200"><canvas id="chart-evol" width="2118" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 2118px;"></canvas></div>
+    <div style="font-size:8px;color:#99aabb;margin-top:4px;">
+      Barras: DOH (eje izq.) · △ Venta % YoY &amp; □ INV Neto % YoY (eje der.)
+    </div>
+  </div>
+
+  <!-- Panel 3: Waterfall componentes año a año -->
+  <div class="panel panel-full">
+    <div class="p-title">
+      🔬 Waterfall por Componente — año a año &nbsp;
+      <span class="badge" id="trans-badge">2026→2027</span>
+    </div>
+    <div class="wf-row" id="trans-btns"><button class="wf-btn active" data-trans="2026→2027">2026→2027</button><button class="wf-btn " data-trans="2027→2028">2027→2028</button><button class="wf-btn " data-trans="2028→2029">2028→2029</button><button class="wf-btn " data-trans="2029→2030">2029→2030</button><button class="wf-btn " data-trans="2030→2031">2030→2031</button><button class="wf-btn " data-trans="2026→2031">2026→2031</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div class="chart-h300"><canvas id="chart-wf" width="1052" height="300" style="display: block; box-sizing: border-box; height: 300px; width: 1052px;"></canvas></div>
+      <div>
+        <table class="ctbl" id="comp-tbl"><tbody><tr><th>Componente</th><th>Base</th><th>Final</th><th>Δ días</th></tr><tr style="background:#f3edff;">
+        <td><b>COGS / Vta</b> <span style="font-size:8px;color:#7c3aed;">(%Vta)</span></td>
+        <td>71.72%</td>
+        <td>71.83%</td>
+        <td class="pos-v">-0.07d</td>
+      </tr><tr>
+        <td>Inv. Disponible</td>
+        <td>46.0d</td>
+        <td>46.5d</td>
+        <td class="neg-v">+0.5d</td>
+      </tr><tr>
+        <td>Logro Automatico</td>
+        <td>-2.4d</td>
+        <td>-2.4d</td>
+        <td class="">-0.0d</td>
+      </tr><tr>
+        <td>Aguas/IT</td>
+        <td>3.5d</td>
+        <td>3.8d</td>
+        <td class="neg-v">+0.2d</td>
+      </tr><tr>
+        <td>Brecha Acum.</td>
+        <td>-5.7d</td>
+        <td>-5.6d</td>
+        <td class="">+0.0d</td>
+      </tr><tr>
+        <td>Obsoletos</td>
+        <td>0.2d</td>
+        <td>0.1d</td>
+        <td class="pos-v">-0.1d</td>
+      </tr><tr>
+        <td>Flete Activado</td>
+        <td>0.4d</td>
+        <td>0.4d</td>
+        <td class="">+0.0d</td>
+      </tr><tr>
+        <td>Dif LM Balance</td>
+        <td>-0.8d</td>
+        <td>-0.8d</td>
+        <td class="">+0.0d</td>
+      </tr><tr style="background:#ffebe9;">
+        <td><b>Efecto Mix GM</b> <span style="font-size:8px;color:#ff5722;">(composicion INV)</span></td>
+        <td>-</td>
+        <td>-</td>
+        <td class="neg-v">+1.11d</td>
+      </tr><tr style="background:#fff8e1;">
+        <td>Otros / Ajustes <span style="font-size:8px;color:#f57c00;">(redondeos)</span></td>
+        <td>0.63d</td>
+        <td>0.58d</td>
+        <td class="">-0.05d</td>
+      </tr><tr class="total-row">
+      <td>DOH Total</td>
+      <td>41.8d</td>
+      <td>42.4d</td>
+      <td class="neg-v">+0.5d</td>
+    </tr></tbody></table>
+        <div class="leg" style="margin-top:10px;">
+          <div class="leg-item"><div class="leg-dot" style="background:#2a8703"></div> aumenta DOH</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#ea1100"></div> reduce DOH</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Panel MIX: Simpson's Paradox / Mix Shift -->
+  <div class="panel panel-full" style="background:linear-gradient(135deg,#fff8e1 0%,#ffffff 60%);border-left:4px solid #ffc220;">
+    <div class="p-title" style="font-size:13px;">
+      <span style="font-size:11px;font-weight:800;color:#ffc220;background:#001E60;padding:2px 8px;border-radius:4px;">PARADOJA</span>
+      ¿Por qué WMCL deteriora si cada segmento mejora?
+      <span class="badge" style="background:#ffc220;color:#001E60;">Efecto Mix</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.1fr 1.4fr 1.3fr;gap:18px;align-items:start;margin-top:6px;">
+
+      <!-- Donuts -->
+      <div>
+        <div style="font-size:10px;font-weight:700;color:#001E60;margin-bottom:6px;text-align:center;">
+          Mix de INVENTARIO por segmento
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div>
+            <div style="font-size:9px;color:#6080a0;text-align:center;margin-bottom:2px;">2026</div>
+            <div style="position:relative;height:130px;"><canvas id="mix-2026" width="300" height="130" style="display: block; box-sizing: border-box; height: 130px; width: 300px;"></canvas></div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:#6080a0;text-align:center;margin-bottom:2px;">2031</div>
+            <div style="position:relative;height:130px;"><canvas id="mix-2031" width="300" height="130" style="display: block; box-sizing: border-box; height: 130px; width: 300px;"></canvas></div>
+          </div>
+        </div>
+        <div id="mix-legend" style="display:flex;justify-content:center;gap:9px;margin-top:6px;flex-wrap:wrap;font-size:9px;"><div style="display:flex;align-items:center;gap:4px;">
+      <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#FF6D00;"></span>
+      <b style="color:#FF6D00;">ACP</b>
+      <span style="color:#6080a0;">50%→26 · 42%→31</span>
+      <span style="color:#2a8703;font-weight:700;">▼8pp</span>
+    </div><div style="display:flex;align-items:center;gap:4px;">
+      <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#2E7D32;"></span>
+      <b style="color:#2E7D32;">PPS</b>
+      <span style="color:#6080a0;">21%→26 · 18%→31</span>
+      <span style="color:#2a8703;font-weight:700;">▼3pp</span>
+    </div><div style="display:flex;align-items:center;gap:4px;">
+      <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#C62828;"></span>
+      <b style="color:#C62828;">GM</b>
+      <span style="color:#6080a0;">30%→26 · 40%→31</span>
+      <span style="color:#ea1100;font-weight:700;">▲10pp</span>
+    </div></div>
+      </div>
+
+      <!-- CAGR bars -->
+      <div>
+        <div style="font-size:10px;font-weight:700;color:#001E60;margin-bottom:6px;text-align:center;">
+          CAGR 2026–2031: ¿INV crece más lento que VENTA?
+        </div>
+        <div style="position:relative;height:200px;"><canvas id="mix-cagr" width="763" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 763px;"></canvas></div>
+        <div style="font-size:8.5px;color:#6080a0;text-align:center;margin-top:4px;">
+          Verde = INV crece más lento que VTA (mejora DOH) · Rojo = INV crece más rápido (deteriora DOH)
+        </div>
+      </div>
+
+      <!-- Story -->
+      <div style="font-size:11px;line-height:1.55;color:#334;">
+        <div style="font-weight:700;color:#001E60;margin-bottom:6px;font-size:12px;">
+          La historia en 30 segundos
+        </div>
+        <p style="margin:0 0 7px 0;">
+          Cada segmento <b style="color:#2a8703;">mejora</b> su rotación: el inventario crece más lento que la venta dentro de ACP, PPS y GM.
+        </p>
+        <p style="margin:0 0 7px 0;">
+          Pero <b id="mix-gm-cagr">GM crece +18% anual</b> en venta (vs ~7% de ACP/PPS) y es nuestro segmento <b>estructuralmente más intensivo</b> en inventario — ~<b id="mix-gm-doh">113 días</b> de DOH vs 22-38 días del resto.
+        </p>
+        <p style="margin:0 0 7px 0;">
+          Por eso GM pasa de <b id="mix-gm-share-2026">30% → 40%</b> del inventario total. El promedio WMCL se acerca al perfil de GM aunque cada segmento mejore individualmente.
+        </p>
+        <div style="background:#fff8e1;border-left:3px solid #ffc220;padding:7px 10px;border-radius:4px;margin-top:8px;">
+          <b style="color:#001E60;">Conclusión para el comité:</b><br>
+          No es problema de ejecución por segmento. Es el costo lógico del crecimiento estratégico de GM.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Panel 3.5: CAGR Venta / Inventario / COGS -->
+  <div class="panel panel-full">
+    <div class="p-title">📈 CAGR 2026 → 2031 · Venta, Inventario Neto y COGS <span class="badge">5 años</span></div>
+    <table class="stbl">
+      <thead>
+        <tr>
+          <th>Segmento</th>
+          <th colspan="3" style="background:#0053e2">VENTA<br><span style="font-size:8px;font-weight:400;opacity:.85;">MMM CLP</span></th>
+          <th colspan="3" style="background:#7c3aed">INV NETO<br><span style="font-size:8px;font-weight:400;opacity:.85;">MMM CLP</span></th>
+          <th colspan="3" style="background:#2a8703">COGS<br><span style="font-size:8px;font-weight:400;opacity:.85;">MMM CLP</span></th>
+          <th>Δ CAGR<br>(Inv − Vta)</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>2026</th><th>2031</th><th>CAGR</th>
+          <th>2026</th><th>2031</th><th>CAGR</th>
+          <th>2026</th><th>2031</th><th>CAGR</th>
+          <th>bps</th>
+        </tr>
+      </thead>
+      <tbody id="cagr-body"><tr>
+      <td style="color:#FF6D00">ACP</td>
+      <td>4428</td><td>6182</td>
+      <td class="pos"><b>+6.9%</b></td>
+      <td>325</td><td>439</td>
+      <td class="pos"><b>+6.2%</b></td>
+      <td>3116</td><td>4360</td>
+      <td class="pos"><b>+7.0%</b></td>
+      <td class="pos"><b>-75</b></td>
+    </tr><tr>
+      <td style="color:#C62828">GM</td>
+      <td>857</td><td>1923</td>
+      <td class="pos"><b>+17.5%</b></td>
+      <td>194</td><td>419</td>
+      <td class="pos"><b>+16.7%</b></td>
+      <td>627</td><td>1413</td>
+      <td class="pos"><b>+17.6%</b></td>
+      <td class="pos"><b>-87</b></td>
+    </tr><tr>
+      <td style="color:#2E7D32">PPS</td>
+      <td>2859</td><td>4086</td>
+      <td class="pos"><b>+7.4%</b></td>
+      <td>134</td><td>186</td>
+      <td class="pos"><b>+6.7%</b></td>
+      <td>2218</td><td>3182</td>
+      <td class="pos"><b>+7.5%</b></td>
+      <td class="pos"><b>-71</b></td>
+    </tr><tr class="total-row">
+      <td style="color:#0053e2">Walmart Chile</td>
+      <td>8090</td><td>12064</td>
+      <td class="pos"><b>+8.3%</b></td>
+      <td>665</td><td>1061</td>
+      <td class="pos"><b>+9.8%</b></td>
+      <td>5802</td><td>8746</td>
+      <td class="pos"><b>+8.6%</b></td>
+      <td class="neg"><b>+147</b></td>
+    </tr></tbody>
+    </table>
+    <div style="font-size:9px;color:#99aabb;margin-top:8px;">
+      CAGR = (Valor 2031 / Valor 2026)^(1/5) − 1. Δ CAGR positivo = inventario crece más rápido que venta (presión sobre DOH ↑).
+      Δ CAGR negativo = venta crece más rápido que inventario (DOH ↓ por mayor rotación).
+    </div>
+  </div>
+
+  <!-- Panel 4: Tabla resumen -->
+  <div class="panel panel-full">
+    <div class="p-title">📋 Resumen DOH YT Dic (días) · 2026–2031</div>
+    <table class="stbl">
+      <thead>
+        <tr>
+          <th>Segmento</th>
+          <th>COGS 2026<br><span style="font-size:8px;font-weight:400;opacity:.85;">MMM CLP</span></th>
+          <th>DOH 2026</th><th>DOH 2027</th><th>DOH 2028</th>
+          <th>DOH 2029</th><th>DOH 2030</th><th>DOH 2031</th>
+          <th>Δ 26→31</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"><tr>
+      <td style="color:#FF6D00">ACP</td>
+      <td>3116</td>
+      <td style="color:#FF6D00">38.1</td><td style="color:#FF6D00">37.6</td><td style="color:#FF6D00">37.4</td><td style="color:#FF6D00">36.9</td><td style="color:#FF6D00">36.8</td><td style="color:#FF6D00">36.7</td>
+      <td class="pos">-1.4</td>
+    </tr><tr>
+      <td style="color:#C62828">GM</td>
+      <td>627</td>
+      <td style="color:#C62828">112.8</td><td style="color:#C62828">109.5</td><td style="color:#C62828">109.0</td><td style="color:#C62828">107.5</td><td style="color:#C62828">108.0</td><td style="color:#C62828">108.2</td>
+      <td class="pos">-4.6</td>
+    </tr><tr>
+      <td style="color:#2E7D32">PPS</td>
+      <td>2218</td>
+      <td style="color:#2E7D32">22.1</td><td style="color:#2E7D32">21.9</td><td style="color:#2E7D32">21.9</td><td style="color:#2E7D32">21.7</td><td style="color:#2E7D32">21.6</td><td style="color:#2E7D32">21.3</td>
+      <td class="pos">-0.8</td>
+    </tr><tr>
+      <td style="color:#0053e2">Walmart Chile</td>
+      <td>5802</td>
+      <td style="color:#0053e2">41.8</td><td style="color:#0053e2">42.4</td><td style="color:#0053e2">42.7</td><td style="color:#0053e2">42.9</td><td style="color:#0053e2">43.7</td><td style="color:#0053e2">44.3</td>
+      <td class="neg">+2.4</td>
+    </tr></tbody>
+    </table>
+    <div style="font-size:9px;color:#99aabb;margin-top:8px;">
+      COGS: neto comercial (columna COGS de Base Dic, distinto de COSTO VENTA bruto).
+      Metodología: DOH = INV Neto Dic / COGS Año × 365 (366 para 2028).
+    </div>
+  </div>
+
+</div>
+
+<!-- SECCION SUPUESTOS -->
+<div id="panel-supuestos" style="display:none;">
+  <div class="main">
+    
+    <!-- Glosario -->
+    <div class="panel panel-full">
+      <div class="p-title">📖 Glosario — Metodología LRP DOH</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:11px;">
+        <div style="background:#f8f9fb;border-radius:8px;padding:12px;">
+          <div style="font-weight:700;color:#001E60;margin-bottom:6px;">Metodología 1pt YT Dic</div>
+          <div style="color:#5a6b80;line-height:1.6;">
+            El LRP DOH se construye con <strong>metodología 1 punto anual</strong>, usando inventario de diciembre como base proyectada. No se modelan fluctuaciones mensuales, solo el inventario final de cada año (Dic).
+          </div>
+        </div>
+        <div style="background:#f8f9fb;border-radius:8px;padding:12px;">
+          <div style="font-weight:700;color:#001E60;margin-bottom:6px;">Fórmula DOH</div>
+          <div style="color:#5a6b80;line-height:1.6;">
+            <strong>DOH = (INV Neto Dic / COGS Año) × Días</strong><br>
+            Donde Días = 365 (o 366 para 2028 bisiesto)
+          </div>
+        </div>
+        <div style="background:#f8f9fb;border-radius:8px;padding:12px;">
+          <div style="font-weight:700;color:#001E60;margin-bottom:6px;">COGS neto vs COSTO VENTA bruto</div>
+          <div style="color:#5a6b80;line-height:1.6;">
+            <strong>COGS</strong> (Cost of Goods Sold) es el costo neto de venta usado en el cálculo de DOH.<br>
+            <strong>COSTO VENTA</strong> es el costo bruto antes de ajustes (sin logro, flete, etc.).
+          </div>
+        </div>
+        <div style="background:#f8f9fb;border-radius:8px;padding:12px;">
+          <div style="font-weight:700;color:#001E60;margin-bottom:6px;">Componentes del DOH</div>
+          <div style="color:#5a6b80;line-height:1.6;font-size:10px;">
+            <strong>• Inv. Disponible:</strong> Inventario bruto en tránsito + almacén<br>
+            <strong>• Logro Automático:</strong> Descuento/rebate proveedor (reduce DOH)<br>
+            <strong>• Aguas/IT:</strong> Inventario en tránsito marítimo (importados)<br>
+            <strong>• Brecha Acum.:</strong> Diferencia acumulada vs objetivo<br>
+            <strong>• Obsoletos:</strong> Inventario no vendible (reduce DOH)<br>
+            <strong>• Flete Activado:</strong> Flete capitalizado en inventario<br>
+            <strong>• Dif LM Balance:</strong> Diferencia contable last mile<br>
+            <strong>• % COGS/Vta:</strong> Cambio en margen impacta DOH
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supuestos de Construcción -->
+    <div class="panel panel-full">
+      <div class="p-title">🏗️ Supuestos de Construcción</div>
+      <table class="stbl">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Supuesto Aplicado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>VTA NETA</td><td>Venta LRP por segmento (proyección oficial)</td></tr>
+          <tr><td>INV INICIAL</td><td>Ene = Dic año anterior - Brecha proyectada</td></tr>
+          <tr><td>COMPRA TOTAL</td><td>% de compra sobre venta año base (histórico)</td></tr>
+          <tr><td>NACIONAL</td><td>Compra total - Importada (% histórico por segmento)</td></tr>
+          <tr><td>IMPORTADOS</td><td>Mismo % sobre Compra nacional (histórico GM ~25%, ACP ~5%)</td></tr>
+          <tr><td>COSTO DE VENTA</td><td>Costo de venta LRP (sin ajustes de logro/flete)</td></tr>
+          <tr><td>LOGRO ACTIVADO</td><td>% Sobre la venta año base (histórico ~0.5-0.7%)</td></tr>
+          <tr><td>AGUAS / INTRANSIT</td><td>% Sobre Compra importada (30-60 días típico)</td></tr>
+          <tr><td>BRECHA ACUM.</td><td>Brecha acumulada LRP (reducción progresiva objetivo)</td></tr>
+          <tr><td>OBSOLETOS</td><td>% Sobre la venta año base (0.1-0.3% según segmento)</td></tr>
+          <tr><td>FLETE ACTIVADO</td><td>% Sobre la venta año base (~0.08-0.13%)</td></tr>
+          <tr><td>DIF LM BALANCE</td><td>% Sobre la venta año base (ajuste contable last mile)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Hitos de Automatización -->
+    <div class="panel">
+      <div class="p-title">🤖 Hitos de Automatización</div>
+      <div style="display:grid;gap:8px;">
+        <div style="background:#E8F5E9;border-left:4px solid #2a8703;padding:10px;border-radius:6px;">
+          <div style="font-weight:700;color:#1b5e20;font-size:11px;">2027 — Expansión LOA</div>
+          <div style="font-size:10px;color:#4a6b54;margin-top:4px;">
+            Logro Automático (LOA) escalado a más proveedores y categorías. Meta: +15% cobertura vs 2026.
+          </div>
+        </div>
+        <div style="background:#FFF3E0;border-left:4px solid #ffc220;padding:10px;border-radius:6px;">
+          <div style="font-weight:700;color:#995213;font-size:11px;">2028 Q1 — Expansión GM</div>
+          <div style="font-size:10px;color:#806030;margin-top:4px;">
+            General Merchandise: nuevo centro de distribución + automatización bodega. Impacto: -5d DOH esperado.
+          </div>
+        </div>
+        <div style="background:#EEF4FF;border-left:4px solid #0053e2;padding:10px;border-radius:6px;">
+          <div style="font-weight:700;color:#003FA8;font-size:11px;">2029 Q2 — Automatización 100% Self-Service</div>
+          <div style="font-size:10px;color:#4a6b8f;margin-top:4px;">
+            Todas las tiendas con reposición automática basada en AI. Reducción de quiebres y exceso.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expansión Logística -->
+    <div class="panel">
+      <div class="p-title">📦 Expansión de Capacidades Logísticas</div>
+      <div style="display:grid;gap:8px;">
+        <div style="background:#f8f9fb;border-radius:6px;padding:10px;">
+          <div style="font-weight:700;color:#001E60;font-size:11px;">CD Sur — Q4 2030</div>
+          <div style="font-size:10px;color:#5a6b80;margin-top:4px;">
+            Nuevo Centro de Distribución región sur. Capacidad: +25,000 m² (+40% vs actual).
+            Impacto DOH: reducción en Aguas/IT por menor distancia importación.
+          </div>
+        </div>
+        <div style="background:#f8f9fb;border-radius:6px;padding:10px;">
+          <div style="font-weight:700;color:#001E60;font-size:11px;">Ampliación El Peñón — 2027</div>
+          <div style="font-size:10px;color:#5a6b80;margin-top:4px;">
+            +12,000 m² bodega. Mejora throughput para soportar crecimiento ACP.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan de Aperturas -->
+    <div class="panel panel-full">
+      <div class="p-title">🏪 Plan de Aperturas de Locales (2026-2037)</div>
+      <table class="stbl">
+        <thead>
+          <tr>
+            <th>Formato</th>
+            <th>2026</th><th>2027</th><th>2028</th><th>2029</th><th>2030</th><th>2031</th>
+            <th>2032-37</th>
+            <th>Total 2026-37</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>BODEGA</td>
+            <td>2</td><td>5</td><td>12</td><td>13</td><td>9</td><td>15</td>
+            <td>58</td>
+            <td>114</td>
+          </tr>
+          <tr>
+            <td>EXPRESS</td>
+            <td>1</td><td>2</td><td>3</td><td>9</td><td>8</td><td>2</td>
+            <td>25</td>
+            <td>50</td>
+          </tr>
+          <tr>
+            <td>LIDER</td>
+            <td>2</td><td>1</td><td>4</td><td>7</td><td>4</td><td>3</td>
+            <td>24</td>
+            <td>45</td>
+          </tr>
+          <tr>
+            <td>MAYORISTA</td>
+            <td>—</td><td>1</td><td>2</td><td>—</td><td>—</td><td>—</td>
+            <td>—</td>
+            <td>3</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>TOTAL</strong></td>
+            <td><strong>5</strong></td><td><strong>9</strong></td><td><strong>21</strong></td><td><strong>29</strong></td><td><strong>21</strong></td><td><strong>20</strong></td>
+            <td><strong>107</strong></td>
+            <td><strong>212</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:9px;color:#7090b0;margin-top:8px;">
+        El plan de aperturas impacta la proyección de inventario por mayor m² de venta y distribución.
+        Formato BODEGA representa ~54% de las aperturas (foco en expansión barrio).
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- FIN SECCION SUPUESTOS -->
+
+<div class="footer">Walmart Chile · LRP Logística 2026–2031 · Metodología 1pt YT Dic</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+const YEARS  = ["2026", "2027", "2028", "2029", "2030", "2031"];
+const SEGS   = ["ACP", "GM", "PPS", "WC"];
+const SEG_LBL  = {"ACP": "ACP", "GM": "GM", "PPS": "PPS", "WC": "Walmart Chile"};
+const COMPS    = ["cogs_effect", "inv_disp", "logro", "aguas", "brecha", "obs", "flete", "dif_lm", "residual"];
+const COMP_LBL = {"cogs_effect": "COGS / Vta", "inv_disp": "Inv. Disponible", "logro": "Logro Automatico", "aguas": "Aguas/IT", "brecha": "Brecha Acum.", "obs": "Obsoletos", "flete": "Flete Activado", "dif_lm": "Dif LM Balance", "gm_mix_effect": "Efecto Mix GM", "residual": "Otros / Ajustes"};
+const COMP_COL = {"cogs_effect": "#7c3aed", "inv_disp": "#0053e2", "logro": "#ea1100", "brecha": "#c62828", "flete": "#2a8703", "aguas": "#1565c0", "obs": "#6a1b9a", "dif_lm": "#ef6c00", "gm_mix_effect": "#ff5722", "residual": "#ff9800"};
+const SEG_COL  = {"WC": "#0053e2", "ACP": "#FF6D00", "GM": "#C62828", "PPS": "#2E7D32"};
+const JS_DATA  = {"ACP": {"doh": [38.10081754077094, 37.56050984050125, 37.42791383012746, 36.91972167911546, 36.845671626814436, 36.70955482335145], "doh_1pt": [38.10081754077094, 37.56050984050125, 37.42791383012746, 36.91972167911546, 36.845671626814436, 36.70955482335145], "doh_2pt": [36.31857097080614, 36.5929346845008, 36.42801617114366, 35.731430208071984, 35.76857523167523, 35.56805090140029], "comp_dias": {"inv_disp": [48.25, 47.58, 47.05, 46.15, 46.04, 46.05], "logro": [-3.46, -3.43, -3.46, -3.47, -3.48, -3.5], "aguas": [1.43, 1.42, 1.43, 1.43, 1.44, 1.45], "brecha": [-7.07, -7.02, -6.59, -6.19, -6.15, -6.27], "obs": [0.05, 0.0, 0.0, 0.0, 0.0, 0.0], "flete": [0.36, 0.36, 0.36, 0.36, 0.36, 0.36], "dif_lm": [-1.35, -1.34, -1.35, -1.36, -1.36, -1.37]}, "residual_dias": [-0.1, 0.0, 0.0, -0.0, 0.0, 0.0], "comp_pct": {"inv_disp": [9.3021, 9.285, 9.1301, 8.9657, 8.9328, 8.8975], "logro": [0.6667, 0.6693, 0.6714, 0.6737, 0.6748, 0.6763], "aguas": [0.2754, 0.2765, 0.2774, 0.2783, 0.2788, 0.2794], "brecha": [1.3637, 1.37, 1.2798, 1.2034, 1.1928, 1.2122], "obs": [-0.0099, 0.0, 0.0, 0.0, 0.0, 0.0], "flete": [0.0698, 0.0698, 0.0698, 0.0698, 0.0698, 0.0698], "dif_lm": [-0.2609, -0.2619, -0.2628, -0.2636, -0.2641, -0.2647]}, "cogs_b": [3115899544.5, 3332410440.0, 3542665085.8, 3828033240.9, 4073908826.4, 4360178990.5], "inv_neto_b": [325255671.3, 342923383.9, 362280228.3, 387205265.3, 411249059.9, 438521177.2], "venta_b": [4427599418.8, 4678277815.1, 4987818871.1, 5398036531.7, 5751980574.0, 6182024772.8], "waterfall_1pt": [{"key": "2026→2027", "start": 38.10081754077094, "end": 37.56050984050125, "delta": -0.54, "deltas": {"cogs_effect": -0.457, "inv_disp": -0.089, "logro": -0.013, "aguas": 0.005, "brecha": -0.033, "obs": -0.051, "flete": 0.0, "dif_lm": -0.005, "residual": 0.103}}, {"key": "2027→2028", "start": 37.56050984050125, "end": 37.42791383012746, "delta": -0.133, "deltas": {"cogs_effect": 0.108, "inv_disp": -0.796, "logro": -0.011, "aguas": 0.005, "brecha": 0.464, "obs": -0.0, "flete": 0.0, "dif_lm": -0.004, "residual": 0.101}}, {"key": "2028→2029", "start": 37.42791383012746, "end": 36.91972167911546, "delta": -0.508, "deltas": {"cogs_effect": 0.058, "inv_disp": -0.845, "logro": -0.012, "aguas": 0.005, "brecha": 0.392, "obs": -0.0, "flete": 0.0, "dif_lm": -0.005, "residual": -0.101}}, {"key": "2029→2030", "start": 36.91972167911546, "end": 36.845671626814436, "delta": -0.074, "deltas": {"cogs_effect": 0.046, "inv_disp": -0.169, "logro": -0.006, "aguas": 0.003, "brecha": 0.055, "obs": -0.0, "flete": 0.0, "dif_lm": -0.002, "residual": -0.001}}, {"key": "2030→2031", "start": 36.845671626814436, "end": 36.70955482335145, "delta": -0.136, "deltas": {"cogs_effect": 0.154, "inv_disp": -0.182, "logro": -0.007, "aguas": 0.003, "brecha": -0.1, "obs": -0.0, "flete": 0.0, "dif_lm": -0.003, "residual": -0.001}}, {"key": "2026→2031", "start": 38.10081754077094, "end": 36.70955482335145, "delta": -1.391, "deltas": {"cogs_effect": -0.091, "inv_disp": -2.081, "logro": -0.049, "aguas": 0.021, "brecha": 0.778, "obs": -0.051, "flete": 0.0, "dif_lm": -0.019, "residual": 0.101}}], "waterfall_2pt": [{"key": "2026→2027", "start": 36.31857097080614, "end": 36.5929346845008, "delta": 0.274, "deltas": {"cogs_effect": -1.425, "inv_disp": -0.089, "logro": -0.013, "aguas": 0.005, "brecha": -0.033, "obs": -0.051, "flete": 0.0, "dif_lm": -0.005, "residual": 1.885}}, {"key": "2027→2028", "start": 36.5929346845008, "end": 36.42801617114366, "delta": -0.165, "deltas": {"cogs_effect": -0.892, "inv_disp": -0.796, "logro": -0.011, "aguas": 0.005, "brecha": 0.464, "obs": -0.0, "flete": 0.0, "dif_lm": -0.004, "residual": 1.069}}, {"key": "2028→2029", "start": 36.42801617114366, "end": 35.731430208071984, "delta": -0.697, "deltas": {"cogs_effect": -1.131, "inv_disp": -0.845, "logro": -0.012, "aguas": 0.005, "brecha": 0.392, "obs": -0.0, "flete": 0.0, "dif_lm": -0.005, "residual": 0.899}}, {"key": "2029→2030", "start": 35.731430208071984, "end": 35.76857523167523, "delta": 0.037, "deltas": {"cogs_effect": -1.031, "inv_disp": -0.169, "logro": -0.006, "aguas": 0.003, "brecha": 0.055, "obs": -0.0, "flete": 0.0, "dif_lm": -0.002, "residual": 1.187}}, {"key": "2030→2031", "start": 35.76857523167523, "end": 35.56805090140029, "delta": -0.201, "deltas": {"cogs_effect": -0.988, "inv_disp": -0.182, "logro": -0.007, "aguas": 0.003, "brecha": -0.1, "obs": -0.0, "flete": 0.0, "dif_lm": -0.003, "residual": 1.076}}, {"key": "2026→2031", "start": 36.31857097080614, "end": 35.56805090140029, "delta": -0.751, "deltas": {"cogs_effect": -5.467, "inv_disp": -2.081, "logro": -0.049, "aguas": 0.021, "brecha": 0.778, "obs": -0.051, "flete": 0.0, "dif_lm": -0.019, "residual": 6.116}}], "waterfall": [{"key": "2026→2027", "start": 38.10081754077094, "end": 37.56050984050125, "delta": -0.54, "deltas": {"cogs_effect": -0.457, "inv_disp": -0.089, "logro": -0.013, "aguas": 0.005, "brecha": -0.033, "obs": -0.051, "flete": 0.0, "dif_lm": -0.005, "residual": 0.103}}, {"key": "2027→2028", "start": 37.56050984050125, "end": 37.42791383012746, "delta": -0.133, "deltas": {"cogs_effect": 0.108, "inv_disp": -0.796, "logro": -0.011, "aguas": 0.005, "brecha": 0.464, "obs": -0.0, "flete": 0.0, "dif_lm": -0.004, "residual": 0.101}}, {"key": "2028→2029", "start": 37.42791383012746, "end": 36.91972167911546, "delta": -0.508, "deltas": {"cogs_effect": 0.058, "inv_disp": -0.845, "logro": -0.012, "aguas": 0.005, "brecha": 0.392, "obs": -0.0, "flete": 0.0, "dif_lm": -0.005, "residual": -0.101}}, {"key": "2029→2030", "start": 36.91972167911546, "end": 36.845671626814436, "delta": -0.074, "deltas": {"cogs_effect": 0.046, "inv_disp": -0.169, "logro": -0.006, "aguas": 0.003, "brecha": 0.055, "obs": -0.0, "flete": 0.0, "dif_lm": -0.002, "residual": -0.001}}, {"key": "2030→2031", "start": 36.845671626814436, "end": 36.70955482335145, "delta": -0.136, "deltas": {"cogs_effect": 0.154, "inv_disp": -0.182, "logro": -0.007, "aguas": 0.003, "brecha": -0.1, "obs": -0.0, "flete": 0.0, "dif_lm": -0.003, "residual": -0.001}}, {"key": "2026→2031", "start": 38.10081754077094, "end": 36.70955482335145, "delta": -1.391, "deltas": {"cogs_effect": -0.091, "inv_disp": -2.081, "logro": -0.049, "aguas": 0.021, "brecha": 0.778, "obs": -0.051, "flete": 0.0, "dif_lm": -0.019, "residual": 0.101}}], "doh_hist": [38.24646585607532, 38.49590998113936, 36.681121080865694], "venta_hist": [3680879697.9, 3896474455.3, 4171946472.0], "inv_neto_hist": [274093738.9, 289198368.4, 294826623.2], "venta_2022": 3414892815.3, "inv_neto_2022": 284884764.1}, "GM": {"doh": [112.79575384513892, 109.51387374775354, 109.01011361809844, 107.51706104868576, 107.95283555153752, 108.19124627073515], "doh_1pt": [112.79575384513892, 109.51387374775354, 109.01011361809844, 107.51706104868576, 107.95283555153752, 108.19124627073515], "doh_2pt": [107.7611622108544, 103.258894869379, 102.65623962471714, 98.68405531630046, 99.41595823730044, 99.55905783326136], "comp_dias": {"inv_disp": [102.91, 98.44, 98.33, 94.39, 94.19, 93.9], "logro": [-1.82, -1.82, -1.85, -1.85, -1.86, -1.88], "aguas": [20.51, 20.45, 19.22, 20.77, 20.9, 21.12], "brecha": [-7.83, -7.36, -6.49, -5.59, -5.08, -4.74], "obs": [1.54, 0.74, 0.75, 0.75, 0.76, 0.76], "flete": [0.66, 0.64, 0.65, 0.64, 0.65, 0.66], "dif_lm": [-0.09, -0.09, -0.1, -0.1, -0.1, -0.1]}, "residual_dias": [-3.07, -1.49, -1.51, -1.5, -1.51, -1.52], "comp_pct": {"inv_disp": [20.6303, 20.3149, 20.0537, 19.3256, 19.1441, 18.9128], "logro": [0.3656, 0.3752, 0.3775, 0.378, 0.3777, 0.3782], "aguas": [4.1122, 4.2201, 3.9207, 4.2523, 4.2489, 4.2541], "brecha": [1.5689, 1.5183, 1.3241, 1.1451, 1.0317, 0.9553], "obs": [-0.308, -0.1535, -0.1535, -0.1535, -0.1535, -0.1535], "flete": [0.1319, 0.1319, 0.1319, 0.1319, 0.1319, 0.1319], "dif_lm": [-0.0189, -0.0193, -0.0195, -0.0195, -0.0195, -0.0195]}, "cogs_b": [627263965.6, 729379954.7, 831714418.0, 1006305037.9, 1190537570.3, 1413464550.1], "inv_neto_b": [193843046.2, 218841710.3, 247719353.0, 296424548.5, 352114812.4, 418971208.9], "venta_b": [857215815.5, 968299821.6, 1114261018.9, 1346548390.4, 1604720413.2, 1922571537.2], "waterfall_1pt": [{"key": "2026→2027", "start": 112.79575384513892, "end": 109.51387374775354, "delta": -3.282, "deltas": {"cogs_effect": -3.22, "inv_disp": -1.573, "logro": -0.048, "aguas": 0.538, "brecha": 0.252, "obs": -0.77, "flete": 0.0, "dif_lm": -0.002, "residual": 1.541}}, {"key": "2027→2028", "start": 109.51387374775354, "end": 109.01011361809844, "delta": -0.504, "deltas": {"cogs_effect": 0.989, "inv_disp": -1.269, "logro": -0.012, "aguas": -1.455, "brecha": 0.944, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.3}}, {"key": "2028→2029", "start": 109.01011361809844, "end": 107.51706104868576, "delta": -1.493, "deltas": {"cogs_effect": -0.129, "inv_disp": -3.56, "logro": -0.002, "aguas": 1.621, "brecha": 0.875, "obs": -0.0, "flete": 0.0, "dif_lm": -0.0, "residual": -0.298}}, {"key": "2029→2030", "start": 107.51706104868576, "end": 107.95283555153752, "delta": 0.436, "deltas": {"cogs_effect": 0.784, "inv_disp": -0.887, "logro": 0.001, "aguas": -0.016, "brecha": 0.554, "obs": -0.0, "flete": 0.0, "dif_lm": 0.0, "residual": -0.0}}, {"key": "2030→2031", "start": 107.95283555153752, "end": 108.19124627073515, "delta": 0.238, "deltas": {"cogs_effect": 0.977, "inv_disp": -1.138, "logro": -0.002, "aguas": 0.025, "brecha": 0.376, "obs": -0.0, "flete": 0.0, "dif_lm": -0.0, "residual": 0.0}}, {"key": "2026→2031", "start": 112.79575384513892, "end": 108.19124627073515, "delta": -4.605, "deltas": {"cogs_effect": -0.599, "inv_disp": -8.427, "logro": -0.063, "aguas": 0.713, "brecha": 3.001, "obs": -0.77, "flete": 0.0, "dif_lm": -0.003, "residual": 1.543}}], "waterfall_2pt": [{"key": "2026→2027", "start": 107.7611622108544, "end": 103.258894869379, "delta": -4.502, "deltas": {"cogs_effect": -9.475, "inv_disp": -1.573, "logro": -0.048, "aguas": 0.538, "brecha": 0.252, "obs": -0.77, "flete": 0.0, "dif_lm": -0.002, "residual": 6.576}}, {"key": "2027→2028", "start": 103.258894869379, "end": 102.65623962471714, "delta": -0.603, "deltas": {"cogs_effect": -5.365, "inv_disp": -1.269, "logro": -0.012, "aguas": -1.455, "brecha": 0.944, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 6.555}}, {"key": "2028→2029", "start": 102.65623962471714, "end": 98.68405531630046, "delta": -3.972, "deltas": {"cogs_effect": -8.962, "inv_disp": -3.56, "logro": -0.002, "aguas": 1.621, "brecha": 0.875, "obs": -0.0, "flete": 0.0, "dif_lm": -0.0, "residual": 6.056}}, {"key": "2029→2030", "start": 98.68405531630046, "end": 99.41595823730044, "delta": 0.732, "deltas": {"cogs_effect": -7.753, "inv_disp": -0.887, "logro": 0.001, "aguas": -0.016, "brecha": 0.554, "obs": -0.0, "flete": 0.0, "dif_lm": 0.0, "residual": 8.833}}, {"key": "2030→2031", "start": 99.41595823730044, "end": 99.55905783326136, "delta": 0.143, "deltas": {"cogs_effect": -7.655, "inv_disp": -1.138, "logro": -0.002, "aguas": 0.025, "brecha": 0.376, "obs": -0.0, "flete": 0.0, "dif_lm": -0.0, "residual": 8.537}}, {"key": "2026→2031", "start": 107.7611622108544, "end": 99.55905783326136, "delta": -8.202, "deltas": {"cogs_effect": -39.21, "inv_disp": -8.427, "logro": -0.063, "aguas": 0.713, "brecha": 3.001, "obs": -0.77, "flete": 0.0, "dif_lm": -0.003, "residual": 36.557}}], "waterfall": [{"key": "2026→2027", "start": 112.79575384513892, "end": 109.51387374775354, "delta": -3.282, "deltas": {"cogs_effect": -3.22, "inv_disp": -1.573, "logro": -0.048, "aguas": 0.538, "brecha": 0.252, "obs": -0.77, "flete": 0.0, "dif_lm": -0.002, "residual": 1.541}}, {"key": "2027→2028", "start": 109.51387374775354, "end": 109.01011361809844, "delta": -0.504, "deltas": {"cogs_effect": 0.989, "inv_disp": -1.269, "logro": -0.012, "aguas": -1.455, "brecha": 0.944, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.3}}, {"key": "2028→2029", "start": 109.01011361809844, "end": 107.51706104868576, "delta": -1.493, "deltas": {"cogs_effect": -0.129, "inv_disp": -3.56, "logro": -0.002, "aguas": 1.621, "brecha": 0.875, "obs": -0.0, "flete": 0.0, "dif_lm": -0.0, "residual": -0.298}}, {"key": "2029→2030", "start": 107.51706104868576, "end": 107.95283555153752, "delta": 0.436, "deltas": {"cogs_effect": 0.784, "inv_disp": -0.887, "logro": 0.001, "aguas": -0.016, "brecha": 0.554, "obs": -0.0, "flete": 0.0, "dif_lm": 0.0, "residual": -0.0}}, {"key": "2030→2031", "start": 107.95283555153752, "end": 108.19124627073515, "delta": 0.238, "deltas": {"cogs_effect": 0.977, "inv_disp": -1.138, "logro": -0.002, "aguas": 0.025, "brecha": 0.376, "obs": -0.0, "flete": 0.0, "dif_lm": -0.0, "residual": 0.0}}, {"key": "2026→2031", "start": 112.79575384513892, "end": 108.19124627073515, "delta": -4.605, "deltas": {"cogs_effect": -0.599, "inv_disp": -8.427, "logro": -0.063, "aguas": 0.713, "brecha": 3.001, "obs": -0.77, "flete": 0.0, "dif_lm": -0.003, "residual": 1.543}}], "doh_hist": [111.43574889632481, 103.6959912563561, 114.91149277553278], "venta_hist": [659391511.6, 684026777.0, 779280717.4], "inv_neto_hist": [148003220.8, 138741703.6, 176538838.4], "venta_2022": 792312309.7, "inv_neto_2022": 177066735.3}, "PPS": {"doh": [22.079284133430757, 21.894157682763094, 21.892129983298627, 21.717442476225145, 21.622765816182977, 21.275776221564165], "doh_1pt": [22.079284133430757, 21.894157682763094, 21.892129983298627, 21.717442476225145, 21.622765816182977, 21.275776221564165], "doh_2pt": [21.49403027131552, 21.334030791749008, 21.23640907666146, 20.910769394913228, 20.937921856365627, 20.5846133936054], "comp_dias": {"inv_disp": [24.04, 23.72, 23.55, 23.23, 23.1, 22.76], "logro": [-0.88, -0.87, -0.88, -0.88, -0.88, -0.89], "aguas": [1.49, 1.48, 1.49, 1.5, 1.5, 1.51], "brecha": [-2.64, -2.5, -2.34, -2.19, -2.15, -2.17], "obs": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "flete": [0.35, 0.35, 0.35, 0.35, 0.35, 0.35], "dif_lm": [-0.28, -0.28, -0.28, -0.29, -0.29, -0.29]}, "residual_dias": [-0.0, -0.0, 0.0, 0.0, 0.0, 0.0], "comp_pct": {"inv_disp": [5.1096, 5.0706, 5.0141, 4.9585, 4.933, 4.8574], "logro": [0.1865, 0.187, 0.1875, 0.1882, 0.1887, 0.1893], "aguas": [0.3165, 0.3173, 0.3182, 0.3194, 0.3203, 0.3213], "brecha": [0.5608, 0.5345, 0.4983, 0.467, 0.4601, 0.4621], "obs": [-0.0003, 0.0, 0.0, 0.0, 0.0, 0.0], "flete": [0.0744, 0.0744, 0.0744, 0.0744, 0.0744, 0.0744], "dif_lm": [-0.0603, -0.0605, -0.0606, -0.0609, -0.061, -0.0612]}, "cogs_b": [2217721776.0, 2357077873.0, 2514377611.6, 2730522389.4, 2927948197.6, 3182471436.5], "inv_neto_b": [134152628.0, 141386944.2, 150396397.5, 162465651.8, 173452981.4, 185505616.8], "venta_b": [2858815452.8, 3020847783.4, 3227190730.3, 3504266218.1, 3756228549.6, 4085589768.3], "waterfall_1pt": [{"key": "2026→2027", "start": 22.079284133430757, "end": 21.894157682763094, "delta": -0.185, "deltas": {"cogs_effect": -0.128, "inv_disp": -0.184, "logro": -0.002, "aguas": 0.003, "brecha": 0.124, "obs": -0.001, "flete": 0.0, "dif_lm": -0.001, "residual": 0.004}}, {"key": "2027→2028", "start": 21.894157682763094, "end": 21.892129983298627, "delta": -0.002, "deltas": {"cogs_effect": 0.032, "inv_disp": -0.265, "logro": -0.003, "aguas": 0.004, "brecha": 0.17, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.061}}, {"key": "2028→2029", "start": 21.892129983298627, "end": 21.717442476225145, "delta": -0.175, "deltas": {"cogs_effect": -0.002, "inv_disp": -0.261, "logro": -0.003, "aguas": 0.006, "brecha": 0.147, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": -0.061}}, {"key": "2029→2030", "start": 21.717442476225145, "end": 21.622765816182977, "delta": -0.095, "deltas": {"cogs_effect": -0.008, "inv_disp": -0.12, "logro": -0.002, "aguas": 0.004, "brecha": 0.032, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.0}}, {"key": "2030→2031", "start": 21.622765816182977, "end": 21.275776221564165, "delta": -0.347, "deltas": {"cogs_effect": 0.015, "inv_disp": -0.354, "logro": -0.003, "aguas": 0.005, "brecha": -0.009, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.0}}, {"key": "2026→2031", "start": 22.079284133430757, "end": 21.275776221564165, "delta": -0.804, "deltas": {"cogs_effect": -0.091, "inv_disp": -1.184, "logro": -0.013, "aguas": 0.022, "brecha": 0.464, "obs": -0.001, "flete": 0.0, "dif_lm": -0.005, "residual": 0.004}}], "waterfall_2pt": [{"key": "2026→2027", "start": 21.49403027131552, "end": 21.334030791749008, "delta": -0.16, "deltas": {"cogs_effect": -0.688, "inv_disp": -0.184, "logro": -0.002, "aguas": 0.003, "brecha": 0.124, "obs": -0.001, "flete": 0.0, "dif_lm": -0.001, "residual": 0.589}}, {"key": "2027→2028", "start": 21.334030791749008, "end": 21.23640907666146, "delta": -0.098, "deltas": {"cogs_effect": -0.624, "inv_disp": -0.265, "logro": -0.003, "aguas": 0.004, "brecha": 0.17, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.621}}, {"key": "2028→2029", "start": 21.23640907666146, "end": 20.910769394913228, "delta": -0.326, "deltas": {"cogs_effect": -0.809, "inv_disp": -0.261, "logro": -0.003, "aguas": 0.006, "brecha": 0.147, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.595}}, {"key": "2029→2030", "start": 20.910769394913228, "end": 20.937921856365627, "delta": 0.027, "deltas": {"cogs_effect": -0.693, "inv_disp": -0.12, "logro": -0.002, "aguas": 0.004, "brecha": 0.032, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.807}}, {"key": "2030→2031", "start": 20.937921856365627, "end": 20.5846133936054, "delta": -0.353, "deltas": {"cogs_effect": -0.676, "inv_disp": -0.354, "logro": -0.003, "aguas": 0.005, "brecha": -0.009, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.685}}, {"key": "2026→2031", "start": 21.49403027131552, "end": 20.5846133936054, "delta": -0.909, "deltas": {"cogs_effect": -3.49, "inv_disp": -1.184, "logro": -0.013, "aguas": 0.022, "brecha": 0.464, "obs": -0.001, "flete": 0.0, "dif_lm": -0.005, "residual": 3.297}}], "waterfall": [{"key": "2026→2027", "start": 22.079284133430757, "end": 21.894157682763094, "delta": -0.185, "deltas": {"cogs_effect": -0.128, "inv_disp": -0.184, "logro": -0.002, "aguas": 0.003, "brecha": 0.124, "obs": -0.001, "flete": 0.0, "dif_lm": -0.001, "residual": 0.004}}, {"key": "2027→2028", "start": 21.894157682763094, "end": 21.892129983298627, "delta": -0.002, "deltas": {"cogs_effect": 0.032, "inv_disp": -0.265, "logro": -0.003, "aguas": 0.004, "brecha": 0.17, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.061}}, {"key": "2028→2029", "start": 21.892129983298627, "end": 21.717442476225145, "delta": -0.175, "deltas": {"cogs_effect": -0.002, "inv_disp": -0.261, "logro": -0.003, "aguas": 0.006, "brecha": 0.147, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": -0.061}}, {"key": "2029→2030", "start": 21.717442476225145, "end": 21.622765816182977, "delta": -0.095, "deltas": {"cogs_effect": -0.008, "inv_disp": -0.12, "logro": -0.002, "aguas": 0.004, "brecha": 0.032, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.0}}, {"key": "2030→2031", "start": 21.622765816182977, "end": 21.275776221564165, "delta": -0.347, "deltas": {"cogs_effect": 0.015, "inv_disp": -0.354, "logro": -0.003, "aguas": 0.005, "brecha": -0.009, "obs": -0.0, "flete": 0.0, "dif_lm": -0.001, "residual": 0.0}}, {"key": "2026→2031", "start": 22.079284133430757, "end": 21.275776221564165, "delta": -0.804, "deltas": {"cogs_effect": -0.091, "inv_disp": -1.184, "logro": -0.013, "aguas": 0.022, "brecha": 0.464, "obs": -0.001, "flete": 0.0, "dif_lm": -0.005, "residual": 0.004}}], "doh_hist": [22.585543369867153, 22.35526268905462, 22.636525456807735], "venta_hist": [2189901095.0, 2372998403.1, 2648320787.8], "inv_neto_hist": [105229483.4, 112243443.1, 127040681.5], "venta_2022": 2083300026.3, "inv_neto_2022": 109258669.8}, "WC": {"doh": [41.836193873958436, 42.35659122693007, 42.65388955454861, 42.87252726107862, 43.65959703252208, 44.27321530911126], "doh_1pt": [41.836193873958436, 42.35659122693007, 42.65388955454861, 42.87252726107862, 43.65959703252208, 44.27321530911126], "doh_2pt": [40.21162571177497, 40.85230918598446, 41.05018477044811, 40.70572045510294, 41.55281921191096, 42.02467181003291], "comp_dias": {"inv_disp": [45.96, 46.4, 46.32, 45.7, 46.1, 46.41], "logro": [-2.39, -2.4, -2.41, -2.39, -2.38, -2.37], "aguas": [3.55, 3.75, 3.74, 4.16, 4.41, 4.68], "brecha": [-5.67, -5.62, -5.21, -4.81, -4.69, -4.68], "obs": [0.19, 0.09, 0.09, 0.1, 0.11, 0.12], "flete": [0.4, 0.4, 0.41, 0.41, 0.41, 0.41], "dif_lm": [-0.85, -0.84, -0.84, -0.83, -0.82, -0.8]}, "residual_dias": [0.63, 0.58, 0.56, 0.54, 0.52, 0.5], "comp_pct": {"inv_disp": [9.0316, 9.1317, 9.0988, 9.0468, 9.1489, 9.2182], "logro": [0.4695, 0.4726, 0.4735, 0.4736, 0.4725, 0.4709], "aguas": [0.6983, 0.738, 0.7337, 0.8226, 0.875, 0.9299], "brecha": [1.1138, 1.1054, 1.0243, 0.9526, 0.9307, 0.9296], "obs": [-0.0382, -0.0173, -0.0185, -0.0204, -0.0224, -0.0245], "flete": [0.0785, 0.0791, 0.0796, 0.0803, 0.0812, 0.082], "dif_lm": [-0.1661, -0.1661, -0.1654, -0.1639, -0.1618, -0.1595]}, "cogs_b": [5802087580.0, 6168981737.7, 6642238296.9, 7331374472.7, 7968215335.6, 8746177302.6], "inv_neto_b": [665033591.4, 715882295.2, 774090980.1, 861135758.7, 953120741.4, 1060880522.9], "venta_b": [8089914268.6, 8588364981.3, 9239222022.0, 10146812358.6, 10999286255.9, 12064297789.5], "waterfall_1pt": [{"key": "2026→2027", "start": 41.836193873958436, "end": 42.35659122693007, "delta": 0.52, "deltas": {"cogs_effect": -0.065, "inv_disp": 0.51, "logro": -0.016, "aguas": 0.202, "brecha": 0.042, "obs": -0.106, "flete": 0.003, "dif_lm": -0.0, "residual": -0.05, "gm_mix_effect": 1.11}}, {"key": "2027→2028", "start": 42.35659122693007, "end": 42.65388955454861, "delta": 0.297, "deltas": {"cogs_effect": -0.037, "inv_disp": -0.168, "logro": -0.004, "aguas": -0.022, "brecha": 0.413, "obs": 0.006, "flete": 0.003, "dif_lm": 0.004, "residual": 0.102, "gm_mix_effect": 1.092}}, {"key": "2028→2029", "start": 42.65388955454861, "end": 42.87252726107862, "delta": 0.219, "deltas": {"cogs_effect": -0.215, "inv_disp": -0.264, "logro": -0.0, "aguas": 0.452, "brecha": 0.364, "obs": 0.009, "flete": 0.004, "dif_lm": 0.008, "residual": -0.139, "gm_mix_effect": 1.822}}, {"key": "2029→2030", "start": 42.87252726107862, "end": 43.65959703252208, "delta": 0.787, "deltas": {"cogs_effect": -0.115, "inv_disp": 0.516, "logro": 0.005, "aguas": 0.265, "brecha": 0.111, "obs": 0.01, "flete": 0.004, "dif_lm": 0.01, "residual": -0.019, "gm_mix_effect": 1.919}}, {"key": "2030→2031", "start": 43.65959703252208, "end": 44.27321530911126, "delta": 0.614, "deltas": {"cogs_effect": -0.033, "inv_disp": 0.349, "logro": 0.008, "aguas": 0.276, "brecha": 0.005, "obs": 0.01, "flete": 0.004, "dif_lm": 0.012, "residual": -0.017, "gm_mix_effect": 1.959}}, {"key": "2026→2031", "start": 41.836193873958436, "end": 44.27321530911126, "delta": 2.437, "deltas": {"cogs_effect": -0.465, "inv_disp": 0.943, "logro": -0.007, "aguas": 1.173, "brecha": 0.935, "obs": -0.071, "flete": 0.018, "dif_lm": 0.034, "gm_mix_effect": 7.927, "residual": -0.123}, "deltas_decomposed": {"inv_disp": {"intra": -4.032, "mix": 5.663, "total": 1.631}, "logro": {"intra": -0.04, "mix": 0.098, "total": 0.058}, "aguas": {"intra": 0.195, "mix": 2.063, "total": 2.258}, "brecha": {"intra": 1.412, "mix": 0.048, "total": 1.46}, "obs": {"intra": -0.256, "mix": 0.08, "total": -0.177}, "flete": {"intra": 0.0, "mix": 0.032, "total": 0.032}, "dif_lm": {"intra": -0.015, "mix": 0.104, "total": 0.089}}}], "waterfall_2pt": [{"key": "2026→2027", "start": 40.21162571177497, "end": 40.85230918598446, "delta": 0.641, "deltas": {"cogs_effect": -1.569, "inv_disp": 0.51, "logro": -0.016, "aguas": 0.202, "brecha": 0.042, "obs": -0.106, "flete": 0.003, "dif_lm": -0.0, "residual": 1.575, "gm_mix_effect": 1.032}}, {"key": "2027→2028", "start": 40.85230918598446, "end": 41.05018477044811, "delta": 0.198, "deltas": {"cogs_effect": -1.641, "inv_disp": -0.168, "logro": -0.004, "aguas": -0.022, "brecha": 0.413, "obs": 0.006, "flete": 0.003, "dif_lm": 0.004, "residual": 1.607, "gm_mix_effect": 1.013}}, {"key": "2028→2029", "start": 41.05018477044811, "end": 40.70572045510294, "delta": -0.344, "deltas": {"cogs_effect": -2.382, "inv_disp": -0.264, "logro": -0.0, "aguas": 0.452, "brecha": 0.364, "obs": 0.009, "flete": 0.004, "dif_lm": 0.008, "residual": 1.465, "gm_mix_effect": 1.632}}, {"key": "2029→2030", "start": 40.70572045510294, "end": 41.55281921191096, "delta": 0.847, "deltas": {"cogs_effect": -2.222, "inv_disp": 0.516, "logro": 0.005, "aguas": 0.265, "brecha": 0.111, "obs": 0.01, "flete": 0.004, "dif_lm": 0.01, "residual": 2.148, "gm_mix_effect": 1.726}}, {"key": "2030→2031", "start": 41.55281921191096, "end": 42.02467181003291, "delta": 0.472, "deltas": {"cogs_effect": -2.281, "inv_disp": 0.349, "logro": 0.008, "aguas": 0.276, "brecha": 0.005, "obs": 0.01, "flete": 0.004, "dif_lm": 0.012, "residual": 2.089, "gm_mix_effect": 1.763}}, {"key": "2026→2031", "start": 40.21162571177497, "end": 42.02467181003291, "delta": 1.813, "deltas": {"cogs_effect": -10.095, "inv_disp": 0.943, "logro": -0.007, "aguas": 1.173, "brecha": 0.935, "obs": -0.071, "flete": 0.018, "dif_lm": 0.034, "gm_mix_effect": 7.129, "residual": 8.884}, "deltas_decomposed": {"inv_disp": {"intra": -4.032, "mix": 5.663, "total": 1.631}, "logro": {"intra": -0.04, "mix": 0.098, "total": 0.058}, "aguas": {"intra": 0.195, "mix": 2.063, "total": 2.258}, "brecha": {"intra": 1.412, "mix": 0.048, "total": 1.46}, "obs": {"intra": -0.256, "mix": 0.08, "total": -0.177}, "flete": {"intra": 0.0, "mix": 0.032, "total": 0.032}, "dif_lm": {"intra": -0.015, "mix": 0.104, "total": 0.089}}}], "waterfall": [{"key": "2026→2027", "start": 41.836193873958436, "end": 42.35659122693007, "delta": 0.52, "deltas": {"cogs_effect": -0.065, "inv_disp": 0.51, "logro": -0.016, "aguas": 0.202, "brecha": 0.042, "obs": -0.106, "flete": 0.003, "dif_lm": -0.0, "residual": -0.05, "gm_mix_effect": 1.11}}, {"key": "2027→2028", "start": 42.35659122693007, "end": 42.65388955454861, "delta": 0.297, "deltas": {"cogs_effect": -0.037, "inv_disp": -0.168, "logro": -0.004, "aguas": -0.022, "brecha": 0.413, "obs": 0.006, "flete": 0.003, "dif_lm": 0.004, "residual": 0.102, "gm_mix_effect": 1.092}}, {"key": "2028→2029", "start": 42.65388955454861, "end": 42.87252726107862, "delta": 0.219, "deltas": {"cogs_effect": -0.215, "inv_disp": -0.264, "logro": -0.0, "aguas": 0.452, "brecha": 0.364, "obs": 0.009, "flete": 0.004, "dif_lm": 0.008, "residual": -0.139, "gm_mix_effect": 1.822}}, {"key": "2029→2030", "start": 42.87252726107862, "end": 43.65959703252208, "delta": 0.787, "deltas": {"cogs_effect": -0.115, "inv_disp": 0.516, "logro": 0.005, "aguas": 0.265, "brecha": 0.111, "obs": 0.01, "flete": 0.004, "dif_lm": 0.01, "residual": -0.019, "gm_mix_effect": 1.919}}, {"key": "2030→2031", "start": 43.65959703252208, "end": 44.27321530911126, "delta": 0.614, "deltas": {"cogs_effect": -0.033, "inv_disp": 0.349, "logro": 0.008, "aguas": 0.276, "brecha": 0.005, "obs": 0.01, "flete": 0.004, "dif_lm": 0.012, "residual": -0.017, "gm_mix_effect": 1.959}}, {"key": "2026→2031", "start": 41.836193873958436, "end": 44.27321530911126, "delta": 2.437, "deltas": {"cogs_effect": -0.465, "inv_disp": 0.943, "logro": -0.007, "aguas": 1.173, "brecha": 0.935, "obs": -0.071, "flete": 0.018, "dif_lm": 0.034, "gm_mix_effect": 7.927, "residual": -0.123}}], "doh_hist": [41.04488129318457, 40.64416162352834, 41.432143890319296], "venta_hist": [6502199188.0, 6953499635.3, 7602834122.9], "inv_neto_hist": [525330883.3, 549975935.1, 613384896.9], "venta_2022": 6264556882.0, "inv_neto_2022": 557467828.6}};
+const TRANS    = ["2026\u21922027", "2027\u21922028", "2028\u21922029", "2029\u21922030", "2030\u21922031", "2026\u21922031"];
+const SEG_BG   = {'WC':'#EEF4FF','ACP':'#FFF3E0','GM':'#FCE8E8','PPS':'#E8F5E9'};
+
+/* ── Helper: serie %COGS/Vta para mostrar contexto en la tabla ── */
+SEGS.forEach(s => {
+  const d = JS_DATA[s];
+  d.cogs_pct_series = YEARS.map((y,i) => (d.cogs_b[i] / d.venta_b[i]) * 100);
+});
+
+/* ── Pre-cálculo: waterfall acumulado 2026→2031 (suma de deltas) ── */
+// Los waterfalls ya vienen calculados correctamente desde Python
+
+let activeSeg = 'WC', activeTrans = TRANS[0], activeMetodo = '1pt';
+let charts = {};
+
+function destroy(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
+
+/* Helper: obtener DOH segun metodologia activa */
+function getDOH(seg) {
+  const d = JS_DATA[seg];
+  return activeMetodo === '1pt' ? d.doh_1pt : d.doh_2pt;
+}
+
+/* Helper: obtener Waterfall segun metodologia activa */
+function getWaterfall(seg) {
+  const d = JS_DATA[seg];
+  return activeMetodo === '1pt' ? d.waterfall_1pt : d.waterfall_2pt;
+}
+
+/* Helper: obtener componentes para waterfall */
+function getComps(seg, wf) {
+  // Usar los componentes que existen en el waterfall actual
+  const baseComps = ["cogs_effect", "inv_disp", "logro", "aguas", "brecha", "obs", "flete", "dif_lm"];
+  const allComps = [...baseComps];
+  
+  if (seg === 'WC' && wf.deltas.hasOwnProperty('gm_mix_effect')) {
+    allComps.push('gm_mix_effect');
+  }
+  
+  allComps.push('residual');
+  return allComps;
+}
+
+/* ── KPIs ── */
+function renderKPIs(seg){
+  const d   = JS_DATA[seg];
+  const doh_data = getDOH(seg);
+  const col = SEG_COL[seg];
+  const HIST_YRS = ['2023','2024','2025'];
+  const allYears = HIST_YRS.concat(YEARS);
+  const allDoh   = (d.doh_hist || []).concat(doh_data);
+  const allVenta = (d.venta_hist || []).concat(d.venta_b);
+  const allInv   = (d.inv_neto_hist || []).concat(d.inv_neto_b);
+  const nHist = HIST_YRS.length;
+  const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+
+  document.getElementById('kpi-row').innerHTML = allYears.map((y,i) => {
+    const isHist = i < nHist;
+    const v = allDoh[i], prev = i>0 ? allDoh[i-1] : v;
+    const dDoh = v - prev;
+
+    // Color palette: gray for history, segment color for forecast
+    const cardBg     = isHist ? '#f1f3f7' : '#f5f8ff';
+    const borderCol  = isHist ? '#b0b8c4' : col;
+    const valColor   = isHist ? '#7a8595' : col;
+    const yrColor    = isHist ? '#9aa5b5' : '#7090b0';
+
+    const dStr = i===0 ? '' :
+      `<div class="delta ${dDoh>0?'neg':(dDoh<0?'pos':'neu')}" style="${isHist?'opacity:.65;':''}">${dDoh>0?'▲':(dDoh<0?'▼':'■')} ${Math.abs(dDoh).toFixed(1)}d</div>`;
+
+    // Growth block (Venta / Inv Neto YoY)
+    let growthHtml = '';
+    // For the very first card (2023), compare against the 2022 baseline
+    // so the user still sees momentum coming into the historical series.
+    const prevVenta = i > 0 ? allVenta[i-1] : d.venta_2022;
+    const prevInv   = i > 0 ? allInv[i-1]   : d.inv_neto_2022;
+    if(prevVenta == null){
+      growthHtml = `<div style="font-size:8px;color:#9aaccf;margin-top:5px;text-align:center;border-top:1px dashed #e0e8f4;padding-top:4px;">base</div>`;
+    } else {
+      const gV = ((allVenta[i] - prevVenta) / prevVenta) * 100;
+      const gI = ((allInv[i]   - prevInv)   / prevInv)   * 100;
+      const invCol = gI > gV ? '#ea1100' : '#2a8703';
+      const op = isHist ? 'opacity:.7;' : '';
+      const baseTag = i === 0 ? ' <span style="font-size:6px;color:#9aaccf;">vs 2022</span>' : '';
+      growthHtml = `
+        <div style="margin-top:5px;border-top:1px dashed #e0e8f4;padding-top:4px;display:flex;justify-content:space-between;gap:4px;${op}">
+          <div style="text-align:left;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> VTA${baseTag}</div>
+            <div style="font-size:10px;font-weight:700;color:${gV>=0?'#2a8703':'#ea1100'};">${fmtPct(gV)}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:7.5px;color:#9aaccf;font-weight:600;"> INV</div>
+            <div style="font-size:10px;font-weight:700;color:${invCol};">${fmtPct(gI)}</div>
+          </div>
+        </div>`;
+    }
+
+    const histTag = isHist
+      ? `<div style="font-size:7px;color:#9aa5b5;font-weight:700;letter-spacing:.5px;margin-bottom:1px;">HIST</div>`
+      : '';
+
+    return `<div class="kpi" style="border-top-color:${borderCol};background:${cardBg};">
+      ${histTag}
+      <div class="yr" style="color:${yrColor};">${y}</div>
+      <div class="val" style="color:${valColor};">${v.toFixed(1)}d</div>${dStr}
+      ${growthHtml}
+    </div>`;
+  }).join('');
+}
+
+/* ── Evolución ── */
+function renderEvol(seg){
+  destroy('evol');
+  const d = JS_DATA[seg];
+  const col = SEG_COL[seg];
+  const doh_data = getDOH(seg);
+  const ctx = document.getElementById('chart-evol').getContext('2d');
+
+  // Historical context (2023-2025) + Forecast (2026-2031)
+  const HIST_YRS = ['2023','2024','2025'];
+  const allYears = HIST_YRS.concat(YEARS);
+  const allDoh   = (d.doh_hist || []).concat(doh_data);
+  const allVenta = (d.venta_hist || []).concat(d.venta_b);
+  const allInv   = (d.inv_neto_hist || []).concat(d.inv_neto_b);
+  const nHist    = HIST_YRS.length;
+
+  // Bar colors: gray for history, dynamic green/red for forecast YoY
+  const barBg = allDoh.map((v,i) => {
+    if(i < nHist) return '#b0b8c460';                 // historical light gray
+    if(i === nHist) return col + '99';                // forecast base year
+    return v >= allDoh[i-1] ? '#ea110066' : '#2a870366';
+  });
+  const barBorder = allDoh.map((v,i) => {
+    if(i < nHist) return '#7a8595';                   // historical darker gray
+    if(i === nHist) return col;
+    return v >= allDoh[i-1] ? '#ea1100' : '#2a8703';
+  });
+
+  // YoY growth (skip the very first historical year)
+  function growth(arr){
+    return arr.map((v,i) => i===0 ? null : +((v-arr[i-1])/arr[i-1]*100).toFixed(1));
+  }
+  const gVenta  = growth(allVenta);
+  const gInvNet = growth(allInv);
+
+  charts['evol'] = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: allYears,
+      datasets:[
+        { label:'DOH (d\u00edas)', data:allDoh,
+           backgroundColor: barBg,
+           borderColor:     barBorder,
+           borderWidth:2, borderRadius:5, order:2, yAxisID:'y' },
+        { label:'DOH tendencia', data:allDoh, type:'line',
+           borderColor:col, backgroundColor:'transparent',
+           borderWidth:2, pointRadius:4, pointBackgroundColor:col,
+           tension:0.3, order:1, yAxisID:'y',
+           segment:{
+             borderColor: ctx => ctx.p0DataIndex < nHist-1 ? '#9aa5b5' : col,
+             borderDash:  ctx => ctx.p0DataIndex < nHist-1 ? [4,4]    : undefined
+           }
+        },
+        { label:'Crecimiento Venta %', data:gVenta, type:'line',
+           borderColor:'#ffc220', backgroundColor:'transparent',
+           borderWidth:2, pointRadius:4, pointBackgroundColor:'#ffc220',
+           pointStyle:'triangle',
+           tension:0.3, order:0, yAxisID:'y2',
+           borderDash:[4,3] },
+        { label:'Crecimiento INV Neto %', data:gInvNet, type:'line',
+           borderColor:'#7c3aed', backgroundColor:'transparent',
+           borderWidth:2, pointRadius:4, pointBackgroundColor:'#7c3aed',
+           pointStyle:'rect',
+           tension:0.3, order:0, yAxisID:'y2',
+           borderDash:[2,2] }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index', intersect:false},
+      plugins:{
+        legend:{
+          display:true, position:'top',
+          labels:{font:{size:9}, boxWidth:12, padding:8,
+            filter: item => item.text !== 'DOH tendencia'
+          }
+        },
+        tooltip:{callbacks:{
+          label: c => {
+            if(c.dataset.yAxisID==='y2') {
+              if(c.parsed.y===null) return null;
+              return `${c.dataset.label}: ${c.parsed.y>=0?'+':''}${c.parsed.y.toFixed(1)}%`;
+            }
+            if(c.dataset.label==='DOH tendencia') return null;
+            const tag = c.dataIndex < nHist ? ' (hist)' : '';
+            return `DOH${tag}: ${c.parsed.y.toFixed(1)} d\u00edas`;
+          }
+        },
+        annotations:{}}
+      },
+      scales:{
+        y:{
+          min: Math.max(0, Math.min(...allDoh)-10),
+          title:{display:true,text:'DOH (d\u00edas)',font:{size:9}},
+          grid:{color:'#edf1f8'}, ticks:{font:{size:9}}
+        },
+        y2:{
+          position:'right',
+          title:{display:true,text:'Crecimiento YoY %',font:{size:9}},
+          grid:{drawOnChartArea:false},
+          ticks:{font:{size:9}, callback: v => (v>=0?'+':'')+v+'%'}
+        },
+        x:{
+          ticks:{
+            font:{size:10},
+            color: ctx => ctx.index < nHist ? '#8a96a8' : '#001E60'
+          }
+        }
+      }
+    }
+  });
+}
+
+
+/* ── Waterfall componentes ── */
+function renderWF(seg, tk){
+  destroy('wf');
+  const wfArr = getWaterfall(seg);
+  const wf = wfArr.find(w=>w.key===tk);
+  if(!wf) return;
+
+  const labels = ['DOH ' + tk.split('→')[0]];
+  const floats = [0]; const vals = [wf.start]; const cols = [SEG_COL[seg]+'99'];
+  let run = wf.start;
+
+  const SIG = 0.05;
+  const comps = getComps(seg, wf);
+  comps.forEach(c => {
+    const dv = wf.deltas[c]||0;
+    if(Math.abs(dv)<SIG) return;
+    labels.push(COMP_LBL[c]);
+    floats.push(dv>=0 ? run : run+dv);
+    vals.push(Math.abs(dv));
+    cols.push(dv>=0?'#ea110088':'#2a870388');
+    run += dv;
+  });
+  labels.push('DOH ' + tk.split('→')[1]);
+  floats.push(0); vals.push(wf.end<0?0:wf.end);
+  cols.push(wf.end>wf.start?'#ea110088':(wf.end<wf.start?'#2a870388':SEG_COL[seg]+'99'));
+
+  // Zoom Y a la zona relevante: rango entre min/max del running total
+  // (start, paradas intermedias, end). Margen del 25% del rango.
+  const stops = [wf.start];
+  let _r = wf.start;
+  comps.forEach(c => { const dv = wf.deltas[c]||0; if(Math.abs(dv)<SIG) return; _r += dv; stops.push(_r); });
+  stops.push(wf.end);
+  const _lo = Math.min(...stops), _hi = Math.max(...stops);
+  const _rng = Math.max(_hi - _lo, 0.5);
+  const _pad = Math.max(_rng * 0.25, 0.5);
+  const yMin = Math.max(0, _lo - _pad);
+  const yMax = _hi + _pad;
+
+  charts['wf'] = new Chart(
+    document.getElementById('chart-wf').getContext('2d'),
+    { type:'bar',
+       data:{
+         labels,
+         datasets:[
+           { label:'base', data:floats, backgroundColor:'transparent', stack:'w' },
+           { label:'días', data:vals, backgroundColor:cols,
+              borderColor:cols.map(c=>c.replace('88','ff')),
+              borderWidth:1.5, borderRadius:5, stack:'w' }
+         ]
+       },
+       options:{
+         responsive:true, maintainAspectRatio:false,
+         plugins:{legend:{display:false},
+           tooltip:{callbacks:{label:(c)=>{
+             if(c.datasetIndex===0) return null;
+             const i=c.dataIndex;
+             if(i===0) return `DOH inicio: ${wf.start.toFixed(1)}d`;
+             if(i===labels.length-1) return `DOH fin: ${wf.end.toFixed(1)}d`;
+             const comp = comps.find(x=>COMP_LBL[x]===labels[i]);
+             const dv = comp ? (wf.deltas[comp]||0) : 0;
+             return `${labels[i]}: ${dv>=0?'+':''}${dv.toFixed(1)}d`;
+           }}}
+         },
+         scales:{
+           y:{stacked:true,
+               min: yMin,
+               max: yMax,
+               title:{display:true,text:'Días DOH (zoom)',font:{size:9}},
+               grid:{color:'#edf1f8'},ticks:{font:{size:9}}},
+           x:{stacked:true,ticks:{font:{size:9},maxRotation:20}}
+         }
+       }
+    }
+  );
+
+  // Tabla de componentes
+  const wfData = getWaterfall(seg).find(w=>w.key===tk)||{};
+  const d0 = wfData.start||0, d1=wfData.end||0;
+  
+  // Detectar si es waterfall acumulado con descomposicion
+  const isAcumulado = tk === '2026\u21922031';
+  const hasDecomp = seg === 'WC' && isAcumulado && wfData.deltas_decomposed;
+  
+  // Header de la tabla segun si tiene descomposicion
+  let tbl = hasDecomp 
+    ? `<tr><th>Componente</th><th>Base</th><th>Final</th><th>Δ Intra</th><th>Δ Mix</th><th>Δ Total</th></tr>`
+    : `<tr><th>Componente</th><th>Base</th><th>Final</th><th>Δ días</th></tr>`;
+    
+  const d0cd = JS_DATA[seg].comp_dias;
+  const d1cd = {};
+  const comps_tbl = getComps(seg, wfData);
+  comps_tbl.forEach(c=>{ d1cd[c]=(d0cd[c]?d0cd[c][YEARS.indexOf(tk.split('→')[0])]||0:0); });
+  let rowsHtml='', sumDelta=0;
+  const iStart = YEARS.indexOf(tk.split('\u2192')[0]);
+  const iEnd   = YEARS.indexOf(tk.split('\u2192')[1]);
+  comps_tbl.forEach(c=>{
+    const dv=(wf.deltas[c]||0);
+    // Caso especial: efecto del cambio en %COGS/Vta sobre DOH
+    if(c==='cogs_effect'){
+      const segData = JS_DATA[activeSeg];
+      const p0 = segData.cogs_pct_series[iStart];
+      const p1 = segData.cogs_pct_series[iEnd];
+      if(Math.abs(dv)<0.001) return;
+      sumDelta+=dv;
+      const clsCogs=dv>0?'neg-v':'pos-v';
+      rowsHtml+=`<tr style="background:#f3edff;">
+        <td><b>${COMP_LBL[c]}</b> <span style="font-size:8px;color:#7c3aed;">(%Vta)</span></td>
+        <td>${p0.toFixed(2)}%</td>
+        <td>${p1.toFixed(2)}%</td>
+        <td class="${Math.abs(dv)>0.05?clsCogs:''}">${dv>=0?'+':''}${dv.toFixed(2)}d</td>
+      </tr>`;
+      return;
+    }
+    // Caso especial: efecto mix de GM (solo WMCL)
+    if(c==='gm_mix_effect'){
+      if(Math.abs(dv)<0.001) return;
+      sumDelta+=dv;
+      const clsMix=dv>0?'neg-v':'pos-v';
+      rowsHtml+=`<tr style="background:#ffebe9;">
+        <td><b>${COMP_LBL[c]}</b> <span style="font-size:8px;color:#ff5722;">(composicion INV)</span></td>
+        <td>-</td>
+        <td>-</td>
+        <td class="${Math.abs(dv)>0.05?clsMix:''}">${dv>=0?'+':''}${dv.toFixed(2)}d</td>
+      </tr>`;
+      return;
+    }
+
+        // Caso especial: residual / ajustes no explicados por componentes mapeados
+    if(c==='residual'){
+      const segData = JS_DATA[activeSeg];
+      const r0 = (segData.residual_dias||[])[iStart]||0;
+      const r1 = (segData.residual_dias||[])[iEnd]||0;
+      if(Math.abs(dv)<0.001) return;
+      sumDelta+=dv;
+      const clsR=dv>0?'neg-v':'pos-v';
+      rowsHtml+=`<tr style="background:#fff8e1;">
+        <td>${COMP_LBL[c]} <span style="font-size:8px;color:#f57c00;">(redondeos)</span></td>
+        <td>${r0.toFixed(2)}d</td>
+        <td>${r1.toFixed(2)}d</td>
+        <td class="${Math.abs(dv)>0.05?clsR:''}">${dv>=0?'+':''}${dv.toFixed(2)}d</td>
+      </tr>`;
+      return;
+    }
+    const base_v=(d0cd[c]?d0cd[c][iStart]||0:0);
+    const fin_v=base_v+dv;
+    if(Math.abs(dv)<0.001&&Math.abs(base_v)<0.001) return;
+    sumDelta+=dv;
+    const cls=dv>0?'neg-v':'pos-v';
+    
+    // Si hay descomposicion, mostrar intra y mix
+    if(hasDecomp && wfData.deltas_decomposed[c]) {
+      const decomp = wfData.deltas_decomposed[c];
+      const clsIntra = decomp.intra > 0 ? 'neg-v' : 'pos-v';
+      const clsMix = decomp.mix > 0 ? 'neg-v' : 'pos-v';
+      const clsTotal = decomp.total > 0 ? 'neg-v' : 'pos-v';
+      rowsHtml+=`<tr>
+        <td>${COMP_LBL[c]}</td>
+        <td>${base_v.toFixed(1)}d</td>
+        <td>${fin_v.toFixed(1)}d</td>
+        <td class="${Math.abs(decomp.intra)>0.05?clsIntra:''}">${decomp.intra>=0?'+':''}${decomp.intra.toFixed(2)}d</td>
+        <td class="${Math.abs(decomp.mix)>0.05?clsMix:''}" style="background:#fff3e0;">${decomp.mix>=0?'+':''}${decomp.mix.toFixed(2)}d</td>
+        <td class="${Math.abs(decomp.total)>0.05?clsTotal:''}" style="font-weight:600;">${decomp.total>=0?'+':''}${decomp.total.toFixed(2)}d</td>
+      </tr>`;
+    } else {
+      // Sin descomposicion, tabla normal
+      rowsHtml+=`<tr>
+        <td>${COMP_LBL[c]}</td>
+        <td>${base_v.toFixed(1)}d</td>
+        <td>${fin_v.toFixed(1)}d</td>
+        <td class="${Math.abs(dv)>0.05?cls:''}">${dv>=0?'+':''}${dv.toFixed(1)}d</td>
+      </tr>`;
+    }
+  });
+  tbl += rowsHtml;
+  
+  // Fila del total - diferentes columnas si hay descomposicion
+  if(hasDecomp) {
+    const totalIntra = Object.values(wfData.deltas_decomposed).reduce((sum, d) => sum + d.intra, 0);
+    const totalMix = Object.values(wfData.deltas_decomposed).reduce((sum, d) => sum + d.mix, 0);
+    const totalTotal = Object.values(wfData.deltas_decomposed).reduce((sum, d) => sum + d.total, 0);
+    tbl += `<tr class="total-row">
+      <td>DOH Total</td>
+      <td>${d0.toFixed(1)}d</td>
+      <td>${d1.toFixed(1)}d</td>
+      <td class="${totalIntra>0?'neg-v':(totalIntra<0?'pos-v':'')}">${totalIntra>=0?'+':''}${totalIntra.toFixed(2)}d</td>
+      <td style="background:#fff3e0;font-weight:600;" class="${totalMix>0?'neg-v':(totalMix<0?'pos-v':'')}">${totalMix>=0?'+':''}${totalMix.toFixed(2)}d</td>
+      <td style="font-weight:700;" class="${(d1-d0)>0?'neg-v':((d1-d0)<0?'pos-v':'')}">${(d1-d0)>=0?'+':''}${(d1-d0).toFixed(2)}d</td>
+    </tr>`;
+  } else {
+    tbl += `<tr class="total-row">
+      <td>DOH Total</td>
+      <td>${d0.toFixed(1)}d</td>
+      <td>${d1.toFixed(1)}d</td>
+      <td class="${(d1-d0)>0?'neg-v':((d1-d0)<0?'pos-v':'')}">${(d1-d0)>=0?'+':''}${(d1-d0).toFixed(1)}d</td>
+    </tr>`;
+  }
+  
+  document.getElementById('comp-tbl').innerHTML=tbl;
+}
+
+/* ── Tabla resumen ── */
+function renderTable(){
+  const data = JS_DATA;
+  document.getElementById('tbl-body').innerHTML = SEGS.map(s=>{
+    const doh=getDOH(s), cogs=data[s].cogs_b[0];
+    const delta=doh[doh.length-1]-doh[0];
+    return `<tr>
+      <td style="color:${SEG_COL[s]}">${SEG_LBL[s]}</td>
+      <td>${(cogs/1e6).toFixed(0)}</td>
+      ${doh.map(v=>`<td style="color:${SEG_COL[s]}">${v.toFixed(1)}</td>`).join('')}
+      <td class="${delta<0?'pos':'neg'}">${delta>=0?'+':''}${delta.toFixed(1)}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Trans buttons ── */
+function renderTransBtns(){
+  document.getElementById('trans-btns').innerHTML =
+    TRANS.map(t=>`<button class="wf-btn ${t===activeTrans?'active':''}" data-trans="${t}">${t}</button>`).join('');
+  document.querySelectorAll('.wf-btn').forEach(b=>{
+    b.onclick=()=>{
+      activeTrans=b.dataset.trans;
+      document.querySelectorAll('.wf-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      document.getElementById('trans-badge').textContent=activeTrans;
+      renderWF(activeSeg,activeTrans);
+    };
+  });
+}
+
+/* ── Tabs ── */
+document.querySelectorAll('.seg-tab').forEach(btn=>{
+  btn.onclick=()=>{
+    activeSeg=btn.dataset.seg;
+    document.querySelectorAll('.seg-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const badge=document.getElementById('seg-badge');
+    badge.textContent=SEG_LBL[activeSeg];
+    badge.style.background=SEG_BG[activeSeg];
+    badge.style.color=SEG_COL[activeSeg];
+    renderKPIs(activeSeg);
+    renderEvol(activeSeg);
+    renderWF(activeSeg,activeTrans);
+  };
+});
+
+/* ── Tabla CAGR ── */
+function renderCAGR(){
+  const n = YEARS.length - 1;   // 5 años de 2026 a 2031
+  const cagr = (a, b) => (a > 0 && b > 0) ? (Math.pow(b / a, 1 / n) - 1) * 100 : 0;
+  const fmt = v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+  const cls = v => v >= 0 ? 'pos' : 'neg';
+
+  document.getElementById('cagr-body').innerHTML = SEGS.map(s => {
+    const d   = JS_DATA[s];
+    const v0  = d.venta_b[0],     v1  = d.venta_b[n];
+    const i0  = d.inv_neto_b[0],  i1  = d.inv_neto_b[n];
+    const c0  = d.cogs_b[0],      c1  = d.cogs_b[n];
+    const gV  = cagr(v0, v1);
+    const gI  = cagr(i0, i1);
+    const gC  = cagr(c0, c1);
+    const gap = (gI - gV) * 100;   // bps
+    const isWC = s === 'WC';
+    return `<tr ${isWC ? 'class="total-row"' : ''}>
+      <td style="color:${SEG_COL[s]}">${SEG_LBL[s]}</td>
+      <td>${(v0/1e6).toFixed(0)}</td><td>${(v1/1e6).toFixed(0)}</td>
+      <td class="${cls(gV)}"><b>${fmt(gV)}</b></td>
+      <td>${(i0/1e6).toFixed(0)}</td><td>${(i1/1e6).toFixed(0)}</td>
+      <td class="${cls(gI)}"><b>${fmt(gI)}</b></td>
+      <td>${(c0/1e6).toFixed(0)}</td><td>${(c1/1e6).toFixed(0)}</td>
+      <td class="${cls(gC)}"><b>${fmt(gC)}</b></td>
+      <td class="${gap >= 0 ? 'neg' : 'pos'}"><b>${gap >= 0 ? '+' : ''}${gap.toFixed(0)}</b></td>
+    </tr>`;
+  }).join('');
+}
+
+
+/* ── Mix shift / Simpson's paradox panel ── */
+function renderMixPanel(){
+  const segs   = ['ACP','PPS','GM'];   // exclude WC — it's the total
+  const colors = segs.map(s => SEG_COL[s]);
+  const invY0 = segs.map(s => JS_DATA[s].inv_neto_b[0]);
+  const invY1 = segs.map(s => JS_DATA[s].inv_neto_b[JS_DATA[s].inv_neto_b.length-1]);
+
+  const donut = (canvasId, values) => new Chart(
+    document.getElementById(canvasId).getContext('2d'),
+    { type:'doughnut',
+      data:{ labels: segs, datasets:[{ data:values, backgroundColor:colors,
+              borderColor:'#fff', borderWidth:2 }] },
+      options:{
+        responsive:true, maintainAspectRatio:false, cutout:'58%',
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{label:c=>{
+            const total = values.reduce((a,b)=>a+b,0);
+            const pct = (c.parsed/total*100).toFixed(1);
+            return `${c.label}: ${pct}%`;
+          }}}
+        }
+      }
+    });
+  destroy('mix2026'); destroy('mix2031');
+  charts['mix2026'] = donut('mix-2026', invY0);
+  charts['mix2031'] = donut('mix-2031', invY1);
+
+  const totalY0 = invY0.reduce((a,b)=>a+b,0);
+  const totalY1 = invY1.reduce((a,b)=>a+b,0);
+  document.getElementById('mix-legend').innerHTML = segs.map((s,i)=>{
+    const p0 = (invY0[i]/totalY0*100).toFixed(0);
+    const p1 = (invY1[i]/totalY1*100).toFixed(0);
+    const delta = +p1 - +p0;
+    const arrow = delta>0 ? '\u25b2' : (delta<0 ? '\u25bc' : '\u25c6');
+    const dCol  = delta>0 ? '#ea1100' : (delta<0 ? '#2a8703' : '#6080a0');
+    return `<div style="display:flex;align-items:center;gap:4px;">
+      <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${colors[i]};"></span>
+      <b style="color:${colors[i]};">${s}</b>
+      <span style="color:#6080a0;">${p0}%\u219226 \u00b7 ${p1}%\u219231</span>
+      <span style="color:${dCol};font-weight:700;">${arrow}${Math.abs(delta)}pp</span>
+    </div>`;
+  }).join('');
+
+  const n = YEARS.length - 1;
+  const cagr = (a,b) => (Math.pow(b/a, 1/n) - 1) * 100;
+  const allSegs = ['ACP','PPS','GM','WC'];
+  const cV = allSegs.map(s=>{ const d=JS_DATA[s]; return cagr(d.venta_b[0],    d.venta_b[n]); });
+  const cI = allSegs.map(s=>{ const d=JS_DATA[s]; return cagr(d.inv_neto_b[0], d.inv_neto_b[n]); });
+  destroy('mixcagr');
+  charts['mixcagr'] = new Chart(
+    document.getElementById('mix-cagr').getContext('2d'),
+    { type:'bar',
+      data:{
+        labels: allSegs.map(s => s==='WC' ? 'WMCL (Total)' : s),
+        datasets:[
+          { label:'CAGR Venta',    data:cV, backgroundColor:'#0053e2cc', borderRadius:4 },
+          { label:'CAGR INV Neto', data:cI,
+             backgroundColor: allSegs.map((s,i)=> cI[i]>cV[i] ? '#ea1100cc' : '#2a8703cc'),
+             borderRadius:4 }
+        ]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'top',labels:{font:{size:9},boxWidth:10,padding:6}},
+          tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y.toFixed(1)}%`}}
+        },
+        scales:{
+          y:{ beginAtZero:true, ticks:{font:{size:9},callback:v=>v+'%'},
+              title:{display:true,text:'CAGR % anual',font:{size:9}} },
+          x:{ ticks:{font:{size:10}} }
+        }
+      }
+    });
+
+  const gmCAGRv = cagr(JS_DATA.GM.venta_b[0], JS_DATA.GM.venta_b[n]);
+  const gmDoh   = JS_DATA.GM.doh[0];
+  const gmInvShare0 = (invY0[2]/totalY0*100).toFixed(0);
+  const gmInvShare1 = (invY1[2]/totalY1*100).toFixed(0);
+  const elA = document.getElementById('mix-gm-cagr');
+  const elB = document.getElementById('mix-gm-doh');
+  const elC = document.getElementById('mix-gm-share-2026');
+  if(elA) elA.textContent = `GM crece +${gmCAGRv.toFixed(0)}% anual`;
+  if(elB) elB.textContent = `${gmDoh.toFixed(0)} d\u00edas`;
+  if(elC) elC.textContent = `${gmInvShare0}% \u2192 ${gmInvShare1}%`;
+}
+
+// Init
+renderKPIs(activeSeg); renderEvol(activeSeg);
+renderTransBtns();
+renderWF(activeSeg,activeTrans); renderTable(); renderCAGR(); renderMixPanel();
+
+
+// Mostrar/ocultar panel Supuestos
+document.querySelectorAll('.seg-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    const seg = t.dataset.seg;
+    const mainDiv = document.querySelector('.main');
+    const supuestosPanel = document.getElementById('panel-supuestos');
+    
+    if (seg === 'SUPUESTOS') {
+      // Ocultar main, mostrar supuestos
+      if (mainDiv) mainDiv.style.display = 'none';
+      if (supuestosPanel) supuestosPanel.style.display = 'block';
+    } else {
+      // Mostrar main, ocultar supuestos
+      if (mainDiv) mainDiv.style.display = 'grid';
+      if (supuestosPanel) supuestosPanel.style.display = 'none';
+      // Actualizar visualización de segmentos normales
+      if (activeSeg !== seg) { activeSeg = seg; updateAll(); }
+    }
+  });
+});
+
+// Update all: re-renderizar todos los paneles
+function updateAll() {
+  const segBadge = document.getElementById('seg-badge');
+  if (segBadge) {
+    segBadge.textContent = SEG_LBL[activeSeg];
+    segBadge.style.color = SEG_COL[activeSeg];
+    segBadge.style.background = SEG_BG[activeSeg];
+  }
+  document.querySelectorAll('.seg-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.seg === activeSeg);
+  });
+  renderKPIs(activeSeg);
+  renderEvol(activeSeg);
+  renderTransBtns();
+  renderWF(activeSeg, activeTrans);
+  renderTable();
+  renderCAGR();
+  renderMixPanel();
+}
+
+// Selector de metodologia
+document.querySelectorAll('.metodo-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const metodo = btn.dataset.metodo;
+    if (activeMetodo !== metodo) {
+      activeMetodo = metodo;
+      document.querySelectorAll('.metodo-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const subtitle = document.querySelector('.hdr-left .sub');
+      if (subtitle) {
+        const metodoText = metodo === '1pt' 
+          ? 'Metodologia 1pt - DOH = INV Neto Dic / COGS Ano x Dias'
+          : 'Metodologia 2pt - DOH = (INV Dic actual + INV Dic anterior) / 2 / COGS Ano x Dias';
+        subtitle.innerHTML = `Fuente: Base Dic - ${metodoText} - Walmart Chile`;
+      }
+      updateAll();
+    }
+  });
+});
+
+</script>
+</body></html>

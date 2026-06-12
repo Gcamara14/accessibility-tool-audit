@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalyst Template Playground</title>
+    
+    <!-- Dependencies -->
+    <link rel="stylesheet" href="assets/libs/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/libs/bootstrap/awesomplete.css">
+    <link rel="stylesheet" href="assets/libs/prism/prism.css">
+    <link rel="stylesheet" href="playground.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="assets/libs/bootstrap/fontawsome.css"> 
+</head>
+<body>
+
+<div class="container-fluid mt-4 mb-5">
+    <header class="mb-4 pb-2 border-bottom">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Catalyst Template Playground</h1>
+            <div>
+                <a href="../index.html" class="btn btn-outline-dark btn-sm mr-2">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="https://chatgpt.com/g/g-6984d89f30d48191a67ebcdf08cc3c13-accessibility-bug-template-creator" target="_blank" class="btn btn-success btn-sm">
+                    <i class="fas fa-magic"></i> Create Template with AI
+                </a>
+                <button class="btn btn-link btn-sm mr-2 text-info" type="button" data-toggle="modal" data-target="#workflowModal" title="How to use AI generation">
+                    <i class="fas fa-info-circle fa-lg"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" type="button" data-toggle="collapse" data-target="#configSection" aria-expanded="true" aria-controls="configSection">
+                    Toggle Input / Config
+                </button>
+            </div>
+        </div>
+        <p class="text-muted">Paste your JSON template(s) below to preview how they will look in the extension and Jira. Here's a link to <a href="https://gecgithub01.walmart.com/OneAppE2E/catalyst/blob/61148a9179a27ea488c03376ed0b64c414abcf59/src/shared/templates.js#L7" target="_blank">all the catalyst templates</a>.</p>
+    </header>
+
+    <!-- Configuration / Input Section -->
+    <div class="collapse show" id="configSection">
+        <div class="card bg-light mb-4">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="jsonInput" class="font-weight-bold">Template JSON Input</label>
+                    <div class="d-flex justify-content-between mb-2">
+                        <small class="text-muted">Paste a single template object <code>{...}</code> or an array of templates <code>[{...}]</code>.</small>
+                    </div>
+                    <textarea class="form-control font-monospace" id="jsonInput" rows="6" placeholder='Paste JSON here...'></textarea>
+                    <div class="invalid-feedback" id="jsonError">Invalid JSON format.</div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <button id="loadBtn" class="btn btn-primary mr-2">
+                            <i class="fas fa-plus-circle"></i> Add to Workspace
+                        </button>
+                    </div>
+                    <button id="clearBtn" class="btn btn-outline-danger btn-sm">Clear Workspace</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter Section -->
+    <div id="playgroundArea" class="d-none">
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="templateSearch" class="sr-only">Search Templates</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                        <input type="text" id="templateSearch" class="form-control" placeholder="Search by title, WCAG, or keywords...">
+                    </div>
+                    <small class="text-muted" id="countDisplay">0 templates loaded</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <select class="form-control" id="platformFilter">
+                        <option value="all">All Platforms</option>
+                        <option value="Web">Web</option>
+                        <option value="iOS">iOS</option>
+                        <option value="Android">Android</option>
+                    </select>
+                </div>
+                <div class="form-group mt-2">
+                    <select class="form-control" id="priorityFilter">
+                        <option value="all">All Priorities</option>
+                        <option value="P1">P1</option>
+                        <option value="P2">P2</option>
+                        <option value="P3">P3</option>
+                    </select>
+                </div>
+                <div class="form-group mt-2">
+                    <select class="form-control" id="levelFilter">
+                        <option value="all">All Levels</option>
+                        <option value="A">Level A</option>
+                        <option value="AA">Level AA</option>
+                        <option value="AAA">Level AAA</option>
+                    </select>
+                </div>
+                <div class="form-group mt-3">
+                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                        <label class="btn btn-outline-primary active" id="gridViewBtn">
+                            <input type="radio" name="viewOptions" autocomplete="off" checked> <i class="fas fa-th-large"></i> Grid
+                        </label>
+                        <label class="btn btn-outline-primary" id="tableViewBtn">
+                            <input type="radio" name="viewOptions" autocomplete="off"> <i class="fas fa-table"></i> Table
+                        </label>
+                        <label class="btn btn-outline-primary" id="analysisViewBtn">
+                            <input type="radio" name="viewOptions" autocomplete="off"> <i class="fas fa-chart-bar"></i> Analysis
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="exportSection" class="form-group mt-3 d-none">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-block dropdown-toggle" type="button" id="exportDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-file-export"></i> Export Table
+                        </button>
+                        <div class="dropdown-menu w-100" aria-labelledby="exportDropdown">
+                            <a class="dropdown-item" href="#" id="exportCsvBtn"><i class="fas fa-file-csv mr-2"></i> Export to CSV</a>
+                            <a class="dropdown-item" href="#" id="exportExcelBtn"><i class="fas fa-file-excel mr-2"></i> Export to Excel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Sections -->
+        
+        <!-- Custom/Preview Section -->
+        <div id="customSection" class="d-none mb-5">
+            <h4 class="border-bottom pb-2 mb-3 text-primary">
+                <i class="fas fa-folder-open"></i> My Workspace
+                <small class="text-muted ml-2" style="font-size: 0.6em; font-weight: normal;">(Not saved to library)</small>
+            </h4>
+            <div class="alert alert-info small py-2 mb-3">
+                <i class="fas fa-info-circle"></i> These templates are saved locally in your browser. To get them added to the official Catalyst library, please submit a Jira ticket.
+            </div>
+            <div id="customResultsContainer" class="row"></div>
+        </div>
+
+        <!-- Standard Library Section -->
+        <div id="standardSection">
+            <h4 class="border-bottom pb-2 mb-3 text-dark">
+                <i class="fas fa-book"></i> Standard Library
+                <small class="text-muted ml-2" id="standardCountDisplay" style="font-size: 0.6em; font-weight: normal;"></small>
+            </h4>
+            <div id="standardResultsContainer" class="row"></div>
+        </div>
+
+        <!-- Table View Section -->
+        <div id="tableViewSection" class="d-none">
+            <h4 class="border-bottom pb-2 mb-3 text-dark">
+                <i class="fas fa-table"></i> All Templates
+            </h4>
+            
+            <div class="alert alert-info small mb-3">
+                <i class="fas fa-info-circle mr-1"></i> 
+                <strong>Tip:</strong> Filter by platform or priority to refine your list. You can export the currently visible table to CSV or Excel using the "Export Table" button in the sidebar.
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="templatesTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col" style="width: 10%">WCAG</th>
+                            <th scope="col" style="width: 50%">Ruleset Title</th>
+                            <th scope="col" style="width: 10%">Priority</th>
+                            <th scope="col" style="width: 15%">Type</th>
+                            <th scope="col" style="width: 15%">Platform</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div id="analysisSection" class="d-none">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                <h4 class="text-dark mb-0">
+                    <i class="fas fa-chart-bar"></i> Standard Library Analysis
+                </h4>
+                <div>
+                    <button id="copyAiPromptBtn" class="btn btn-outline-info btn-sm mr-2">
+                        <i class="fas fa-robot"></i> Copy AI Research Prompt
+                    </button>
+                    <button id="copyEmailBtn" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-envelope"></i> Copy Email Summary
+                    </button>
+                </div>
+            </div>
+            <div id="analysisContent"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Template Detail Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="detailModalLabel">Template Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Jira Preview Container -->
+                <div class="jira-preview-container border p-4 bg-white">
+                    <!-- Dynamic Content -->
+                    <div id="jiraPreviewContent"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" id="downloadJsonBtn">Download JSON</button>
+                <button type="button" class="btn btn-primary" id="copyJiraBtn">Copy for Jira</button>
+                <button type="button" class="btn btn-success" id="copyTextBtn">Copy JSON</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Workflow Info Modal -->
+<div class="modal fade" id="workflowModal" tabindex="-1" role="dialog" aria-labelledby="workflowModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="workflowModalLabel"><i class="fas fa-robot"></i> AI Template Generation Workflow</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Use our custom GPT to generate correctly formatted JSON templates for the playground.</p>
+                
+                <ol class="font-weight-bold">
+                    <li class="mb-3">
+                        <span>Click the "Create Template with AI" button.</span>
+                        <p class="font-weight-normal text-muted mt-1">This opens the Accessibility Bug Template Creator GPT in a new tab.</p>
+                    </li>
+                    <li class="mb-3">
+                        <span>Describe the bug you want a template for.</span>
+                        <p class="font-weight-normal text-muted mt-1">Example: <em>"Create me a bug for when a button is pressed on web and it gets removed from the DOM and focus is reset"</em></p>
+                    </li>
+                    <li class="mb-3">
+                        <span>Copy the JSON output.</span>
+                        <p class="font-weight-normal text-muted mt-1">The GPT will generate a JSON object. Copy this code block.</p>
+                        <img src="assets/images/copy-json.png" class="img-fluid border rounded shadow-sm mb-2" alt="Copy JSON Example">
+                    </li>
+                    <li class="mb-3">
+                        <span>Paste into the Playground.</span>
+                        <p class="font-weight-normal text-muted mt-1">Return to this tab, paste the JSON into the input box, and click "Load Templates".</p>
+                        <img src="assets/images/paste-json.png" class="img-fluid border rounded shadow-sm mb-2" alt="Paste JSON Example">
+                    </li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Got it</button>
+                <a href="https://chatgpt.com/g/g-6984d89f30d48191a67ebcdf08cc3c13-accessibility-bug-template-creator" target="_blank" class="btn btn-success">
+                    <i class="fas fa-magic"></i> Go to GPT
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="assets/libs/jquery.js"></script>
+<script src="assets/libs/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="assets/libs/bootstrap/awesomplete.min.js"></script>
+<script src="assets/libs/bootstrap/fuse.min.js"></script>
+    <script src="assets/libs/prism/prism.js"></script>
+    <script src="wcag-map.js"></script>
+    <script src="templates.js"></script>
+    <script src="playground.js"></script>
+
+</body>
+</html>

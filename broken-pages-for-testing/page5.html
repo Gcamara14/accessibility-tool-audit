@@ -1,0 +1,583 @@
+<html lang="en" dir="ltr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFID Globalization - US + International Platform Unification (Readout)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#0053e2; --blue-d:#003a9e; --blue-l:#1e6bff;
+    --spark:#ffc220; --spark-140:#995213; --spark-10:#fff3d6;
+    --green:#2a8703; --green-d:#1d6101; --red:#ea1100;
+    --ink:#16191f; --muted:#74767c; --line:#cdd0d6; --line-2:#eceef2;
+    --bg:#f6f8fb; --card:#ffffff;
+  }
+  *{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;}
+  code,.mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  body{background:var(--bg);color:var(--ink);}
+  .hero-bg{background:radial-gradient(900px circle at 12% -10%, var(--blue-l), transparent 55%), linear-gradient(135deg, var(--blue), var(--blue-d));}
+  .accent-bar{width:6px;border-radius:6px;}
+  .card{background:var(--card);border:1px solid var(--line-2);border-radius:16px;box-shadow:0 1px 2px rgba(16,25,40,.04),0 8px 24px rgba(16,25,40,.05);}
+  .kpi-top{height:5px;border-top-left-radius:16px;border-top-right-radius:16px;}
+  .pill{display:inline-flex;align-items:center;gap:.4rem;border-radius:999px;padding:.28rem .7rem;font-size:.72rem;font-weight:700;letter-spacing:.03em;}
+  .chip{font-family:'JetBrains Mono',monospace;background:#eef2fb;color:var(--blue-d);border:1px solid #dbe5fb;border-radius:6px;padding:.05rem .35rem;font-size:.8em;}
+  .nav-link{color:var(--blue);font-weight:600;font-size:.86rem;}
+  .nav-link:hover{color:var(--blue-d);text-decoration:underline;}
+  table{border-collapse:collapse;width:100%;}
+  th{background:var(--blue);color:#fff;font-weight:600;text-align:left;font-size:.8rem;}
+  th,td{padding:.6rem .7rem;border:1px solid var(--line-2);vertical-align:top;font-size:.85rem;}
+  tr:nth-child(even) td{background:#fafbfd;}
+  .tag-keep{color:var(--green-d);font-weight:700;}
+  .tag-drop{color:var(--red);font-weight:700;}
+  .tag-new{color:var(--blue);font-weight:700;}
+  h2{scroll-margin-top:84px;}
+  /* ccm flow diagram */
+  .node{border-radius:12px;border:1px solid var(--line);background:#fff;padding:.7rem .9rem;}
+  .node-blue{background:#eef4ff;border-color:#cfe0ff;}
+  .node-spark{background:var(--spark-10);border-color:#f3dca0;}
+  .node-dark{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;border:none;}
+  .arrow-down{width:2px;height:22px;background:var(--line);margin:6px auto;position:relative;}
+  .arrow-down:after{content:"";position:absolute;bottom:-1px;left:-4px;border:5px solid transparent;border-top-color:var(--line);}
+  .mkt{border-radius:10px;border:1px solid var(--line-2);background:#fafbff;padding:.55rem .65rem;font-size:.72rem;font-weight:700;}
+</style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.sticky{position:sticky}.top-0{top:0px}.z-30{z-index:30}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-5{margin-bottom:1.25rem}.ml-auto{margin-left:auto}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-7{margin-top:1.75rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.flex-1{flex:1 1 0%}.list-disc{list-style-type:disc}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-stretch{align-items:stretch}.justify-center{justify-content:center}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-x-5{column-gap:1.25rem}.gap-y-1{row-gap:0.25rem}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-12 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(3rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(3rem * var(--tw-space-y-reverse))}.self-stretch{align-self:stretch}.border-b{border-bottom-width:1px}.border-l-4{border-left-width:4px}.border-t-4{border-top-width:4px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-12{padding-bottom:3rem}.pl-5{padding-left:1.25rem}.pt-9{padding-top:2.25rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[11px\]{font-size:11px}.text-\[15px\]{font-size:15px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.text-blue-100{--tw-text-opacity:1;color:rgb(219 234 254 / var(--tw-text-opacity, 1))}.text-blue-50{--tw-text-opacity:1;color:rgb(239 246 255 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.opacity-90{opacity:0.9}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}@media (min-width: 768px){.md\:w-64{width:16rem}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-5xl{font-size:3rem;line-height:1}}</style></head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero-bg text-white">
+  <div class="max-w-6xl mx-auto px-6 pt-9 pb-12">
+    <div class="flex flex-wrap items-center gap-2 mb-5">
+      <span class="pill" style="background:var(--spark);color:#1a1300;">TIGER TEAM READOUT</span>
+      <span class="pill" style="background:rgba(255,255,255,.16);color:#fff;">RFID GLOBALIZATION</span>
+      <span class="pill" style="background:rgba(255,255,255,.16);color:#fff;">RFIDSI | STORE RFID 2.0 | GLOBAL PLATFORM</span>
+      <span class="pill" style="background:rgba(255,255,255,.16);color:#fff;">WAVE 3 · Q1 · 32 WEEKS</span>
+      <span class="ml-auto text-sm text-blue-100">June 10, 2026</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Store RFID — US + International<br>Platform Unification</h1>
+    <p class="mt-4 max-w-3xl text-blue-50 text-lg">
+      One codebase, <strong>two deployments</strong>, US as the authoritative baseline. Merge the divergent
+      <span class="chip" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.25);">intl-ssaeim</span>
+      RFID fork back onto the
+      <span class="chip" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.25);">SSAEIM (us/)</span>
+      tree and serve US + 8 international markets from a single binary — country flows through the code as <em>data</em>, not as a build profile.
+    </p>
+    <p class="mt-4 text-sm text-blue-100">
+      Sources: Confluence <span class="underline">RFIDSI › RFID Globalization</span> (Decision Log D1–D44, Backend ADR, UI ADR / RFIDSI-4315, Global Platform LOE, FY27 Forecast)
+      · Puppy Pages <span class="underline">store-rfid-platform-unification-plan-v2</span>
+      · Code-level US↔INTL diff analysis (9 repo pairs).
+    </p>
+  </div>
+</header>
+
+<!-- ===================== STICKY NAV ===================== -->
+<nav class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex flex-wrap gap-x-5 gap-y-1">
+    <a class="nav-link" href="#summary">Summary</a>
+    <a class="nav-link" href="#context">1. Context</a>
+    <a class="nav-link" href="#approach">2. Approach</a>
+    <a class="nav-link" href="#findings">3. Findings</a>
+    <a class="nav-link" href="#results">4. Results &amp; LOE</a>
+    <a class="nav-link" href="#uiadr">UI ADR</a>
+    <a class="nav-link" href="#recos">5. Recommendations</a>
+  </div>
+</nav>
+
+<main class="max-w-6xl mx-auto px-6 py-10 space-y-12">
+
+  <!-- ===================== EXEC SUMMARY ===================== -->
+  <section id="summary">
+    <div class="flex items-start gap-4">
+      <div class="accent-bar self-stretch" style="background:var(--blue);"></div>
+      <div class="flex-1">
+        <h2 class="text-2xl font-extrabold">Executive Summary</h2>
+        <p class="mt-3 text-[15px] leading-relaxed max-w-4xl">
+          The US and International RFID stacks drifted into two separate forks (org <span class="chip">SSAEIM</span> vs
+          <span class="chip">intl-ssaeim</span>). A code-level comparison of all 9 shared repos confirmed the divergence is
+          real but <strong>convergeable</strong>: the base Java packages are identical, and the deltas cluster around three
+          axes that don't exist in US — <strong>multi-country tenancy</strong> (Canada live, Mexico scaffolded),
+          a <strong>Sam's-Club "Banner" dimension</strong>, and <strong>CCM2 + Akeyless + mTLS</strong> plumbing. The plan
+          adopts <strong>US as the authoritative base (D13)</strong>, freezes the INTL tree as a source of features to
+          absorb, and routes by country at the edge so one binary serves both regions.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-5 mt-7">
+      <div class="card">
+        <div class="kpi-top" style="background:var(--blue);"></div>
+        <div class="p-5">
+          <div class="text-4xl font-extrabold" style="color:var(--blue);">32</div>
+          <div class="text-sm font-semibold mt-1">weeks · RFID program LOE (June)</div>
+          <div class="text-xs text-gray-500 mt-1">Official Inventory Apps tracker; down from 490 → 154 → 32</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kpi-top" style="background:var(--green);"></div>
+        <div class="p-5">
+          <div class="text-4xl font-extrabold" style="color:var(--green-d);">~8–11</div>
+          <div class="text-sm font-semibold mt-1">calendar weeks</div>
+          <div class="text-xs text-gray-500 mt-1">3–4 engineers · Wave 3 · Q1</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kpi-top" style="background:var(--spark);"></div>
+        <div class="p-5">
+          <div class="text-4xl font-extrabold" style="color:var(--spark-140);">1 → 2</div>
+          <div class="text-sm font-semibold mt-1">one repo, two deploys</div>
+          <div class="text-xs text-gray-500 mt-1">same Git tag → US + INTL, separate infra (D17, D20)</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kpi-top" style="background:var(--blue);"></div>
+        <div class="p-5">
+          <div class="text-4xl font-extrabold" style="color:var(--blue);">9</div>
+          <div class="text-sm font-semibold mt-1">markets, one codebase</div>
+          <div class="text-xs text-gray-500 mt-1">US/PR + CA, MX, CR, GT, HN, NI, SV, CL</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-6 border-l-4" style="border-left-color:var(--spark);">
+      <div class="p-5">
+        <div class="font-bold text-sm" style="color:var(--spark-140);">Top-line</div>
+        <p class="text-[15px] mt-1 leading-relaxed">
+          This is a <strong>forward-merge, not a green-field rewrite</strong>. US absorbs the few genuinely-new INTL
+          capabilities (country-keyed config, EI bootstrap topology, <span class="chip">fr-CA</span> locale, per-country
+          IQS headers) behind clean abstractions, with security staying aligned to the US baseline. Sam's Club
+          and RFID 1.0 are <strong>out of scope</strong>; in-code multi-tenancy is <strong>deferred</strong> behind a
+          deploy-time market list until upstream/downstream systems support it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 1. CONTEXT ===================== -->
+  <section id="context">
+    <div class="flex items-start gap-4">
+      <div class="accent-bar self-stretch" style="background:var(--blue);"></div>
+      <div class="flex-1">
+        <h2 class="text-2xl font-extrabold">1. Team Context &amp; Objectives</h2>
+
+        <div class="grid md:grid-cols-2 gap-6 mt-5">
+          <div class="card"><div class="p-5">
+            <h3 class="font-bold text-lg">Domain &amp; surface</h3>
+            <p class="text-sm mt-2 leading-relaxed">
+              Store RFID 2.0 — the platform behind VizPick Fashion binning, Find-with-RFID, scan ingestion and
+              EI on-hand updates. Surface under review: <strong>9 backend services</strong>
+              (<span class="chip">store-rfid-service</span>, <span class="chip">-commons</span>,
+              <span class="chip">-event-manager</span>, <span class="chip">-pre-scan</span>,
+              <span class="chip">-post-scan</span>, <span class="chip">-scan-api</span>,
+              <span class="chip">rfid-batch</span>) and <strong>2 apps</strong>
+              (<span class="chip">rfid-scan-mini-app</span>, <span class="chip">native-rfid-scanner</span>),
+              each with a divergent INTL twin.
+            </p>
+          </div></div>
+          <div class="card"><div class="p-5">
+            <h3 class="font-bold text-lg">Workshop scope</h3>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li><strong>Discover</strong> what differs between US and INTL, and whether it <em>needs</em> to differ.</li>
+              <li><strong>Decide</strong> the architecture (US baseline, country routing) and log every call (D1–D44).</li>
+              <li><strong>Plan</strong> a concrete, estimated execution path to a single codebase.</li>
+              <li><strong>Out of scope:</strong> Sam's Club banner, RFID 1.0, cluster consolidation (D20), in-code multi-tenancy.</li>
+            </ul>
+          </div></div>
+        </div>
+
+        <h3 class="font-bold text-lg mt-8">Phased objective</h3>
+        <p class="text-sm text-gray-600 mt-1">From the RFIDSI Key Decisions framing — unify first, optimize next, generalize last.</p>
+        <div class="grid md:grid-cols-3 gap-5 mt-4">
+          <div class="card border-t-4" style="border-top-color:var(--green);"><div class="p-5">
+            <span class="pill" style="background:#e0f2da;color:var(--green-d);">PHASE 1 · NOW</span>
+            <h4 class="font-bold mt-3">Core Platform Unification</h4>
+            <p class="text-sm mt-1.5 text-gray-700">One merged repo on the <span class="chip">us/</span> tree; country resolved at the edge; two deployments from one Git tag. The work this readout estimates.</p>
+          </div></div>
+          <div class="card border-t-4" style="border-top-color:var(--spark);"><div class="p-5">
+            <span class="pill" style="background:var(--spark-10);color:var(--spark-140);">PHASE 2 · LATER</span>
+            <h4 class="font-bold mt-3">Optimization</h4>
+            <p class="text-sm mt-1.5 text-gray-700">Per-country observability granularity, cost-driven cluster consolidation (deferred D20), frontend locale expansion, dead-code &amp; dead-CCM cleanup.</p>
+          </div></div>
+          <div class="card border-t-4" style="border-top-color:var(--blue);"><div class="p-5">
+            <span class="pill" style="background:#e6effd;color:var(--blue);">PHASE 3 · FUTURE</span>
+            <h4 class="font-bold mt-3">Multi-tenancy</h4>
+            <p class="text-sm mt-1.5 text-gray-700">True in-code multi-tenancy (tenant columns, request-time routing) once upstream/downstream systems support it. Today: deploy-time <span class="chip">MARKETS=</span> list, no fallback.</p>
+          </div></div>
+        </div>
+
+        <h3 class="font-bold text-lg mt-8">How the team was structured</h3>
+        <table class="mt-3">
+          <thead><tr><th style="width:22%">Track</th><th style="width:34%">People / Roles</th><th>Owns</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Leadership / Direction</strong></td><td>Punarvashu Tiagi (Dir, WMT US) · Ram Jayaraman (Dir, WMT/Sam's INTL)</td><td>Scope, prioritization, cross-BU alignment, FY27 AOP tie-in.</td></tr>
+            <tr><td><strong>Architecture</strong></td><td>Wayne Menezes (Architect, WMT US) · Sumith Sukumaran (Pinpoint INTL) · Sam's architects (advisory)</td><td>Backend ADR, UI ADR, decision log, unification plan.</td></tr>
+            <tr><td><strong>Engineering Mgmt</strong></td><td>Luis R. Rosario-Berrios (Eng Mgr, WMT US) · Nathan Edwards (Eng Mgr, WMT INTL)</td><td>Execution, staffing, US/INTL delivery coordination.</td></tr>
+            <tr><td><strong>Backend</strong></td><td>2 senior engineers (US baseline)</td><td>TenantContext, SPI/registries, service pruning, Kafka/Cassandra, CCM.</td></tr>
+            <tr><td><strong>Frontend</strong></td><td>2 engineers</td><td>Mini-app locale port, native-scanner wand fields, country routing.</td></tr>
+            <tr><td><strong>DevOps (shared)</strong></td><td>0.5 engineer</td><td>kitt two-service split, sr.yaml routing, Akeyless zones, API Proxy.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2. APPROACH ===================== -->
+  <section id="approach">
+    <div class="flex items-start gap-4">
+      <div class="accent-bar self-stretch" style="background:var(--blue);"></div>
+      <div class="flex-1">
+        <h2 class="text-2xl font-extrabold">2. Approach &amp; Ways of Working</h2>
+
+        <div class="grid md:grid-cols-3 gap-5 mt-5">
+          <div class="card"><div class="p-5">
+            <h3 class="font-bold">How AI was leveraged</h3>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li><strong>Mechanical diff at scale:</strong> all 9 repo pairs diffed (~169k lines), then de-noised — e.g. CRLF inflation in <span class="chip">store-rfid-service</span> (41k→22k real lines).</li>
+              <li><strong>Cited evidence, no vibes:</strong> every claim backed by a quoted diff line or path; sub-agents read each diff in full and produced per-repo reports.</li>
+              <li><strong>Cross-validation:</strong> findings re-checked with independent greps (geo flags, Spring Boot versions, Sam's presence, Find-It folding).</li>
+            </ul>
+          </div></div>
+          <div class="card"><div class="p-5">
+            <h3 class="font-bold">Decision-making</h3>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li><strong>Decision log</strong> as single source of truth — <strong>44 decisions (D1–D44)</strong>, each Decided / Deferred / Out-of-scope.</li>
+              <li><strong>Two ADRs:</strong> Backend (service-mesh routing) and UI (mini-app globalization).</li>
+              <li><strong>US-baseline rule (D13):</strong> all changes land in <span class="chip">us/</span>; INTL is frozen reference.</li>
+            </ul>
+          </div></div>
+          <div class="card"><div class="p-5">
+            <h3 class="font-bold">How work was organized</h3>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li>36 tasks collapsed onto <strong>7 parallel rails / 16 groups</strong>; anything without a dependency arrow can start day one.</li>
+              <li>T-shirt sizing → person-weeks (XS .1 / S .3 / M .8 / L 1.5 / XL 3.0).</li>
+              <li>Investigations (location MDM, fashion groupings, open-scan) run off the critical path with their own owners.</li>
+            </ul>
+          </div></div>
+        </div>
+
+        <div class="card mt-6 border-l-4" style="border-left-color:var(--blue);">
+          <div class="p-5">
+            <div class="font-bold text-sm" style="color:var(--blue);">Note — AI learnings &amp; the reusable playbook</div>
+            <p class="text-[15px] mt-1 leading-relaxed">
+              The deep dive on <strong>AI ways-of-working</strong> — the prompt patterns, the agent/skill stack, the
+              diff-then-cite playbook, and what we'd templatize for the next tiger team — is documented in the
+              <strong>Shelf Availability Tiger Team readout</strong> and is intentionally <em>not</em> duplicated here.
+              This RFID effort used the <em>same</em> playbook; treat that report as the canonical AI-learnings appendix.
+              <br><span class="text-sm text-gray-600">Reference: <span class="underline">puppy.walmart.com/sharing/l0r08a2/sa-1411-tiger-team-readout</span> → §2 &amp; §5.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3. FINDINGS ===================== -->
+  <section id="findings">
+    <div class="flex items-start gap-4">
+      <div class="accent-bar self-stretch" style="background:var(--blue);"></div>
+      <div class="flex-1">
+        <h2 class="text-2xl font-extrabold">3. Key Findings</h2>
+
+        <h3 class="font-bold text-lg mt-5">3.1 Gap analysis — what actually differs (US baseline)</h3>
+        <table class="mt-3">
+          <thead><tr><th style="width:16%">Area</th><th style="width:26%">US base</th><th style="width:28%">INTL folds in / differs</th><th>Unified target</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Config</strong></td><td>Scalar properties, hardcoded <span class="chip">"US"</span></td><td>Country-keyed <span class="chip">Map&lt;country,T&gt;</span></td><td><span class="tag-new">Adopt</span> <span class="chip">@UseObjectMapper Map&lt;String,X&gt;</span> keyed on <span class="chip">TenantContext.country()</span> (D9)</td></tr>
+            <tr><td><strong>Country context</strong></td><td>None / implicit US</td><td>Country threaded manually</td><td><span class="tag-new">New</span> <span class="chip">TenantContext</span> + <span class="chip">CountryResolverFilter</span> (header→path→<strong>reject</strong>, no default) (D1,D3,D22)</td></tr>
+            <tr><td><strong>Edge routing</strong></td><td>Single US backend</td><td>Separate INTL backend</td><td>Single CNAME via API Proxy; <span class="chip">X-Country-Code</span> → <span class="chip">ingressGatewayRouting</span>; default REJECT/400 (D7,D28)</td></tr>
+            <tr><td><strong>Kafka</strong></td><td>Static topics/brokers (TaaS shared7)</td><td><span class="chip">intl-</span> topics, SOX6/TaaS5, dynamic broker</td><td><span class="tag-new">SPI</span> <span class="chip">KafkaTopicResolver</span>/<span class="chip">KafkaBrokerResolver</span> by (country,eventType) (D10)</td></tr>
+            <tr><td><strong>Cassandra</strong></td><td>store/gtin PKs</td><td>country-prefixed PKs (broad)</td><td>Add <span class="chip">country_code</span> to <strong>2 tables only</strong> — <span class="chip">item_attribute_cache_v2</span>, <span class="chip">cid_gtin_list</span>; backfill, not ALTER (D39)</td></tr>
+            <tr><td><strong>Secrets</strong></td><td>Akeyless <span class="chip">ssaeim-wcnp</span></td><td>Akeyless <span class="chip">intl-ssaeim-wcnp</span></td><td>Single Akeyless config, zone-interpolated path + guardrails (D19)</td></tr>
+            <tr><td><strong>IQS / SIRO</strong></td><td>No martId headers</td><td><span class="chip">WM_MART_ID</span>+<span class="chip">WM_LOCALE_ID</span> per country</td><td><span class="tag-new">SPI</span> <span class="chip">IqsClient</span>; country-keyed martId / deptLocale</td></tr>
+            <tr><td><strong>Transport security</strong></td><td>TLS to US backends (TaaS shared7)</td><td>mutual TLS egress (SOX6 / TaaS5)</td><td>Mutual-TLS egress union across US + INTL in <span class="chip">sr.yaml</span>; SIRO RSA key rotation is a Phase 0 blocker</td></tr>
+            <tr><td><strong>Find-It</strong></td><td>Standalone <span class="chip">store-find-it-api</span></td><td>Folded into <span class="chip">store-rfid-service</span></td><td>Disposition decision pending (product) — keep US service vs adopt fold-in</td></tr>
+            <tr><td><strong>Banner (Sam's)</strong></td><td>None</td><td><span class="chip">WMT</span>/<span class="chip">SAMS</span> dimension</td><td><span class="tag-drop">Out of scope</span> — flatten banner maps to country-only; drop SAMS</td></tr>
+            <tr><td><strong>Apps</strong></td><td>mini-app + native-scanner</td><td><span class="chip">-2-0</span> variants</td><td><span class="tag-keep">Keep US apps</span>; port <span class="chip">fr-CA</span> + wand fields; drop INTL apps</td></tr>
+            <tr><td><strong>Framework</strong></td><td>Spring Boot 3.2–3.5 (mixed)</td><td>up to 4.0.2 / Java 21</td><td>Align on <strong>3.5.x baseline</strong>; defer Boot 4 / Java 21 org-wide</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="font-bold text-lg mt-8">3.2 Key architectural decisions</h3>
+        <div class="grid md:grid-cols-2 gap-5 mt-3">
+          <div class="card"><div class="p-5">
+            <h4 class="font-bold">Tenancy &amp; routing</h4>
+            <p class="text-sm mt-1.5">Country is <strong>data, not a profile</strong>. Edge derives it once from <span class="chip">X-Country-Code</span> (or path); every layer reads from request scope. Missing/malformed → HTTP 400, never a silent US default (D3, D7, D22, D28).</p>
+          </div></div>
+          <div class="card"><div class="p-5">
+            <h4 class="font-bold">Config &amp; secrets</h4>
+            <p class="text-sm mt-1.5">New US-owned <span class="chip">store-rfid-v2-ccm</span> repo with per-app <span class="chip">ccm/</span> folders; INTL deltas live in a zone override. One Akeyless config, zone-interpolated, with cross-region guardrails (D4, D9, D18, D19, D40).</p>
+          </div></div>
+          <div class="card"><div class="p-5">
+            <h4 class="font-bold">Adapters (sources / sinks)</h4>
+            <p class="text-sm mt-1.5">Eight SPIs in commons — IQS, MELO, Location/MDM, store-list, secrets, Kafka topic, Kafka broker, feature-toggle — each a registry bean reading country-keyed CCM. No <span class="chip">if (country=="US")</span> in core.</p>
+          </div></div>
+          <div class="card"><div class="p-5">
+            <h4 class="font-bold">Deliberately dropped</h4>
+            <p class="text-sm mt-1.5">Sam's banner &amp; Pete adapter, RFID 1.0 legacy paths, INTL frontend apps. Cluster consolidation &amp; Dynatrace explicitly out of scope (D15, D20).</p>
+          </div></div>
+        </div>
+
+        <h3 class="font-bold text-lg mt-8">3.3 What worked — and what created friction</h3>
+        <div class="grid md:grid-cols-2 gap-5 mt-3">
+          <div class="card border-l-4" style="border-left-color:var(--green);"><div class="p-5">
+            <div class="font-bold" style="color:var(--green-d);">Worked better than expected</div>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li>Architecture was already <strong>externalized</strong> — mini-app reads base URLs/country from CCM + URL path; "the repo is in a good position."</li>
+              <li>Base Java packages identical across forks — this is a merge, not a rewrite.</li>
+              <li>AI diff-then-cite gave an <strong>evidence-backed</strong> gap analysis in hours, not weeks.</li>
+              <li>Decision log (D1–D44) collapsed ambiguity into unambiguous direction.</li>
+            </ul>
+          </div></div>
+          <div class="card border-l-4" style="border-left-color:var(--red);"><div class="p-5">
+            <div class="font-bold" style="color:var(--red);">Friction points</div>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li><strong>Cassandra PK change = backfill</strong> (dual-write → backfill → cutover), not an in-place ALTER (D39) — the single largest risk.</li>
+              <li><strong>API-Proxy externalization</strong> is cross-team (security review, new environment + subscription) and gates service-mesh header routing (D41, D7).</li>
+              <li><strong>INTL investigations</strong> — location MDM globalized view, fashion groupings, open-scan availability — gate the INTL rollout (D34, D37, D38).</li>
+              <li><strong>Estimate reconciliation:</strong> figures revised 490 → 154 → 32 weeks as scope tightened — now anchored to the 32-week program-tracker LOE.</li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4. RESULTS & LOE ===================== -->
+  <section id="results">
+    <div class="flex items-start gap-4">
+      <div class="accent-bar self-stretch" style="background:var(--spark);"></div>
+      <div class="flex-1">
+        <h2 class="text-2xl font-extrabold">4. Results &amp; Deliverables — the LOE picture</h2>
+
+        <div class="grid md:grid-cols-3 gap-5 mt-5">
+          <div class="card border-t-4" style="border-top-color:var(--blue);"><div class="p-5">
+            <span class="pill" style="background:#e6effd;color:var(--blue);">OFFICIAL · LOE (JUNE)</span>
+            <div class="text-3xl font-extrabold mt-2" style="color:var(--blue);">32 weeks</div>
+            <p class="text-sm mt-1">The RFID line on the Inventory Apps program tracker — the committed level of effort for the in-scope unification. Wave 3 · Q1.</p>
+          </div></div>
+          <div class="card border-t-4" style="border-top-color:var(--green);"><div class="p-5">
+            <span class="pill" style="background:#e0f2da;color:var(--green-d);">BOTTOM-UP PLAN</span>
+            <div class="text-3xl font-extrabold mt-2" style="color:var(--green-d);">~30 PW</div>
+            <p class="text-sm mt-1">36 tasks across 16 workstreams (unification-plan-v2) sum to ~30 PW and round to the 32-week LOE — an independent corroboration. ~8–11 calendar weeks @ 3–4 engineers.</p>
+          </div></div>
+          <div class="card border-t-4" style="border-top-color:var(--spark);"><div class="p-5">
+            <span class="pill" style="background:var(--spark-10);color:var(--spark-140);">CONVERGENCE</span>
+            <div class="text-3xl font-extrabold mt-2" style="color:var(--spark-140);">490 → 154 → 32</div>
+            <p class="text-sm mt-1">Estimate revisions (in weeks) as scope was cut: Sam's out, RFID 1.0 out, in-code multi-tenancy deferred, cluster consolidation deferred (D20).</p>
+          </div></div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">The 32-week program-tracker LOE (June) and the ~30 PW bottom-up plan agree. The earlier 490 / 154-week numbers were broader-scope revisions that still carried Sam's, RFID 1.0, and full platform migration — out of scope for this unification. (The org-level Global Platform LOE including a Sam's rewrite is a separate 490–555 PW figure.)</p>
+
+        <h3 class="font-bold text-lg mt-8">4.1 Where the effort sits (bottom-up ~30 PW → 32-week LOE)</h3>
+        <div class="card mt-3"><div class="p-5">
+          <div style="height:340px;"><canvas id="loeChart" width="1040" height="340" style="display: block; box-sizing: border-box; height: 340px; width: 1040px;"></canvas></div>
+        </div></div>
+
+        <h3 class="font-bold text-lg mt-8">4.2 Repo dispositions</h3>
+        <table class="mt-3">
+          <thead><tr><th style="width:30%">Repo</th><th style="width:18%">Disposition</th><th>What happens</th></tr></thead>
+          <tbody>
+            <tr><td><span class="chip">store-rfid-commons</span></td><td><span class="tag-new">Modify US</span></td><td>Home of TenantContext, 8 SPIs + registries, validation, Cassandra codec, MDC.</td></tr>
+            <tr><td><span class="chip">store-rfid-service</span></td><td><span class="tag-new">Modify US</span></td><td>Hard prune (D29); migrate ProductController → scan-api (D42); drop Reactive WebClient (D5).</td></tr>
+            <tr><td><span class="chip">store-rfid-event-manager</span></td><td><span class="tag-new">Modify US</span></td><td>Keep EI only (D30); absorb INTL EI bootstrap topology; country-aware producers.</td></tr>
+            <tr><td><span class="chip">store-rfid-pre-scan-processor</span></td><td><span class="tag-new">Modify US</span></td><td>Country-iterating ModelScheduler; dark-item per-country gate (D31, D32).</td></tr>
+            <tr><td><span class="chip">store-rfid-post-scan-processor</span></td><td><span class="tag-new">Modify US</span></td><td>Country iteration in ScanCutoffScheduler; DLQ/area-shard behind SPIs.</td></tr>
+            <tr><td><span class="chip">store-rfid-scan-api</span></td><td><span class="tag-new">Modify US</span></td><td>OpenScan per-country gate (D33); receives ProductController; API-Proxy externalized (D41).</td></tr>
+            <tr><td><span class="chip">rfid-admin-web-app</span></td><td><span class="tag-keep">Keep US-only</span></td><td>No INTL twin; unchanged.</td></tr>
+            <tr><td><span class="chip">store-rfid-v2-ccm</span> (new)</td><td><span class="tag-new">Create</span></td><td>US-owned CCM gitops repo; US/INTL admin groups; zone overrides (D4, D40).</td></tr>
+            <tr><td><span class="chip">intl-store-rfid-*</span></td><td><span class="tag-drop">Freeze → decommission</span></td><td>Reference only during merge; archived once traffic cuts over.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== UI ADR + DEMO (the differentiator) ===================== -->
+  <section id="uiadr">
+    <div class="flex items-start gap-4">
+      <div class="accent-bar self-stretch" style="background:var(--blue);"></div>
+      <div class="flex-1">
+        <div class="flex flex-wrap items-center gap-3">
+          <h2 class="text-2xl font-extrabold">UI ADR — rfid-scan-mini-app globalization</h2>
+          <span class="pill" style="background:var(--spark);color:#1a1300;">NEW vs SA READOUT</span>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">Source: Confluence <span class="underline">rfid-scan-mini-app / RFID UI ADR</span> · <span class="chip">RFIDSI-4315</span>. The points below are taken directly from that ADR.</p>
+
+        <div class="card mt-5 border-l-4" style="border-left-color:var(--blue);"><div class="p-5">
+          <p class="text-sm"><strong>Goal:</strong> Enable <span class="chip">rfid-scan-mini-app</span> (<span class="chip">@walmart/rfid-scan-mini-app</span>) to support countries beyond the US (e.g., Mexico, Canada) and additional locales beyond <span class="chip">en-US</span> / <span class="chip">es-MX</span> (specific locales TBD).</p>
+          <p class="text-sm mt-2"><strong>TL;DR:</strong> The repo is in a good position. The architecture is mostly externalized.</p>
+        </div></div>
+
+        <div class="grid md:grid-cols-2 gap-5 mt-5">
+          <div class="card border-l-4" style="border-left-color:var(--green);"><div class="p-5">
+            <div class="font-bold" style="color:var(--green-d);">What is already globalization-ready</div>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li>URL builder already injects a country code segment: <span class="chip">/country/{countryCode}/store/{siteId}{endpoint}</span>.</li>
+              <li>Country code is sourced from Redux (<span class="chip">UserSelectors.getCountryCode</span>), populated by the host app.</li>
+              <li>Base URLs and consumer IDs are read from CCM via <span class="chip">ConfigSelectors</span> (<span class="chip">getInventoryBaseUrl</span>, <span class="chip">getDistancingBaseUrl</span>, <span class="chip">getRfidUrls</span>, <span class="chip">getRfidConsumerIds</span>) — the hardcoded <span class="chip">DEFAULT_*</span> constants in source are fallback values only, used when CCM returns null. Pointing the app at a non-US backend is a CCM change, not a code change.</li>
+              <li><span class="chip">i18next</span> is wired up via <span class="chip">@walmart/allspark-foundation</span> and supports per-locale translation files.</li>
+              <li>Most RFID thresholds, wand power profiles, and timing values are driven by <span class="chip">ConfigSelectors</span> / CCM, not constants.</li>
+            </ul>
+          </div></div>
+          <div class="card border-l-4" style="border-left-color:var(--spark);"><div class="p-5">
+            <div class="font-bold" style="color:var(--spark-140);">What is not yet globalization-ready</div>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li>Only <span class="chip">en-US</span> and <span class="chip">es-MX</span> translation files exist.</li>
+              <li>The <span class="chip">DEFAULT_MANUAL_REASON_CONFIG</span> constant contains inline bilingual strings (en-US + es-MX) rather than translation keys.</li>
+              <li>Limited date / time localization.</li>
+            </ul>
+          </div></div>
+        </div>
+
+        <!-- CCM-DRIVEN CONFIG DIAGRAM -->
+        <h3 class="font-bold text-lg mt-8">One codebase, per-market options via CCM</h3>
+        <p class="text-sm text-gray-600 mt-1">How the front end serves multiple markets from the same build: country comes from the request / Redux, and CCM supplies the per-market options at runtime. This is the same mechanism that lets the single artifact scale toward multi-tenancy — adding a market is a CCM change, not a code change.</p>
+
+        <div class="card mt-4"><div class="p-6">
+          <div class="node node-dark text-center"><div class="font-bold text-sm">Single mini-app artifact — one codebase</div><div class="text-xs opacity-90 mt-0.5">hosted in MyWalmart · ships all per-locale translation bundles</div></div>
+          <div class="arrow-down"></div>
+          <div class="node node-blue text-center"><div class="font-semibold text-sm">Country context (per request)</div><div class="text-xs mt-1">Redux <span class="chip">UserSelectors.getCountryCode</span> (set by host app) &nbsp;+&nbsp; URL <span class="chip">/country/{countryCode}/store/{siteId}</span></div></div>
+          <div class="arrow-down"></div>
+          <div class="flex flex-col md:flex-row items-stretch justify-center gap-3">
+            <div class="node node-blue flex-1 text-center"><div class="font-bold text-sm" style="color:var(--blue-d);">CCM resolution at runtime</div><div class="text-xs mt-1"><span class="chip">ConfigSelectors</span>: getInventoryBaseUrl · getDistancingBaseUrl · getRfidUrls · getRfidConsumerIds<br><span class="chip">i18next</span>: per-locale translation bundle</div></div>
+            <div class="node node-spark md:w-64 text-center flex items-center justify-center"><div class="text-xs"><strong>DEFAULT_*</strong> fallback — used only when CCM returns null</div></div>
+          </div>
+          <div class="arrow-down"></div>
+          <div class="text-center text-xs font-semibold text-gray-500 mb-2">Per-market options resolved from CCM — same code path for every market</div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="mkt"><span style="color:var(--blue-d);">US</span><div class="mt-1 text-gray-600" style="font-weight:400;">baseUrls · consumerIds · thresholds · wandPower · timing · <strong>en-US</strong></div></div>
+            <div class="mkt"><span style="color:var(--blue-d);">CA</span><div class="mt-1 text-gray-600" style="font-weight:400;">baseUrls · consumerIds · thresholds · wandPower · timing · <strong>en-CA / fr-CA*</strong></div></div>
+            <div class="mkt"><span style="color:var(--blue-d);">MX</span><div class="mt-1 text-gray-600" style="font-weight:400;">baseUrls · consumerIds · thresholds · wandPower · timing · <strong>es-MX</strong></div></div>
+            <div class="mkt"><span style="color:var(--blue-d);">CR / GT / HN / NI / SV / CL</span><div class="mt-1 text-gray-600" style="font-weight:400;">baseUrls · consumerIds · thresholds · wandPower · timing · <strong>locale*</strong></div></div>
+          </div>
+          <p class="text-[11px] text-gray-400 mt-3">* Locales beyond en-US / es-MX are the remaining work (per the ADR). The resolution path already exists; new markets and locales are CCM + translation-bundle additions, not code changes.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 5. RECOMMENDATIONS ===================== -->
+  <section id="recos">
+    <div class="flex items-start gap-4">
+      <div class="accent-bar self-stretch" style="background:var(--blue);"></div>
+      <div class="flex-1">
+        <h2 class="text-2xl font-extrabold">5. Recommendations to Scale + Continue</h2>
+
+        <div class="grid md:grid-cols-3 gap-5 mt-5">
+          <div class="card"><div class="p-5">
+            <h3 class="font-bold" style="color:var(--green-d);">Repeat</h3>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li><strong>AI diff-then-cite</strong> as the gap-analysis backbone — mechanical, evidence-first.</li>
+              <li><strong>US-baseline + frozen-INTL-as-source</strong> — removes "whose code wins" debate.</li>
+              <li><strong>Decision log</strong> as the single source of truth (44 calls, each with status).</li>
+              <li><strong>SPI/registry abstraction</strong> for every source/sink that differs by country.</li>
+            </ul>
+          </div></div>
+          <div class="card"><div class="p-5">
+            <h3 class="font-bold" style="color:var(--spark-140);">Do differently</h3>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li>Clear <strong>Phase 0 day-1 blockers</strong> first — SIRO RSA key rotation, INTL Akeyless path, and the <span class="chip">MARKETS</span> market-config contract — before merge work starts.</li>
+              <li>Lock <strong>product decisions earlier</strong> (Find-It disposition, open-scan per market, fashion groupings).</li>
+              <li>Pin the <strong>service-mesh failure-mode default</strong> early — Backend ADR leaves default-to-US vs 400 vs reject as TBD.</li>
+              <li>Maintain <strong>one canonical estimate tracker</strong> anchored to the 32-week program LOE.</li>
+            </ul>
+          </div></div>
+          <div class="card"><div class="p-5">
+            <h3 class="font-bold" style="color:var(--blue);">Org improvements</h3>
+            <ul class="text-sm mt-2 space-y-1.5 list-disc pl-5">
+              <li><strong>Unblock external deps:</strong> API-Proxy env/subscription, DCS-W onboarding, INTL Akeyless zones, SIRO key rotation.</li>
+              <li><strong>Get product decisions</strong> on the in/out-of-scope grey areas before Phase 1 exits.</li>
+              <li><strong>Drift control:</strong> Sentinel-style PR gate + a runtime arm comparing deployed config to a tenant manifest.</li>
+              <li><strong>Per-country observability</strong> ownership — who owns the unified dashboard (D15 TBD).</li>
+            </ul>
+          </div></div>
+        </div>
+
+        <div class="card mt-6 border-l-4" style="border-left-color:var(--spark);"><div class="p-5">
+          <div class="font-bold text-sm" style="color:var(--spark-140);">Closing executive insight</div>
+          <p class="text-[15px] mt-1 leading-relaxed">
+            The expensive part of globalization here isn't the code — it's the <strong>decisions and the dependencies</strong>.
+            The architecture is already externalized, the forks share a common ancestor, and AI compressed the gap analysis from
+            weeks to hours. With <strong>US as the baseline</strong> and country flowing through the stack as data, the core
+            unification is a <strong>32-week effort (~8–11 calendar weeks at 3–4 engineers)</strong> — gated mostly by external platform
+            enablement (API Proxy, Akeyless, DCS-W) and a handful of product calls. Land Phase 1 cleanly and the same
+            playbook generalizes to the next banner and the next market.
+          </p>
+        </div></div>
+
+        <p class="text-xs text-gray-500 mt-6">
+          Generated by Everest for the RFID Globalization tiger team. Sources combined: Confluence RFIDSI (Decision Log D1–D44, Backend ADR, UI ADR / RFIDSI-4315, Global Platform LOE, FY27 Forecast), Puppy Pages <em>store-rfid-platform-unification-plan-v2</em>, and the code-level US↔INTL diff analysis. AI ways-of-working detailed in the Shelf Availability readout (SA-1411).
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  const ctx = document.getElementById('loeChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [
+        'CCM (new repo, gitops, Akeyless)',
+        'Investigations (location MDM, fashion, open-scan)',
+        'Platform plumbing (commons, SPIs, registries)',
+        'Pre/post-scan + scan-api gates',
+        'Event-manager refactor',
+        'Service-tier pruning & migration',
+        'Observability + tests + docs',
+        'Storage & schema (Cassandra, D39)',
+        'Deployment (kitt + sr)',
+        'API Proxy externalization',
+        'Hangtags onboarding'
+      ],
+      datasets: [{
+        label: 'Person-weeks',
+        data: [3.9, 4.5, 3.5, 3.3, 2.7, 2.7, 2.4, 2.3, 2.3, 1.5, 0.8],
+        backgroundColor: [
+          '#0053e2','#ffc220','#0053e2','#0053e2','#0364a8','#0364a8',
+          '#2a8703','#2a8703','#5b8def','#995213','#74767c'
+        ],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: 'Bottom-up effort by workstream (~30 PW; rounds to 32-week LOE)', font: { size: 14, weight: '700' }, color: '#16191f' },
+        tooltip: { callbacks: { label: (c) => ' ' + c.parsed.x + ' person-weeks' } }
+      },
+      scales: {
+        x: { title: { display: true, text: 'person-weeks' }, grid: { color: '#eceef2' } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+</script>
+<script>
+  // Sticky-nav scroll. Uses scrollIntoView instead of #hash navigation so it works
+  // even inside Puppy Pages' sandboxed srcdoc iframe (no allow-same-origin), where
+  // native fragment links resolve against the parent URL and do nothing.
+  (function () {
+    function navHeight() {
+      var n = document.querySelector('nav');
+      return n ? n.getBoundingClientRect().height : 64;
+    }
+    document.querySelectorAll('nav a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var el = document.getElementById(a.getAttribute('href').slice(1));
+        if (!el) return;
+        var y = el.getBoundingClientRect().top + window.pageYOffset - navHeight() - 12;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
+  })();
+</script>
+
+
+</body></html>

@@ -1,0 +1,32 @@
+import fs from "fs";
+import path from "path";
+
+const legacyRaw = [
+  {
+    "text": "PHX1",
+    "level": "H1",
+    "reason": "Page title in header",
+    "bbox": [135, 59, 70, 31]
+  },
+  {
+    "text": "🚛 Yard Status💬",
+    "level": "H2",
+    "reason": "Major section divider",
+    "bbox": [32, 172, 150, 46]
+  },
+  {
+    "text": "🚪 EXIT Backlog💬",
+    "level": "H2",
+    "reason": "Major section divider",
+    "bbox": [244, 173, 156, 24]
+  }
+];
+
+const v1Raw = `| page_id | page_url_or_fixture | skill_name | element_type | selector_or_location | wcag_candidate | severity | status | notes | heading_text | heading_level | is_hierarchy_valid | hierarchy_issue_type |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| page1 | broken-pages-for-testing/page1.html | headings_inventory | heading | h1.hdr-title | 1.3.1 | low | pass | Valid H1 | PHX1 | 1 | true | none |
+| page1 | broken-pages-for-testing/page1.html | headings_inventory | heading | h2 | 1.3.1 | low | pass | Valid H2 | 🚛 Yard Status💬 | 2 | true | none |
+| page1 | broken-pages-for-testing/page1.html | headings_inventory | heading | span | 1.3.1 | high | fail | Styled span used as heading | 🚪 EXIT Backlog💬 | null | false | fake_heading |
+| page1 | broken-pages-for-testing/page1.html | headings_inventory | heading | div | 1.3.1 | high | fail | Styled div used as heading | 📅 Projected Solve | null | false | fake_heading |`;
+
+fs.writeFileSync("mock_real_results.json", JSON.stringify({ v1Raw, legacyRaw: JSON.stringify(legacyRaw) }));

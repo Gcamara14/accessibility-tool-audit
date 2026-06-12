@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐶 Wibey Swarm Queue Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        blue: { 100: '#0053e2', 110: '#0047c3', 130: '#00338d' },
+                        spark: { 10: '#fff9e6', 100: '#ffc220', 140: '#995213' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen p-8">
+
+    <div class="max-w-5xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-blue-100"><i class="fa-solid fa-dog mr-2"></i>Wibey Swarm Queue Builder</h1>
+                <p class="text-gray-500 mt-2">Add bugs below. Copy the Markdown table directly into your <code>BATCH_QUEUE.md</code> file.</p>
+            </div>
+            <div class="text-4xl">🐾</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Left Column: Form -->
+            <div class="md:col-span-1 bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit">
+                <h2 class="text-xl font-semibold mb-4 border-b pb-2">➕ Add to Queue</h2>
+                <form id="queueForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Jira URL</label>
+                        <input type="url" id="jiraUrl" required placeholder="https://jira.walmart.com/..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-100 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">GitHub PR URL</label>
+                        <input type="url" id="prUrl" required placeholder="https://gecgithub01.walmart.com/..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-100 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Notes / WCAG Rule</label>
+                        <textarea id="notes" required rows="3" placeholder="1.1.1 Informative Alt Text - Correcting description..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-100 outline-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-100 hover:bg-blue-110 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                        <i class="fa-solid fa-plus mr-2"></i> Add to Queue
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Column: Table & Output -->
+            <div class="md:col-span-2 space-y-6">
+                
+                <!-- Table View -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h2 class="text-xl font-semibold">📋 Current Queue</h2>
+                        <button onclick="clearQueue()" class="text-red-500 hover:text-red-700 text-sm font-medium px-2 py-1 rounded hover:bg-red-50 transition">
+                            <i class="fa-solid fa-trash mr-1"></i> Clear All
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 border-y border-gray-200 text-sm">
+                                    <th class="py-2 px-3 font-semibold">#</th>
+                                    <th class="py-2 px-3 font-semibold">Jira</th>
+                                    <th class="py-2 px-3 font-semibold">PR</th>
+                                    <th class="py-2 px-3 font-semibold">Notes</th>
+                                    <th class="py-2 px-3 font-semibold text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody" class="text-sm">
+                                <!-- JS injects rows here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="emptyState" class="text-center py-8 text-gray-400 hidden">
+                        <i class="fa-solid fa-box-open text-3xl mb-2"></i>
+                        <p>Your queue is empty. Feed me some bugs!</p>
+                    </div>
+                </div>
+
+                <!-- Markdown Export -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="text-xl font-semibold">📝 Markdown Output</h2>
+                        <button onclick="copyMarkdown()" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold py-1.5 px-3 rounded shadow transition flex items-center">
+                            <i class="fa-regular fa-copy mr-2"></i> Copy for Wibey
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-3">Click copy and paste this directly into <code>final-skill/BATCH_QUEUE.md</code></p>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 overflow-x-auto">
+                        <pre><code id="markdownOutput" class="text-xs text-gray-700 whitespace-pre"></code></pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 transform transition-transform duration-300 translate-y-20 opacity-0 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg font-medium flex items-center">
+        <i class="fa-solid fa-circle-check mr-2"></i> <span id="toastMsg">Copied to clipboard!</span>
+    </div>
+
+    <script>
+        // LocalStorage Key
+        const STORAGE_KEY = 'wibey_batch_queue';
+        let queue = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+        // DOM Elements
+        const form = document.getElementById('queueForm');
+        const tableBody = document.getElementById('tableBody');
+        const emptyState = document.getElementById('emptyState');
+        const markdownOutput = document.getElementById('markdownOutput');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        // Extract ID from URL for cleaner display
+        function extractIdFromUrl(url) {
+            try {
+                // For Jira: https://jira.walmart.com/browse/CEPG-337717 -> CEPG-337717
+                // For Github: .../pull/180471 -> #180471
+                if (url.includes('jira')) {
+                    const match = url.match(/browse\/([A-Z0-9-]+)/);
+                    return match ? match[1] : url;
+                } else if (url.includes('github') || url.includes('pull')) {
+                    const match = url.match(/pull\/(\d+)/);
+                    return match ? `#${match[1]}` : 'PR Link';
+                }
+                return 'Link';
+            } catch (e) {
+                return 'Link';
+            }
+        }
+
+        // Add to Queue
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newItem = {
+                id: Date.now(), // unique ID for deletion
+                jiraUrl: document.getElementById('jiraUrl').value.trim(),
+                prUrl: document.getElementById('prUrl').value.trim(),
+                notes: document.getElementById('notes').value.trim()
+            };
+            
+            queue.push(newItem);
+            saveData();
+            renderUI();
+            form.reset();
+            document.getElementById('jiraUrl').focus();
+        });
+
+        // Delete from Queue
+        function deleteItem(id) {
+            queue = queue.filter(item => item.id !== id);
+            saveData();
+            renderUI();
+        }
+
+        // Clear all
+        function clearQueue() {
+            if(confirm("Are you sure you want to clear the entire queue?")) {
+                queue = [];
+                saveData();
+                renderUI();
+            }
+        }
+
+        // Save to LocalStorage
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
+        }
+
+        // Render Table and Markdown
+        function renderUI() {
+            tableBody.innerHTML = '';
+            
+            if (queue.length === 0) {
+                emptyState.classList.remove('hidden');
+                markdownOutput.textContent = "Your queue is empty.";
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            let mdString = `| # | Status | Jira | PR | Notes |\n|---|---|---|---|---|\n`;
+
+            queue.forEach((item, index) => {
+                const rowNum = index + 1;
+                const jiraId = extractIdFromUrl(item.jiraUrl);
+                const prId = extractIdFromUrl(item.prUrl);
+                
+                // Render HTML Table Row
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-gray-100 hover:bg-gray-50";
+                tr.innerHTML = `
+                    <td class="py-3 px-3 text-gray-500">${rowNum}</td>
+                    <td class="py-3 px-3"><a href="${item.jiraUrl}" target="_blank" class="text-blue-100 hover:underline">${jiraId}</a></td>
+                    <td class="py-3 px-3"><a href="${item.prUrl}" target="_blank" class="text-blue-100 hover:underline">${prId}</a></td>
+                    <td class="py-3 px-3 text-gray-600 max-w-xs truncate" title="${item.notes}">${item.notes}</td>
+                    <td class="py-3 px-3 text-center">
+                        <button onclick="deleteItem(${item.id})" class="text-gray-400 hover:text-red-500 transition">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+
+                // Build Markdown String
+                // Clean notes to prevent markdown table breaking (replace | and newlines)
+                const safeNotes = item.notes.replace(/\|/g, '-').replace(/\n/g, ' ');
+                mdString += `| ${rowNum} | ⏳ PENDING | [${jiraId}](${item.jiraUrl}) | [${prId}](${item.prUrl}) | ${safeNotes} |\n`;
+            });
+
+            markdownOutput.textContent = mdString;
+        }
+
+        // Copy to Clipboard Function
+        function copyMarkdown() {
+            const mdText = markdownOutput.textContent;
+            if(!mdText || mdText === "Your queue is empty.") return;
+
+            navigator.clipboard.writeText(mdText).then(() => {
+                showToast("Markdown copied to clipboard!");
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast("Failed to copy!", true);
+            });
+        }
+
+        function showToast(msg, isError = false) {
+            toastMsg.textContent = msg;
+            toast.className = `fixed bottom-5 right-5 transform transition-transform duration-300 px-6 py-3 rounded-lg shadow-lg font-medium flex items-center ${isError ? 'bg-red-600' : 'bg-green-600'} text-white`;
+            
+            // Slide up
+            setTimeout(() => toast.classList.remove('translate-y-20', 'opacity-0'), 10);
+            
+            // Slide down
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        // Initial render
+        renderUI();
+    </script>
+</body>
+</html>

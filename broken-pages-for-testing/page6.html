@@ -1,0 +1,888 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walmart Connect Product Summaries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        walmart: {
+                            blue: '#0053e2',
+                            blueHover: '#0046c2',
+                            spark: '#ffc220',
+                            sparkDark: '#995213',
+                            gray: {
+                                10: '#f8f8f8',
+                                50: '#e0e0e0',
+                                100: '#b3b3b3',
+                                160: '#2e2f32'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .nav-link.active { background-color: #0053e2; color: white; }
+        .category-header { font-size: 0.65rem; letter-spacing: 0.1em; }
+        @media (max-width: 1023px) {
+            .sidebar { display: none; }
+            .sidebar.open { display: block; position: fixed; z-index: 50; left: 0; top: 0; height: 100vh; }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.left-0{left:0px}.left-4{left:1rem}.top-0{top:0px}.top-4{top:1rem}.z-50{z-index:50}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-1{margin-top:0.25rem}.block{display:block}.flex{display:flex}.grid{display:grid}.h-6{height:1.5rem}.h-screen{height:100vh}.min-h-screen{min-height:100vh}.w-6{width:1.5rem}.w-72{width:18rem}.max-w-4xl{max-width:56rem}.scroll-mt-8{scroll-margin-top:2rem}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-walmart-gray-50{--tw-border-opacity:1;border-color:rgb(224 224 224 / var(--tw-border-opacity, 1))}.border-walmart-spark{--tw-border-opacity:1;border-color:rgb(255 194 32 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-walmart-blue{--tw-bg-opacity:1;background-color:rgb(0 83 226 / var(--tw-bg-opacity, 1))}.bg-walmart-gray-10{--tw-bg-opacity:1;background-color:rgb(248 248 248 / var(--tw-bg-opacity, 1))}.bg-walmart-spark{--tw-bg-opacity:1;background-color:rgb(255 194 32 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-walmart-blue{--tw-gradient-from:#0053e2 var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 83 226 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-700{--tw-gradient-to:#1d4ed8 var(--tw-gradient-to-position)}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:0.5rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-walmart-blue{--tw-text-opacity:1;color:rgb(0 83 226 / var(--tw-text-opacity, 1))}.text-walmart-gray-100{--tw-text-opacity:1;color:rgb(179 179 179 / var(--tw-text-opacity, 1))}.text-walmart-gray-160{--tw-text-opacity:1;color:rgb(46 47 50 / var(--tw-text-opacity, 1))}.text-walmart-sparkDark{--tw-text-opacity:1;color:rgb(153 82 19 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-90{opacity:0.9}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-walmart-gray-10:hover{--tw-bg-opacity:1;background-color:rgb(248 248 248 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:ml-72{margin-left:18rem}.lg\:hidden{display:none}}</style><style>                      .htmx-indicator{opacity:0}                      .htmx-request .htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                      .htmx-request.htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                    </style></head>
+<body class="bg-walmart-gray-10 text-walmart-gray-160">
+    <!-- Mobile Menu Toggle -->
+    <button id="menuToggle" class="lg:hidden fixed top-4 left-4 z-50 bg-walmart-blue text-white p-2 rounded-lg shadow-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-72 bg-white border-r border-walmart-gray-50 overflow-y-auto shadow-lg">
+        <div class="p-6 border-b border-walmart-gray-50">
+            <h1 class="text-xl font-bold text-walmart-blue flex items-center gap-2">
+                <span class="text-2xl"></span> Product Summaries
+            </h1>
+            <p class="text-sm text-walmart-gray-100 mt-1">Walmart Connect Portfolio</p>
+        </div>
+        
+        <nav class="p-4">
+            <!-- Onsite Display -->
+            <div class="mb-4">
+                <p class="category-header text-walmart-gray-100 uppercase font-bold mb-2 px-3">Onsite Display</p>
+                <a href="#homepage-ads" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Homepage Ads</a>
+                <a href="#display-videos" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Display Videos</a>
+            </div>
+
+            <!-- Sponsored Search -->
+            <div class="mb-4">
+                <p class="category-header text-walmart-gray-100 uppercase font-bold mb-2 px-3">Sponsored Search</p>
+                <a href="#sponsored-brands" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Sponsored Brands</a>
+                <a href="#sponsored-videos" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Sponsored Videos</a>
+            </div>
+
+            <!-- Offsite Display -->
+            <div class="mb-4">
+                <p class="category-header text-walmart-gray-100 uppercase font-bold mb-2 px-3">Offsite Display</p>
+                <a href="#high-impact-creative" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">High Impact Creative</a>
+                <a href="#pinterest" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Pinterest</a>
+                <a href="#social-meta" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Meta (FB &amp; IG)</a>
+                <a href="#tiktok" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">TikTok</a>
+                <a href="#offsite-shoppable-atc" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Shoppable Add-to-Cart</a>
+                <a href="#walmart-dsp" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Walmart DSP</a>
+            </div>
+
+            <!-- In-Store Display -->
+            <div class="mb-4">
+                <p class="category-header text-walmart-gray-100 uppercase font-bold mb-2 px-3">In-Store Display</p>
+                <a href="#tv-wall" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">TV Wall</a>
+                <a href="#self-checkout-ads" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Self-Checkout Ads</a>
+                <a href="#deli-bakery" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Deli &amp; Bakery Screens</a>
+                <a href="#auto-care" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Auto Care Center</a>
+                <a href="#vision-center" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Vision Center</a>
+            </div>
+
+            <!-- In-Store Experiential -->
+            <div class="mb-4">
+                <p class="category-header text-walmart-gray-100 uppercase font-bold mb-2 px-3">In-Store Experiential</p>
+                <a href="#experiential-events" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Experiential Events</a>
+                <a href="#in-store-demo" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">In-Store Demo</a>
+                <a href="#in-store-audio" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">In-Store Audio</a>
+                <a href="#pickup-sampling" class="nav-link block px-3 py-2 rounded-lg text-sm hover:bg-walmart-gray-10 transition-colors">Pickup &amp; Delivery Sampling</a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-72 min-h-screen">
+        <!-- Hero Header -->
+        <header class="bg-gradient-to-r from-walmart-blue to-blue-700 text-white py-12 px-8">
+            <div class="max-w-4xl">
+                <h1 class="text-4xl font-bold mb-4">Walmart Connect Product Portfolio</h1>
+                <p class="text-xl opacity-90">19 advertising products across digital, in-store, and experiential channels</p>
+            </div>
+        </header>
+
+        <div class="p-8 max-w-4xl">
+
+            <!-- ONSITE DISPLAY SECTION -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-walmart-blue mb-6 pb-2 border-b-2 border-walmart-spark"> Onsite Display</h2>
+
+                <!-- Homepage Ads -->
+                <article id="homepage-ads" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Homepage Ads</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Onsite Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS, SS, Custom</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Make a strong first impression</p>
+                    <p class="text-walmart-gray-160 mb-4">Premium real estate reaches shoppers early in their journey on w.com, driving awareness, consideration, and brand presence at scale.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Above the Fold:</strong> Immediate visibility</li>
+                                <li>• <strong>Feature Stories:</strong> Storytelling and product education</li>
+                                <li>• <strong>Gallery Takeover:</strong> Maximum visual impact</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Launches, seasonal moments, tentpole events</li>
+                                <li>• Major campaigns and brand presence</li>
+                                <li>• New product education and multi-item collections</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Walmart's homepage is the front door to the shopping journey, reaching 150M+ visitors per week.
+                    </div>
+                </article>
+
+                <!-- Display Videos -->
+                <article id="display-videos" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Display Videos</h3>
+                        <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Beta (July 2025)</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Onsite Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Premium</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Capture attention with motion and sound</p>
+                    <p class="text-walmart-gray-160 mb-4">Video ads reach high-intent shoppers across Walmart's app, driving brand awareness, storytelling, and consideration through visuals that static banners can't match.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Brand Box:</strong> Video on Item, Order Details, and Order History pages</li>
+                                <li>• <strong>Pickup &amp; Check-in:</strong> Capture attention at curbside</li>
+                                <li>• <strong>Advanced Targeting:</strong> Behavioral and contextual targeting</li>
+                                <li>• <strong>Rich Measurement:</strong> Quartile view rates and attributed sales</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Brand storytelling and emotional connection</li>
+                                <li>• New product introductions</li>
+                                <li>• Omnichannel awareness campaigns</li>
+                                <li>• High-intent, purchasing-mindset moments</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Videos auto-play on mute with customer-controlled unmuting—respecting the shopper experience while maximizing engagement.
+                    </div>
+                </article>
+            </section>
+
+            <!-- SPONSORED SEARCH SECTION -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-walmart-blue mb-6 pb-2 border-b-2 border-walmart-spark"> Sponsored Search</h2>
+
+                <!-- Sponsored Brands -->
+                <article id="sponsored-brands" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Sponsored Brands</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Sponsored Search</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS, SS, WPA</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Own the top of search</p>
+                    <p class="text-walmart-gray-160 mb-4">Capture high-intent shoppers with the highest-viewability search placement on Walmart.com and the app. Sponsored Brands puts your logo, custom headline, and up to four products above organic results.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Top of Search:</strong> Maximum visibility above all organic results</li>
+                                <li>• <strong>Brand Storytelling:</strong> Custom logo, headline, and curated products</li>
+                                <li>• <strong>Flexible Targeting:</strong> Keyword and negative keyword controls</li>
+                                <li>• <strong>Custom Lifestyle Images:</strong> App placements support rich imagery</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Launching new products or brands</li>
+                                <li>• Seasonal pushes and higher-priced items</li>
+                                <li>• Winning consideration from competitor shoppers</li>
+                                <li>• Multi-product storytelling and portfolio awareness</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Sponsored Brands uses a second-price auction—you only pay one cent above the next-highest bid, not your full bid amount.
+                    </div>
+                </article>
+
+                <!-- Sponsored Videos -->
+                <article id="sponsored-videos" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Sponsored Videos</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Sponsored Search</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS, SS</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Capture attention with sight and sound</p>
+                    <p class="text-walmart-gray-160 mb-4">Short video ads that bridge performance Display and always-on Sponsored Search, boosting awareness and discovery while educating shoppers at the consideration point.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Visual Storytelling:</strong> Demonstrate item uses and benefits</li>
+                                <li>• <strong>Autoplay:</strong> Begins when 50% in view</li>
+                                <li>• <strong>Add-to-Cart Button:</strong> Seamless conversion from the ad</li>
+                                <li>• <strong>Closed Captions:</strong> Required and enabled by default</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Standing out in search results</li>
+                                <li>• Showcasing product benefits</li>
+                                <li>• Reaching in-market shoppers</li>
+                                <li>• Complementing Sponsored Brands campaigns</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Sponsored Videos fills the gap between upper-funnel Display and lower-funnel Search in a full-funnel strategy.
+                    </div>
+                </article>
+            </section>
+
+            <!-- OFFSITE DISPLAY SECTION -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-walmart-blue mb-6 pb-2 border-b-2 border-walmart-spark"> Offsite Display</h2>
+
+                <!-- High Impact Creative -->
+                <article id="high-impact-creative" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">High Impact Creative</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Offsite Display &amp; Video</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Managed Serve</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Capture attention with rich, immersive ad experiences</p>
+                    <p class="text-walmart-gray-160 mb-4">High-Impact ads help brands stand out through animated, scroll-reactive, and expandable creative formats—running across premium offsite inventory via the Walmart DSP.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Display Units:</strong> Anchor, Breakaway, Sidekick, Venti, Highrise, and more</li>
+                                <li>• <strong>Video Units:</strong> Athena In-feed, Viewstream, Video Anchor</li>
+                                <li>• <strong>High Viewability:</strong> 85–91% in-view rates</li>
+                                <li>• <strong>Standard Targeting:</strong> Full Offsite capabilities</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Awareness, recall, and favorability campaigns</li>
+                                <li>• Brand storytelling requiring rich media</li>
+                                <li>• Site visits and engagement at scale</li>
+                                <li>• Pharma campaigns with ISI scroll</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Creative turnaround is 13 business days. Minimums start at $32K for Display and $40K for Video—per ad unit.
+                    </div>
+                </article>
+
+                <!-- Pinterest -->
+                <article id="pinterest" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Pinterest</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Offsite Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Managed Service</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Move customers from inspiration to action</p>
+                    <p class="text-walmart-gray-160 mb-4">Reach shoppers in Pinterest's brand-safe environment while they plan and discover. Walmart's first-party data powers precise targeting with closed-loop ROAS measurement.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>First-Party Targeting:</strong> Walmart's proprietary data segments</li>
+                                <li>• <strong>Multiple Formats:</strong> Static, video, carousel, and collection ads</li>
+                                <li>• <strong>Closed-Loop Measurement:</strong> In-flight ROAS via WMX 2.0</li>
+                                <li>• <strong>Conquesting:</strong> Category-minus-brand targeting</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• New or seasonal product launches</li>
+                                <li>• Discovery and consideration campaigns</li>
+                                <li>• Planning moments (events, holidays)</li>
+                                <li>• Multi-item collections</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Pinterest users arrive ready to plan and buy—Pins help customers build a complete vision that turns into purchases.
+                    </div>
+                </article>
+
+                <!-- Meta (FB & IG) -->
+                <article id="social-meta" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Meta (Facebook &amp; Instagram)</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Offsite Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Connect inspiration to conversion on the platforms shoppers love</p>
+                    <p class="text-walmart-gray-160 mb-4">Facebook and Instagram ads capture attention where shoppers spend their time daily, combining Walmart's first-party targeting with engaged social audiences.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Static Image:</strong> Clean, simple creative canvas</li>
+                                <li>• <strong>Carousel:</strong> Multiple products or brand narrative</li>
+                                <li>• <strong>Video:</strong> Sight, sound, and motion</li>
+                                <li>• <strong>Omnichannel Attribution:</strong> 14-day tracking window</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Brand awareness and consideration</li>
+                                <li>• New product launches and seasonal pushes</li>
+                                <li>• ROAS-focused strategies</li>
+                                <li>• Campaigns with $100K+ budgets</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Ads are posted from the official Walmart profile and appear across Feeds, Stories, and Reels on both platforms.
+                    </div>
+                </article>
+
+                <!-- TikTok -->
+                <article id="tiktok" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">TikTok Ads</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Offsite Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Spark engagement with Gen Z and Millennials</p>
+                    <p class="text-walmart-gray-160 mb-4">A first-to-market partnership combining Walmart's first-party data with TikTok's 150M+ US users through native in-feed video ads.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Non-Spark Ads:</strong> Native in-feed video on "For You" page</li>
+                                <li>• <strong>Display Card Add-On:</strong> Interactive overlay with CTA</li>
+                                <li>• <strong>Walmart 1P Targeting:</strong> Full audience suite</li>
+                                <li>• <strong>Exclusive Sales Measurement:</strong> ROAS powered by Walmart Connect</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Seasonal launches and new product education</li>
+                                <li>• Gen Z and Millennial discovery</li>
+                                <li>• Curated shopping journeys</li>
+                                <li>• Reinforcing in-store purchases</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> 70% of TikTok users discover new brands on the platform, and 28% say TikTok inspired impulse purchases—more than any other social platform.
+                    </div>
+                </article>
+
+                <!-- Offsite Shoppable ATC -->
+                <article id="offsite-shoppable-atc" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Offsite Shoppable Add-to-Cart</h3>
+                        <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Beta (FY26-FY27)</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Offsite Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS, SS</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Turn inspiration into instant action</p>
+                    <p class="text-walmart-gray-160 mb-4">A lower-funnel ad format that brings seamless add-to-cart functionality to social platforms—Meta, Pinterest, and TikTok—letting shoppers cart up to 10 items directly.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>One-Click Multi-Item:</strong> Cart up to 10 items in a single click</li>
+                                <li>• <strong>Social Platform Reach:</strong> Meta, Pinterest, TikTok</li>
+                                <li>• <strong>Cross-Portfolio:</strong> Single or multi-brand campaigns</li>
+                                <li>• <strong>DSP Integration:</strong> Managed or self-serve</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Recipe-inspired meal bundles</li>
+                                <li>• Household essentials refill baskets</li>
+                                <li>• Entertainment system setups</li>
+                                <li>• Seasonal kits (back-to-school, new-mover)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> A summer BBQ campaign for Kingsford and Hidden Valley Ranch drove $41.35 ROAS, 292K add-to-cart actions, and 52% lift in new-to-brand buyers.
+                    </div>
+                </article>
+
+                <!-- Walmart DSP -->
+                <article id="walmart-dsp" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Walmart DSP - Managed Serve</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Offsite Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS (via The Trade Desk)</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Reach your audience wherever they are</p>
+                    <p class="text-walmart-gray-160 mb-4">Leverage Walmart's first-party data to target shoppers across the open web through 25+ ad exchanges—display, video, CTV, native, and audio—with closed-loop measurement.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Multi-Channel:</strong> Display, Video, Native, CTV, Audio</li>
+                                <li>• <strong>Closed-Loop Measurement:</strong> WMX integration</li>
+                                <li>• <strong>High Viewability:</strong> 70%+ average</li>
+                                <li>• <strong>Brand Safety:</strong> IAS and DoubleVerify partnerships</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Viewability-focused campaigns</li>
+                                <li>• Reaching niche audiences beyond Walmart.com</li>
+                                <li>• Video and audio storytelling</li>
+                                <li>• Extending onsite campaigns offsite</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> The Walmart DSP taps into 25+ ad exchanges with 70%+ viewability—and a quarter of impressions come through fraud-resistant programmatic direct deals.
+                    </div>
+                </article>
+            </section>
+
+            <!-- IN-STORE DISPLAY SECTION -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-walmart-blue mb-6 pb-2 border-b-2 border-walmart-spark"> In-Store Display</h2>
+
+                <!-- TV Wall -->
+                <article id="tv-wall" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">TV Wall</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Command attention at the point of purchase</p>
+                    <p class="text-walmart-gray-160 mb-4">Dynamic 4K video with audio across Walmart store electronics departments, reaching shoppers ready to buy through sight, sound, and motion.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>4K Video with Audio:</strong> Full sight, sound, and motion</li>
+                                <li>• <strong>Massive Scale:</strong> 3,800+ stores, 150M+ weekly visitors</li>
+                                <li>• <strong>Store-Level Targeting:</strong> Specific stores or network-wide</li>
+                                <li>• <strong>Full-Funnel Measurement:</strong> Impressions, reach, brand lift</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Launching new products or brands</li>
+                                <li>• Product features and benefits showcase</li>
+                                <li>• Seasonal and tentpole moments</li>
+                                <li>• Walmart-exclusive products</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Walmart shoppers spend an average of 15 minutes in the Electronics department—plenty of time to see and hear your message.
+                    </div>
+                </article>
+
+                <!-- Self-Checkout Ads -->
+                <article id="self-checkout-ads" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Self-Checkout Ads</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS, SS</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Reach shoppers at the register</p>
+                    <p class="text-walmart-gray-160 mb-4">Cost-per-day brand advertising on self-checkout screens, engaging customers during an average 1.5-minute dwell time at a key moment.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Massive Scale:</strong> ~4,600 stores, 70,000+ screens</li>
+                                <li>• <strong>Extended Exposure:</strong> 1.5-minute average dwell time</li>
+                                <li>• <strong>Regional Targeting:</strong> Four regions or run of network</li>
+                                <li>• <strong>Full-Funnel Measurement:</strong> Impressions, attributed sales, ROAS</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• In-store brand awareness at scale</li>
+                                <li>• Checkout moment engagement</li>
+                                <li>• Omnichannel campaigns</li>
+                                <li>• Brand lift measurement</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Self-checkout is the only in-store format offering full-funnel and closed-loop measurement, bringing parity with out-of-home standards.
+                    </div>
+                </article>
+
+                <!-- Deli & Bakery Screens -->
+                <article id="deli-bakery" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Deli &amp; Bakery Screens</h3>
+                        <span class="bg-gray-200 text-gray-700 text-xs font-bold px-3 py-1 rounded-full">Standard</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Serve up fresh impressions in high-traffic departments</p>
+                    <p class="text-walmart-gray-160 mb-4">In-store screens in Walmart's busiest fresh departments reach shoppers at the moment they're making meal decisions.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Massive Scale:</strong> 2,600+ Deli, 2,200+ Bakery stores</li>
+                                <li>• <strong>Proven Lift:</strong> 5% median sales lift in testing</li>
+                                <li>• <strong>Store-Level Targeting:</strong> Run-of-network or specific stores</li>
+                                <li>• <strong>Thematic Storytelling:</strong> Aligned with editorial calendar</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Food and grocery-adjacent brands</li>
+                                <li>• Seasonal campaigns and party inspiration</li>
+                                <li>• Basket-building moments</li>
+                                <li>• Complementary products</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> 56% of surveyed shoppers visit Deli and Bakery sections more than once per week—making these some of the most frequently seen screens in-store.
+                    </div>
+                </article>
+
+                <!-- Auto Care Center -->
+                <article id="auto-care" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Auto Care Center Screens</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS, Custom</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Capture a captive audience during vehicle service</p>
+                    <p class="text-walmart-gray-160 mb-4">High-visibility screens near the cashier engage customers while they wait for oil changes and maintenance across 1,400+ Auto Care Centers.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Prime Placement:</strong> Side-by-side screens near cashier</li>
+                                <li>• <strong>Captive Audience:</strong> Customers actively waiting</li>
+                                <li>• <strong>Store-Level Targeting:</strong> 500 store minimum</li>
+                                <li>• <strong>Visual-First Format:</strong> 15-second video or static</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Auto parts and automotive accessories</li>
+                                <li>• Impulse items for waiting customers</li>
+                                <li>• Spring Car Care Month campaigns</li>
+                                <li>• Brand awareness in auto category</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Walmart commands 56% auto penetration reach—exceeding competitors—and sold 625M+ automotive items in 2024.
+                    </div>
+                </article>
+
+                <!-- Vision Center -->
+                <article id="vision-center" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Vision Center Screens</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Display</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Managed-Serve</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Capture high-intent shoppers in a focused environment</p>
+                    <p class="text-walmart-gray-160 mb-4">Screens in 1,600+ Walmart Vision Centers reach customers at a pivotal point of purchase in a captive environment.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Captive Audience:</strong> Extended time for better recall</li>
+                                <li>• <strong>4K Video-Enabled:</strong> High-quality video and static (no audio)</li>
+                                <li>• <strong>Contextual Relevance:</strong> In-category alignment</li>
+                                <li>• <strong>Flexible Spots:</strong> :15 and :30 second options</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Eyecare and vision product launches</li>
+                                <li>• Complementary accessories</li>
+                                <li>• Brand awareness and recognition</li>
+                                <li>• Cross-category basket-building</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> A 4-week run-of-network campaign can deliver 2-3M gross impressions to customers visiting Vision Centers.
+                    </div>
+                </article>
+            </section>
+
+            <!-- IN-STORE EXPERIENTIAL SECTION -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-walmart-blue mb-6 pb-2 border-b-2 border-walmart-spark"> In-Store Experiential</h2>
+
+                <!-- Experiential Events -->
+                <article id="experiential-events" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Experiential Events</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Experiential</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">MS, Custom</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Create unforgettable in-store moments</p>
+                    <p class="text-walmart-gray-160 mb-4">Immersive activations—from demos and sampling to mobile tours and celebrity appearances—bring brands to life at Walmart.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Supplier-Led Events:</strong> Single-brand spotlight</li>
+                                <li>• <strong>Multi-Supplier Events:</strong> Theme-aligned collaborations</li>
+                                <li>• <strong>4th Wall Takeover:</strong> Premium leased spaces</li>
+                                <li>• <strong>Mobile Tours:</strong> Sidewalk and food truck activations</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Product launches and tentpole events</li>
+                                <li>• Sampling, demos, and hands-on education</li>
+                                <li>• Trial, awareness, and consideration</li>
+                                <li>• Walmart's strategic celebrations</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Events execute over 14–20 week cycles—with post-event reporting including sales lift, NPS scores, and feedback within 6 weeks.
+                    </div>
+                </article>
+
+                <!-- In-Store Demo -->
+                <article id="in-store-demo" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">In-Store Demo</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Experiential</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Managed-Serve</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Let customers try before they buy</p>
+                    <p class="text-walmart-gray-160 mb-4">Experiential sampling activations with branded cart, product samples, and trained event specialist during a six-hour daily event.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Event Specialist:</strong> Trained staff for product education</li>
+                                <li>• <strong>Branded Cart &amp; Signage:</strong> High-visibility setup</li>
+                                <li>• <strong>Volume Discounts:</strong> $275 down to $260/store/day</li>
+                                <li>• <strong>Flexible Scheduling:</strong> Friday through Monday</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Launching new products</li>
+                                <li>• Seasonal or featured items</li>
+                                <li>• Food &amp; Consumables trial</li>
+                                <li>• Omnichannel campaigns</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> In-Store Demos run across approximately 600 Walmart stores, and spend counts toward JBP commitment.
+                    </div>
+                </article>
+
+                <!-- In-Store Audio -->
+                <article id="in-store-audio" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">In-Store Audio Ads</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Media</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Managed-Serve</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Reach shoppers while they browse the aisles</p>
+                    <p class="text-walmart-gray-160 mb-4">Un-skippable 30-second audio spots air hourly on Walmart Radio across 4,500+ U.S. stores, creating a unique sensory touchpoint.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Un-skippable Format:</strong> Guaranteed hourly exposure</li>
+                                <li>• <strong>Massive Scale:</strong> 81–90M weekly impressions at Gold tier</li>
+                                <li>• <strong>Store-Level Targeting:</strong> Bronze, Silver, or Gold tiers</li>
+                                <li>• <strong>Top-of-the-Hour Add-On:</strong> Optional 5-second brand message</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Product launches and announcements</li>
+                                <li>• Seasonal campaigns and tentpole moments</li>
+                                <li>• Geo-specific or regional messaging</li>
+                                <li>• Omni-channel amplification</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> Only three advertisers can run per week, making In-Store Audio one of the most exclusive placements in the Walmart Connect portfolio.
+                    </div>
+                </article>
+
+                <!-- Pickup & Delivery Sampling -->
+                <article id="pickup-sampling" class="bg-white rounded-xl shadow-md p-6 mb-6 scroll-mt-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-bold text-walmart-gray-160">Pickup &amp; Delivery Sampling</h3>
+                        <span class="bg-walmart-spark text-walmart-sparkDark text-xs font-bold px-3 py-1 rounded-full">Premium</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-walmart-gray-100 mb-4">
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">In-Store Sampling</span>
+                        <span class="bg-walmart-gray-10 px-2 py-1 rounded">Managed-Serve (Advantage Solutions)</span>
+                    </div>
+                    <p class="text-lg font-medium text-walmart-blue mb-4">Surprise and delight at the moment of fulfillment</p>
+                    <p class="text-walmart-gray-160 mb-4">Reach customers when they pick up or receive their Walmart orders—driving trial, awareness, and brand love through physical product samples.</p>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">Distinguishing Features</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>Massive Reach:</strong> 2.7MM sample bags across 9 waves</li>
+                                <li>• <strong>Flexible Formats:</strong> Trial-size, full-size, scent samples</li>
+                                <li>• <strong>Overwrap Options:</strong> Literature cards or coupons</li>
+                                <li>• <strong>Lift Measurement:</strong> Pre/post and YoY sales reporting</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm mb-2">What It's Best For</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Product launches and new item trials</li>
+                                <li>• CPG and consumables consideration</li>
+                                <li>• Seasonal pushes and tentpole moments</li>
+                                <li>• Multi-item or collection sampling</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-walmart-gray-10 rounded-lg p-3 text-sm">
+                        <span class="font-bold text-walmart-blue"> Fun Fact:</span> 99% of customers say receiving a sample bag is a great way to learn about new products, and 76% consider buying after receiving one—with an average NPS of 86.
+                    </div>
+                </article>
+            </section>
+
+            <!-- Footer -->
+            <footer class="text-center py-8 text-walmart-gray-100 text-sm border-t border-walmart-gray-50">
+                <p>Generated by  Code Puppy | Walmart Connect Product Portfolio</p>
+                <p class="mt-1">19 Products • Onsite • Offsite • In-Store</p>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Close sidebar when clicking a link on mobile
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        });
+
+        // Highlight active section in sidebar
+        const sections = document.querySelectorAll('article[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { rootMargin: '-20% 0% -80% 0%' });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+
+
+</body></html>

@@ -1,0 +1,195 @@
+/* Playground General Styles */
+body {
+    background-color: #f4f5f7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.font-monospace {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.9em;
+}
+
+/* Card / List Item Styles */
+.template-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: 1px solid #dfe1e6;
+}
+
+.template-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-color: #0052cc;
+}
+
+.wcag-badge {
+    background-color: #dfe1e6;
+    color: #42526e;
+    font-weight: bold;
+    font-size: 0.8em;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.priority-badge {
+    font-size: 0.8em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.priority-P1 {
+    background-color: #ffebe6;
+    color: #de350b;
+}
+
+.priority-P2 {
+    background-color: #fffae6;
+    color: #ff991f;
+}
+
+.priority-P3 {
+    background-color: #e3fcef;
+    color: #006644;
+}
+
+/* Jira Preview Styles (Mimicking Jira Issue View) */
+.jira-preview-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #172b4d;
+    line-height: 1.5;
+}
+
+.jira-preview-header {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #dfe1e6;
+    padding-bottom: 10px;
+}
+
+.jira-preview-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #172b4d;
+    margin-bottom: 5px;
+}
+
+.jira-section-label {
+    font-weight: 600;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 1.1em;
+}
+
+.jira-section-label i {
+    margin-right: 8px;
+}
+
+.label-expected {
+    color: #006644; /* Green */
+}
+
+.label-actual {
+    color: #de350b; /* Red */
+}
+
+.label-recommendation {
+    color: #0052cc; /* Blue */
+}
+
+.jira-code-block {
+    background-color: #f4f5f7;
+    border-radius: 3px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #dfe1e6;
+    overflow-x: auto;
+}
+
+.jira-steps-list {
+    padding-left: 20px;
+}
+
+.jira-steps-list li {
+    margin-bottom: 4px;
+}
+
+/* Awesomplete Customization */
+.awesomplete {
+    width: 100%;
+}
+
+.awesomplete > ul {
+    border-radius: 4px;
+    margin-top: 2px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border: 1px solid #dfe1e6;
+}
+
+.awesomplete > ul > li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f4f5f7;
+}
+
+.awesomplete > ul > li:hover {
+    background-color: #ebecf0;
+    color: #172b4d;
+}
+
+.awesomplete mark {
+    background: #fff0b3;
+    padding: 0;
+}
+
+/* Table View Styles */
+.table-row-clickable {
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.table-row-clickable:hover {
+    background-color: #f4f5f7 !important;
+}
+
+.table-row-clickable:hover td:not(.bg-light) {
+    background-color: #ebecf0;
+}
+
+/* Ensure sticky header if table gets long */
+#tableViewSection .table-responsive {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#tableViewSection thead th {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* WCAG Group Styling */
+.wcag-group-end {
+    border-bottom: 3px solid #343a40 !important;
+}
+
+.wcag-accent-1 {
+    border-left: 5px solid #00b8d9 !important; /* Cyan */
+}
+
+.wcag-accent-2 {
+    border-left: 5px solid #ffab00 !important; /* Orange */
+}
+
+.wcag-accent-3 {
+    border-left: 5px solid #6554c0 !important; /* Purple */
+}
+
+/* Sticky WCAG Cell Content */
+.wcag-sticky-wrapper {
+    position: sticky;
+    top: 50px; /* Adjust based on header height */
+    z-index: 0;
+}

@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heading Skill Review</title>
+  <style>
+    :root { color-scheme: light; --blue: #2563eb; --border: #e2e8f0; --bg: #f8fafc; --text: #334155; }
+    body { margin: 0; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text); background: var(--bg); }
+    header, .card { max-width: 1280px; margin: 0 auto 24px; background: white; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08); }
+    header { padding: 24px; border-bottom: 4px solid var(--blue); }
+    h1, h2, h3 { margin: 0; color: #0f172a; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 18px; }
+    h3 { font-size: 15px; margin-bottom: 10px; }
+    p { margin: 6px 0 0; color: #64748b; font-size: 13px; }
+    .card-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; padding: 18px; border-bottom: 1px solid var(--border); }
+    .pill { background: #dbeafe; color: #1d4ed8; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .images { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 18px; }
+    figure { margin: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #f1f5f9; }
+    .image-scroll { height: 420px; overflow: auto; background: white; }
+    img { display: block; width: 100%; height: auto; background: white; }
+    .image-open { display: block; width: 100%; border: 0; padding: 0; background: transparent; cursor: zoom-in; text-align: inherit; }
+    figcaption { padding: 8px 10px; font-size: 12px; font-weight: 700; background: #f8fafc; border-top: 1px solid var(--border); }
+    .tables { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 0 18px 18px; }
+    .table-scroll { max-height: 360px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { border: 1px solid var(--border); padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f8fafc; color: #475569; position: sticky; top: 0; z-index: 1; }
+    .link-btn { border: 1px solid #dc2626; color: #dc2626; background: #fff; border-radius: 6px; padding: 4px 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .link-btn:hover { background: #fef2f2; }
+    .empty { color: #94a3b8; text-align: center; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.72); z-index: 9999; align-items: center; justify-content: center; padding: 24px; }
+    .modal-overlay.open { display: flex; }
+    .modal { width: min(1180px, 96vw); max-height: 92vh; overflow: hidden; background: white; border-radius: 12px; box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35); display: flex; flex-direction: column; }
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--border); }
+    .modal-header p { margin-top: 4px; }
+    .close-btn { border: 0; background: #fee2e2; color: #991b1b; border-radius: 999px; width: 32px; height: 32px; font-size: 22px; line-height: 1; cursor: pointer; }
+    .modal-body { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.7fr); gap: 18px; padding: 18px 20px 20px; overflow: hidden; min-height: 0; }
+    .modal-image-scroll { overflow: auto; max-height: calc(92vh - 160px); border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; }
+    .modal-image-scroll img { width: 100%; min-width: 720px; }
+    .modal-details { overflow-y: auto; max-height: calc(92vh - 160px); padding-right: 4px; }
+    .detail-card { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; background: #f8fafc; }
+    .detail-card.active { border-color: #dc2626; background: #fef2f2; }
+    .detail-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 800; margin-bottom: 3px; }
+    pre { white-space: pre-wrap; overflow: auto; max-height: 220px; background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 10px; font-size: 12px; }
+    @media (max-width: 900px) { .images, .tables, .modal-body { grid-template-columns: 1fr; } .modal-image-scroll, .modal-details { max-height: 42vh; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Heading Skill Review</h1>
+    <p>Compare screenshot-only heading detection against screenshot + code heading detection.</p>
+  </header>
+  <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>page1</h2>
+            <p>/Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html</p>
+          </div>
+          <div class="pill">walmart-llm · claude-opus-4</div>
+        </div>
+        <div class="images">
+          <figure><div class="image-scroll"><img src="page1_original.png" alt="Original page screenshot"></div><figcaption>Original</figcaption></figure>
+          <figure><button class="image-open" type="button" onclick="openRunDialog(0, 0)"><div class="image-scroll"><img src="page1_screenshot_only_highlighted.png" alt="Screenshot-only highlighted headings"></div></button><figcaption>Screenshot only · 7 findings</figcaption></figure>
+          <figure><button class="image-open" type="button" onclick="openRunDialog(0, 1)"><div class="image-scroll"><img src="page1_screenshot_code_highlighted.png" alt="Screenshot plus code highlighted headings"></div></button><figcaption>Screenshot + code · 10 findings</figcaption></figure>
+        </div>
+        <div class="tables">
+          <div>
+            <h3>Screenshot-Only Headings</h3>
+            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody><tr>
+        <td>YARD STATUS</td>
+        <td>H2</td>
+        <td>found</td>
+        <td>Section heading for yard status information</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 0)">Review</button></td>
+      </tr>
+<tr>
+        <td>EXIT Backlog</td>
+        <td>H2</td>
+        <td>found</td>
+        <td>Section heading for exit backlog data</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 1)">Review</button></td>
+      </tr>
+<tr>
+        <td>OR FLOW (TODAY - MST)</td>
+        <td>H2</td>
+        <td>found</td>
+        <td>Section heading for OR flow chart and data</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 2)">Review</button></td>
+      </tr>
+<tr>
+        <td>INBOUND EXECUTION</td>
+        <td>H2</td>
+        <td>found</td>
+        <td>Section heading for inbound execution metrics</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 3)">Review</button></td>
+      </tr>
+<tr>
+        <td>OUTBOUND EXECUTION</td>
+        <td>H2</td>
+        <td>found</td>
+        <td>Section heading for outbound execution metrics</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 4)">Review</button></td>
+      </tr>
+<tr>
+        <td>DEPARTMENT PRODUCTION</td>
+        <td>H2</td>
+        <td>found</td>
+        <td>Section heading for department production data</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 5)">Review</button></td>
+      </tr>
+<tr>
+        <td>BUILDING OVERVIEW (DRAX FORMAT)</td>
+        <td>H2</td>
+        <td>found</td>
+        <td>Section heading for building overview table</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 6)">Review</button></td>
+      </tr></tbody></table></div>
+          </div>
+          <div>
+            <h3>Screenshot + Code Headings</h3>
+            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody><tr>
+        <td>PHX1</td>
+        <td>H1</td>
+        <td>pass</td>
+        <td>Main heading present</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 0)">Review</button></td>
+      </tr>
+<tr>
+        <td>🚛 Yard Status💬</td>
+        <td>H2</td>
+        <td>pass</td>
+        <td>Properly nested h2</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 1)">Review</button></td>
+      </tr>
+<tr>
+        <td>📊 OB Flow (Today - MST)💬</td>
+        <td>H2</td>
+        <td>pass</td>
+        <td>Properly nested h2</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 2)">Review</button></td>
+      </tr>
+<tr>
+        <td>Inbound Execution💬</td>
+        <td>H2</td>
+        <td>pass</td>
+        <td>Properly nested h2</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 3)">Review</button></td>
+      </tr>
+<tr>
+        <td>Outbound Execution💬</td>
+        <td>H2</td>
+        <td>pass</td>
+        <td>Properly nested h2</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 4)">Review</button></td>
+      </tr>
+<tr>
+        <td>📦 Inbound Volume Mix
+            
+                (Receive paths only)
+            
+        💬</td>
+        <td>H3</td>
+        <td>pass</td>
+        <td>Properly nested h3</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 5)">Review</button></td>
+      </tr>
+<tr>
+        <td>🚚 Outbound Volume Flow
+            
+                (Pick → Pack → Load)
+            
+        💬</td>
+        <td>H3</td>
+        <td>pass</td>
+        <td>Properly nested h3</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 6)">Review</button></td>
+      </tr>
+<tr>
+        <td>🏭 Department Production💬</td>
+        <td>H2</td>
+        <td>pass</td>
+        <td>Properly nested h2</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 7)">Review</button></td>
+      </tr>
+<tr>
+        <td>📋 IB Support</td>
+        <td>H4</td>
+        <td>fail</td>
+        <td>Skipped heading level - h4 after h2, missing h3</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 8)">Review</button></td>
+      </tr>
+<tr>
+        <td>Building Overview (DRAX Format) — Day Shift · Jun 10, 2026💬</td>
+        <td>H2</td>
+        <td>pass</td>
+        <td>Properly nested h2</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 9)">Review</button></td>
+      </tr></tbody></table></div>
+          </div>
+        </div>
+      </section>
+  <div id="detail-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 id="modal-title">Finding details</h2>
+          <p id="modal-subtitle"></p>
+        </div>
+        <button class="close-btn" type="button" onclick="closeDialog()" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-image-scroll">
+          <img id="modal-image" src="" alt="Highlighted screenshot">
+        </div>
+        <div class="modal-details">
+          <div id="modal-findings"></div>
+          <details>
+            <summary>Raw model response</summary>
+            <pre id="modal-raw"></pre>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script id="review-data" type="application/json">[{"page_id":"page1","page_path":"/Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html","category":"headings","backend":"walmart-llm","model":"claude-opus-4","generated_at":"2026-06-12T17:26:08.862Z","original_image":"page1_original.png","runs":[{"skill":"heading-screenshot-only","label":"Screenshot only","findings_count":7,"findings":[{"source":"heading-screenshot-only","text":"YARD STATUS","level":"H2","reason":"Section heading for yard status information","bbox":[29,90,91,101]},{"source":"heading-screenshot-only","text":"EXIT Backlog","level":"H2","reason":"Section heading for exit backlog data","bbox":[137,91,186,100]},{"source":"heading-screenshot-only","text":"OR FLOW (TODAY - MST)","level":"H2","reason":"Section heading for OR flow chart and data","bbox":[290,90,398,101]},{"source":"heading-screenshot-only","text":"INBOUND EXECUTION","level":"H2","reason":"Section heading for inbound execution metrics","bbox":[21,356,126,368]},{"source":"heading-screenshot-only","text":"OUTBOUND EXECUTION","level":"H2","reason":"Section heading for outbound execution metrics","bbox":[347,356,463,368]},{"source":"heading-screenshot-only","text":"DEPARTMENT PRODUCTION","level":"H2","reason":"Section heading for department production data","bbox":[29,802,155,813]},{"source":"heading-screenshot-only","text":"BUILDING OVERVIEW (DRAX FORMAT)","level":"H2","reason":"Section heading for building overview table","bbox":[21,1154,212,1166]}],"highlighted_image":"page1_screenshot_only_highlighted.png","raw_response":"[\n  { \"text\": \"YARD STATUS\", \"level\": \"H2\", \"reason\": \"Section heading for yard status information\", \"bbox\": [29, 90, 91, 101] },\n  { \"text\": \"EXIT Backlog\", \"level\": \"H2\", \"reason\": \"Section heading for exit backlog data\", \"bbox\": [137, 91, 186, 100] },\n  { \"text\": \"OR FLOW (TODAY - MST)\", \"level\": \"H2\", \"reason\": \"Section heading for OR flow chart and data\", \"bbox\": [290, 90, 398, 101] },\n  { \"text\": \"INBOUND EXECUTION\", \"level\": \"H2\", \"reason\": \"Section heading for inbound execution metrics\", \"bbox\": [21, 356, 126, 368] },\n  { \"text\": \"OUTBOUND EXECUTION\", \"level\": \"H2\", \"reason\": \"Section heading for outbound execution metrics\", \"bbox\": [347, 356, 463, 368] },\n  { \"text\": \"DEPARTMENT PRODUCTION\", \"level\": \"H2\", \"reason\": \"Section heading for department production data\", \"bbox\": [29, 802, 155, 813] },\n  { \"text\": \"BUILDING OVERVIEW (DRAX FORMAT)\", \"level\": \"H2\", \"reason\": \"Section heading for building overview table\", \"bbox\": [21, 1154, 212, 1166] }\n]"},{"skill":"heading-screenshot-code","label":"Screenshot + code","findings_count":10,"findings":[{"source":"heading-screenshot-code","text":"PHX1","level":"H1","reason":"Main heading present","selector":"body > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > h1","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"🚛 Yard Status💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(1) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"📊 OB Flow (Today - MST)💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"Inbound Execution💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"Outbound Execution💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(2) > div:nth-of-type(2) > div > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"📦 Inbound Volume Mix\n            \n                (Receive paths only)\n            \n        💬","level":"H3","reason":"Properly nested h3","selector":"body > main > div:nth-of-type(3) > div > div:nth-of-type(1) > h3","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"🚚 Outbound Volume Flow\n            \n                (Pick → Pack → Load)\n            \n        💬","level":"H3","reason":"Properly nested h3","selector":"body > main > div:nth-of-type(3) > div > div:nth-of-type(2) > h3","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"🏭 Department Production💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(4) > div > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"📋 IB Support","level":"H4","reason":"Skipped heading level - h4 after h2, missing h3","selector":"body > main > div:nth-of-type(4) > div > div:nth-of-type(2) > div:nth-of-type(2) > h4","status":"fail","severity":"medium","issue_type":"skipped_level"},{"source":"heading-screenshot-code","text":"Building Overview (DRAX Format) — Day Shift · Jun 10, 2026💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(5) > div > h2","status":"pass","severity":"low","issue_type":"none"}],"highlighted_image":"page1_screenshot_code_highlighted.png","raw_response":"| page_id | page_url_or_fixture | skill_name | element_type | selector | wcag_candidate | severity | status | notes | heading_text | heading_level | is_hierarchy_valid | hierarchy_issue_type |\n|---------|-------------------|------------|--------------|----------|----------------|----------|---------|--------|--------------|---------------|-------------------|---------------------|\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > h1 | 1.3.1 | low | pass | Main heading present | PHX1 | 1 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(1) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | 🚛 Yard Status💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | 📊 OB Flow (Today - MST)💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | Inbound Execution💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(2) > div:nth-of-type(2) > div > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | Outbound Execution💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(3) > div > div:nth-of-type(1) > h3 | 1.3.1 | low | pass | Properly nested h3 | 📦 Inbound Volume Mix (Receive paths only) 💬 | 3 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(3) > div > div:nth-of-type(2) > h3 | 1.3.1 | low | pass | Properly nested h3 | 🚚 Outbound Volume Flow (Pick → Pack → Load) 💬 | 3 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(4) > div > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | 🏭 Department Production💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(4) > div > div:nth-of-type(2) > div:nth-of-type(2) > h4 | 1.3.1 | medium | fail | Skipped heading level - h4 after h2, missing h3 | 📋 IB Support | 4 | false | skipped_level |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(5) > div > h2 | 1.3.1 | low | pass | Properly nested h2 | Building Overview (DRAX Format) — Day Shift · Jun 10, 2026💬 | 2 | true | none |"}]}]</script>
+  <script>
+    const REVIEW_DATA = JSON.parse(document.getElementById('review-data').textContent);
+    const modal = document.getElementById('detail-modal');
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
+
+    function findingStatus(finding) {
+      return finding.status || finding.severity || finding.issue_type || 'found';
+    }
+
+    function openRunDialog(pageIndex, runIndex) {
+      openDialog(pageIndex, runIndex, 0);
+    }
+
+    function openFindingDialog(pageIndex, runIndex, findingIndex) {
+      openDialog(pageIndex, runIndex, findingIndex);
+    }
+
+    function openDialog(pageIndex, runIndex, findingIndex) {
+      const page = REVIEW_DATA[pageIndex];
+      const run = page.runs[runIndex];
+      const activeIndex = Number.isInteger(findingIndex) ? findingIndex : 0;
+
+      document.getElementById('modal-title').textContent = run.skill + ' · ' + run.findings_count + ' findings';
+      document.getElementById('modal-subtitle').textContent = page.page_id + ' · ' + page.backend + ' · ' + page.model;
+      document.getElementById('modal-image').src = run.highlighted_image;
+      document.getElementById('modal-raw').textContent = run.raw_response || '';
+      document.getElementById('modal-findings').innerHTML = run.findings.length
+        ? run.findings.map((finding, index) => '<div class="detail-card ' + (index === activeIndex ? 'active' : '') + '">' +
+            '<div class="detail-label">Finding ' + (index + 1) + '</div>' +
+            '<h3>' + escapeHtml(finding.text || '(no text)') + '</h3>' +
+            '<p><strong>Level:</strong> ' + escapeHtml(finding.level || 'n/a') + '</p>' +
+            '<p><strong>Status:</strong> ' + escapeHtml(findingStatus(finding)) + '</p>' +
+            (finding.selector ? '<p><strong>Selector:</strong> <code>' + escapeHtml(finding.selector) + '</code></p>' : '') +
+            (finding.bbox ? '<p><strong>BBox:</strong> <code>' + escapeHtml(JSON.stringify(finding.bbox)) + '</code></p>' : '') +
+            '<p><strong>Reason:</strong> ' + escapeHtml(finding.reason || '') + '</p>' +
+          '</div>').join('')
+        : '<p class="empty">No findings returned.</p>';
+
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        const active = modal.querySelector('.detail-card.active');
+        if (active) active.scrollIntoView({ block: 'nearest' });
+      }, 0);
+    }
+
+    function closeDialog() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeDialog();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeDialog();
+    });
+  </script>
+</body>
+</html>

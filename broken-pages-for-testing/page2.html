@@ -1,0 +1,745 @@
+<html lang="es"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="120"><!-- auto-recarga cada 2 min -->
+  <title>Monitor Relojes Control – Walmart Chile</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f5f5f5;
+        color: #1a1a2e;
+        padding: 24px;
+        min-height: 100vh;
+    }
+    a { color: #0053e2; }
+    header {
+        background: #0053e2;
+        color: #fff;
+        border-radius: 12px;
+        padding: 20px 28px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    header h1 { font-size: 1.35rem; font-weight: 700; }
+    header .meta { font-size: 0.78rem; opacity: .85; line-height: 1.6; text-align: right; }
+    .spark-badge {
+        background: #ffc220;
+        color: #000;
+        font-weight: 700;
+        font-size: .7rem;
+        padding: 3px 8px;
+        border-radius: 999px;
+    }
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .card .label { font-size: .72rem; color: #666; margin-bottom: 4px; }
+    .card .value { font-size: 2rem; font-weight: 700; line-height: 1; }
+    .card .sub   { font-size: .75rem; margin-top: 4px; }
+    .c-blue  { color: #0053e2; }
+    .c-red   { color: #ea1100; }
+    .c-green { color: #2a8703; }
+    .c-spark { color: #b36a00; }
+    section {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+    section h2 {
+        font-size: .95rem;
+        font-weight: 700;
+        padding: 14px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .82rem;
+    }
+    thead tr { background: #f8f8f8; }
+    th {
+        text-align: left;
+        padding: 10px 16px;
+        font-size: .75rem;
+        color: #555;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    td {
+        padding: 10px 16px;
+        border-top: 1px solid #f0f0f0;
+        vertical-align: middle;
+    }
+    tr:hover td { background: #fafafa; }
+    .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: .7rem;
+        font-weight: 700;
+    }
+    .badge-red   { background: #ea1100;   color: #fff; }
+    .badge-green { background: #2a8703; color: #fff; }
+    .badge-gray  { background: #ccc;     color: #333; }
+    .badge-spark { background: #ffc220; color: #000; }
+    .empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+        font-size: .9rem;
+    }
+    .rank-bar-bg {
+        background: #eee;
+        border-radius: 999px;
+        height: 8px;
+        width: 140px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .rank-bar {
+        background: #ea1100;
+        border-radius: 999px;
+        height: 8px;
+    }
+    footer {
+        text-align: center;
+        font-size: .72rem;
+        color: #aaa;
+        margin-top: 12px;
+    }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        header { flex-direction: column; align-items: flex-start; }
+        header .meta { text-align: left; }
+    }
+    </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🕐 Monitor de Relojes de Control</h1>
+    <div style="margin-top:6px">
+      <span class="spark-badge">Walmart Chile</span>
+    </div>
+  </div>
+  <div class="meta">
+    <div>📅 Generado: <strong>10/06/2026 18:46:27</strong></div>
+    <div>🔍 Último chequeo: 2026-06-10T18:46:27.813442-04:00</div>
+    <div style="margin-top:4px;font-size:.7rem;opacity:.7">
+      Este reporte se actualiza automáticamente cada 30 min
+    </div>
+  </div>
+</header>
+
+
+
+<!-- Tarjetas de resumen -->
+<div class="cards">
+  <div class="card">
+    <div class="label">Total Relojes</div>
+    <div class="value c-blue">625</div>
+    <div class="sub">
+      <span style="color:#2a8703">✅ 623 UP</span>&nbsp;
+      <span style="color:#ea1100">🔴 2 DOWN</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Disponibilidad</div>
+    <div class="value c-red">99.7%</div>
+    <div class="sub c-red">🔴 2 caídos</div>
+  </div>
+  <div class="card">
+    <div class="label">Alertas Enviadas</div>
+    <div class="value c-blue">25</div>
+    <div class="sub c-spark">📅 Hoy: 0</div>
+  </div>
+  <div class="card">
+    <div class="label">Recuperaciones</div>
+    <div class="value c-green">20</div>
+    <div class="sub" style="color:#666">Registradas en historial</div>
+  </div>
+</div>
+
+<!-- Relojes DOWN -->
+<section>
+  <h2 style="color:#ea1100">
+    🔴 Relojes DOWN
+    <span style="font-weight:400;font-size:.8rem;color:#999">
+      (2 / 625 total)
+    </span>
+  </h2>
+  
+    <table>
+        <thead><tr>
+            <th>#</th><th>Hostname</th><th>IP</th>
+            <th>Estado</th><th>⏱ Tiempo Caído</th>
+            <th>Último Check</th><th>Info</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+            <td style="color:#999">1</td>
+            <td style="font-family:monospace;font-weight:600">Local 215 Reloj 1</td>
+            <td style="font-family:monospace;color:#888;font-size:.75rem">22.112.168.205</td>
+            <td><span class="badge badge-red">DOWN</span></td>
+            <td style="color:#ea1100;font-weight:600">0d  0h 33m 33s</td>
+            <td style="font-size:.75rem;color:#666">10/06/2026 18:42:25</td>
+            <td style="font-size:.75rem;color:#555;max-width:220px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="CRÍTICO - Host Inalcanzable (22.112.168.205)">CRÍTICO - Host Inalcanzable (22.112.168.205)</td>
+        </tr>
+        <tr>
+            <td style="color:#999">2</td>
+            <td style="font-family:monospace;font-weight:600">Local 6020 Reloj 10</td>
+            <td style="font-family:monospace;color:#888;font-size:.75rem">10.87.150.204</td>
+            <td><span class="badge badge-red">DOWN</span></td>
+            <td style="color:#ea1100;font-weight:600">2d  9h 40m 50s</td>
+            <td style="font-size:.75rem;color:#666">10/06/2026 18:44:39</td>
+            <td style="font-size:.75rem;color:#555;max-width:220px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="PING CRÍTICO - Pérdida de paquetes = 100%">PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr></tbody>
+    </table>
+</section>
+
+<!-- Recuperaciones recientes -->
+<section>
+  <h2 style="color:#2a8703">✅ Recuperaciones Recientes</h2>
+  
+    <table>
+        <thead><tr>
+            <th>Hostname</th><th>Caída Desde</th>
+            <th>Recuperado</th><th>Duración Caída</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+            <td style="font-family:monospace">Local 149 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 18:06:27</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 18:08:42</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 2m 14s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 467 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 17:02:28</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 17:09:06</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 6m 38s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 48 Reloj 2</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 16:37:42</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 16:43:28</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 5m 46s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 524 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 16:10:57</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 16:19:28</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 8m 31s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 229 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 15:59:28</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 16:05:28</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 6m 0s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 459 Reloj 2</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 13:28:47</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 14:47:28</td>
+            <td style="color:#ea1100;font-weight:600">0d 1h 18m 41s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 459 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 14:44:46</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 14:45:46</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 1m 0s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 73 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 12:46:57</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 14:30:28</td>
+            <td style="color:#ea1100;font-weight:600">0d 1h 43m 30s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">CD 6011 Reloj 11</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 13:58:28</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 13:59:29</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 1m 0s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 937 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 10:38:59</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 13:12:34</td>
+            <td style="color:#ea1100;font-weight:600">0d 2h 33m 34s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 501 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 07:55:44</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 13:07:42</td>
+            <td style="color:#ea1100;font-weight:600">0d 5h 11m 57s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 600 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 13:02:28</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 13:02:42</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 0m 13s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 559 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 12:58:28</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 12:59:29</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 1m 0s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 589 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 12:32:23</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 12:33:33</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 1m 9s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 36 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 11:52:42</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 12:10:29</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 17m 47s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">CD 6011 Reloj 16</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 11:52:42</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 11:55:28</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 2m 46s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">CD 6011 Reloj 14</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 11:37:49</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 11:39:11</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 1m 22s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 82 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 09:57:41</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 10:15:04</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 17m 23s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 992 Reloj 1</td>
+            <td style="color:#ea1100;font-size:.78rem">10/06/2026 08:12:27</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 08:16:32</td>
+            <td style="color:#ea1100;font-weight:600">0d 0h 4m 4s</td>
+        </tr>
+        <tr>
+            <td style="font-family:monospace">Local 6020 Reloj 10</td>
+            <td style="color:#ea1100;font-size:.78rem">09/06/2026 08:52:08</td>
+            <td style="font-size:.78rem;color:#666">10/06/2026 07:52:44</td>
+            <td style="color:#ea1100;font-weight:600">0d 23h 0m 35s</td>
+        </tr></tbody>
+    </table>
+</section>
+
+<!-- Alertas recientes -->
+<section>
+  <h2>📧 Alertas Recientes</h2>
+  
+    <table>
+        <thead><tr>
+            <th>Fecha</th><th>Host</th><th>Enviado a</th><th>Detalle</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">13/03/2026 13:25:42</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 997 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 997 | Estado: DOWN | Duración: 0d  0h 10m 37s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 997 | Estado: DOWN | Duración: 0d  0h 10m 37s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">13/03/2026 09:06:58</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 56 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 56 | Estado: DOWN | Duración: 0d  0h  0m 48s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 56 | Estado: DOWN | Duración: 0d  0h  0m 48s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">13/03/2026 09:02:11</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 501 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 501 | Estado: DOWN | Duración: 0d  6h 54m 17s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 501 | Estado: DOWN | Duración: 0d  6h 54m 17s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">13/03/2026 09:02:11</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 6009 Reloj Casino 3</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Fabian.Cornejo@walmart.com; Mitzi.Urra@walmart.com">Fabian.Cornejo@walmart.com; Mitzi.Urra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 6009 | Estado: DOWN | Duración: 1d 20h 11m  6s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 6009 | Estado: DOWN | Duración: 1d 20h 11m  6s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">13/03/2026 09:02:11</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 638 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 638 | Estado: DOWN | Duración: 0d 15h 26m  9s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 638 | Estado: DOWN | Duración: 0d 15h 26m  9s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">13/03/2026 09:02:11</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 73 Reloj 2</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 73 | Estado: DOWN | Duración: 0d  1h 22m  6s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 73 | Estado: DOWN | Duración: 0d  1h 22m  6s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">13/03/2026 09:02:11</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 94 Reloj 2</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 94 | Estado: DOWN | Duración: 0d 14h 16m 33s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 94 | Estado: DOWN | Duración: 0d 14h 16m 33s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">13/03/2026 09:02:11</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 95 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 95 | Estado: DOWN | Duración: 0d  0h  2m 45s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 95 | Estado: DOWN | Duración: 0d  0h  2m 45s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 17:02:41</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 454 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 454 | Estado: DOWN | Duración: 0d  0h  0m 31s | Info: CRÍTICO - Host Inalcanzable (22.123.232.205)">Local 454 | Estado: DOWN | Duración: 0d  0h  0m 31s | Info: CRÍTICO - Host Inalcanzable (22.123.232.205)</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 16:52:37</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 81 Reloj 4</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 81 | Estado: DOWN | Duración: 0d  0h  0m 55s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 81 | Estado: DOWN | Duración: 0d  0h  0m 55s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 16:36:01</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 687 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 687 | Estado: DOWN | Duración: 0d  0h  0m 34s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 687 | Estado: DOWN | Duración: 0d  0h  0m 34s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 16:33:30</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 81 Reloj 2</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 81 | Estado: DOWN | Duración: 0d  0h  0m 35s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 81 | Estado: DOWN | Duración: 0d  0h  0m 35s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 16:13:12</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 81 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 81 | Estado: DOWN | Duración: 0d  0h  0m 58s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 81 | Estado: DOWN | Duración: 0d  0h  0m 58s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 16:11:42</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 7 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 7 | Estado: DOWN | Duración: 0d  0h  0m 50s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 7 | Estado: DOWN | Duración: 0d  0h  0m 50s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 16:10:12</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 51 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 51 | Estado: DOWN | Duración: 0d  0h  1m  1s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 51 | Estado: DOWN | Duración: 0d  0h  1m  1s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 15:48:31</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 81 Reloj 3</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Local 81 | Estado: DOWN | Duración: 0d  0h  0m 46s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Local 81 | Estado: DOWN | Duración: 0d  0h  0m 46s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 14:40:04</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 959 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Estado: DOWN | Duración: 0d  0h  0m 39s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Estado: DOWN | Duración: 0d  0h  0m 39s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 11:34:46</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 46 Reloj 2</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Estado: DOWN | Duración: 0d  0h  1m  4s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Estado: DOWN | Duración: 0d  0h  1m  4s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 11:14:51</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 425 Reloj 2</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Estado: DOWN | Duración: 0d  0h  0m 42s | Info: PING CRÍTICO - Pérdida de paquetes = 100%">Estado: DOWN | Duración: 0d  0h  0m 42s | Info: PING CRÍTICO - Pérdida de paquetes = 100%</td>
+        </tr>
+        <tr>
+            <td style="font-size:.75rem;color:#666;white-space:nowrap">12/03/2026 09:51:41</td>
+            <td style="font-family:monospace;font-size:.8rem">Local 214 Reloj 1</td>
+            <td style="font-size:.75rem;color:#555;max-width:180px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Lizardo.saavedra@walmart.com">Lizardo.saavedra@walmart.com</td>
+            <td style="font-size:.75rem;color:#555;max-width:240px;overflow:hidden;
+                       text-overflow:ellipsis;white-space:nowrap" title="Status: DOWN | Duration: 235d  3h  9m 48s | Info: CRITICAL - Host Unreachable (22.112.160.205)">Status: DOWN | Duration: 235d  3h  9m 48s | Info: CRITICAL - Host Unreachable (22.112.160.205)</td>
+        </tr></tbody>
+    </table>
+</section>
+
+<!-- Ranking -->
+<section>
+  <h2 style="color:#0053e2">🏆 Ranking: Locales con más Caídas</h2>
+  
+    <table>
+        <thead><tr>
+            <th>#</th><th>Hostname</th><th>Incidentes</th><th>Total</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+            <td style="font-size:.85rem;width:32px">🥇</td>
+            <td style="font-family:monospace;font-weight:600">Local 588 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">🥈</td>
+            <td style="font-family:monospace;font-weight:600">Local 6009 Reloj Casino 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">🥉</td>
+            <td style="font-family:monospace;font-weight:600">Local 458 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">4</td>
+            <td style="font-family:monospace;font-weight:600">Local 535 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">5</td>
+            <td style="font-family:monospace;font-weight:600">Local 632 Reloj 3</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">6</td>
+            <td style="font-family:monospace;font-weight:600">Local 501 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">7</td>
+            <td style="font-family:monospace;font-weight:600">Local 798 Reloj 2</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">8</td>
+            <td style="font-family:monospace;font-weight:600">Local 607 Reloj 2</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">9</td>
+            <td style="font-family:monospace;font-weight:600">Local 78 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">10</td>
+            <td style="font-family:monospace;font-weight:600">Local 94 Reloj 2</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">11</td>
+            <td style="font-family:monospace;font-weight:600">Local 36 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">12</td>
+            <td style="font-family:monospace;font-weight:600">Local 525 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">13</td>
+            <td style="font-family:monospace;font-weight:600">Local 575 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">14</td>
+            <td style="font-family:monospace;font-weight:600">Local 580 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">15</td>
+            <td style="font-family:monospace;font-weight:600">Local 78 Reloj 2</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">16</td>
+            <td style="font-family:monospace;font-weight:600">Local 19 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">17</td>
+            <td style="font-family:monospace;font-weight:600">Local 4 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">18</td>
+            <td style="font-family:monospace;font-weight:600">Local 524 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">19</td>
+            <td style="font-family:monospace;font-weight:600">Local 58 Reloj 3</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr>
+        <tr>
+            <td style="font-size:.85rem;width:32px">20</td>
+            <td style="font-family:monospace;font-weight:600">Local 587 Reloj 1</td>
+            <td>
+                <div class="rank-bar-bg">
+                    <div class="rank-bar" style="width:0%"></div>
+                </div>
+            </td>
+            <td style="color:#ea1100;font-weight:700">0</td>
+        </tr></tbody>
+    </table>
+</section>
+
+<footer>
+  Generado por <strong>Nagios Clock Monitor</strong> · Walmart Chile ·
+  Este reporte es de uso interno. Última actualización: 10/06/2026 18:46:27
+</footer>
+
+
+</body></html>

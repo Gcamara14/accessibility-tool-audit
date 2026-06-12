@@ -1,0 +1,103 @@
+{
+  "version": "v1",
+  "scope": "web",
+  "description": "Initial prompt benchmark fixture set for minimal accessibility prompt MVP.",
+  "fixtures": [
+    {
+      "id": "FX-001",
+      "category": "name-role-value",
+      "wcag": ["4.1.2"],
+      "alphaGovTestName": "Form element has no label",
+      "sourceSnippet": "<form><input type=\"text\" /></form>",
+      "expectedFixSignals": [
+        "Add programmatic label via <label for> + id or aria-label.",
+        "Do not rely on placeholder as the only label."
+      ],
+      "candidateTemplateIds": ["WA11Y-WEB-4.1.2-001", "WA11Y-WEB-4.1.2-010"]
+    },
+    {
+      "id": "FX-002",
+      "category": "name-role-value",
+      "wcag": ["4.1.2", "3.3.2"],
+      "alphaGovTestName": "Placeholder no label",
+      "sourceSnippet": "<form><input id=\"search-main\" name=\"q\" placeholder=\"Search\" type=\"search\" /><input class=\"submit\" type=\"submit\" value=\"Search\" /></form>",
+      "expectedFixSignals": [
+        "Introduce visible and programmatic label for the search field.",
+        "Keep submit action discoverable by screen readers."
+      ],
+      "candidateTemplateIds": ["WA11Y-WEB-4.1.2-001", "WA11Y-WEB-4.1.2-006"]
+    },
+    {
+      "id": "FX-003",
+      "category": "info-relationships",
+      "wcag": ["1.3.1"],
+      "alphaGovTestName": "Text formatting used instead of an actual heading",
+      "sourceSnippet": "<div class=\"fake-heading\">Fake Heading</div><p>This paragraph is preceded by a div that is styled to look like a heading</p>",
+      "expectedFixSignals": [
+        "Replace fake heading with semantic heading element.",
+        "Keep visual styling while restoring semantic structure."
+      ],
+      "candidateTemplateIds": ["WA11Y-WEB-1.3.1-001"]
+    },
+    {
+      "id": "FX-004",
+      "category": "info-relationships",
+      "wcag": ["1.3.1"],
+      "alphaGovTestName": "Headings not structured in a hierarchical manner",
+      "sourceSnippet": "<h3>Heading 3</h3> ... <h5>Heading 5</h5> ... <h4>Heading 4</h4>",
+      "expectedFixSignals": [
+        "Normalize heading levels to non-skipping hierarchy.",
+        "Preserve intended content sections."
+      ],
+      "candidateTemplateIds": ["WA11Y-WEB-1.3.1-001"]
+    },
+    {
+      "id": "FX-005",
+      "category": "keyboard",
+      "wcag": ["2.1.1"],
+      "alphaGovTestName": "Lightbox - close button doesn't receive focus",
+      "sourceSnippet": "<span title=\"Close lightbox\" class=\"close-button\">X</span>",
+      "expectedFixSignals": [
+        "Convert close control to native interactive element (<button>).",
+        "Ensure keyboard focusability and activation."
+      ],
+      "candidateTemplateIds": ["WA11Y-WEB-2.1.1-001"]
+    },
+    {
+      "id": "FX-006",
+      "category": "focus-order",
+      "wcag": ["2.4.3"],
+      "alphaGovTestName": "Focus order in wrong order",
+      "sourceSnippet": "<div class=\"focus-order-broken\"><a class=\"first\" href=\"#\">First link</a><a class=\"second\" href=\"#\">Second link</a><a class=\"Third\" href=\"#\">Third link</a></div>",
+      "expectedFixSignals": [
+        "Correct DOM order to match intended tab order and reading order.",
+        "Avoid tabindex > 0 hacks."
+      ],
+      "candidateTemplateIds": ["WA11Y-WEB-2.4.3-001", "WA11Y-WEB-2.4.3-002"]
+    },
+    {
+      "id": "FX-007",
+      "category": "focus-order",
+      "wcag": ["2.4.3"],
+      "alphaGovTestName": "Tabindex greater than 0",
+      "sourceSnippet": "<a href=\"page.html\" tabindex=\"5\">A link with a tabindex greater than 0</a>",
+      "expectedFixSignals": [
+        "Remove positive tabindex and rely on natural DOM sequence.",
+        "Keep element keyboard reachable."
+      ],
+      "candidateTemplateIds": ["WA11Y-WEB-2.4.3-001", "WA11Y-WEB-2.4.3-003"]
+    },
+    {
+      "id": "FX-008",
+      "category": "keyboard",
+      "wcag": ["2.1.1", "2.4.7"],
+      "alphaGovTestName": "Keyboard focus is not indicated visually",
+      "sourceSnippet": "<a class=\"no-outline\" href=\"link.html\">Link with no focus style</a>",
+      "expectedFixSignals": [
+        "Restore visible focus indicator for keyboard users.",
+        "Do not remove outline unless replaced by equally visible style."
+      ],
+      "candidateTemplateIds": ["WA11Y-WEB-2.1.1-001"]
+    }
+  ]
+}

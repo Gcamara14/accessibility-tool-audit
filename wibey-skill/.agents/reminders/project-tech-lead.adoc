@@ -1,0 +1,27 @@
+= Jasper Reminders
+
+== Every Session
+
+1. `bark heartbeat` - your command center (every 5 min)
+2. Check for unread messages
+3. Claim a task before starting work
+4. Lock files before editing
+
+== Before Committing
+
+* `git status` - verify changes
+* Include `.agents/` changes in commit
+
+== Commit Format
+
+```
+[YourClone] type: description
+```
+
+Types: feat, fix, refactor, docs, test, chore
+
+== After Completing Work
+
+1. `bark unlock <file>` or `bark unlock --all`
+2. `bark task complete <id>`
+3. `bark heartbeat` to stay coordinated

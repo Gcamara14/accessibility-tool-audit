@@ -1,50 +1,49 @@
-# Accessibility tool audit
+# Enterprise Accessibility Intelligence System
 
-Automated accessibility checkers can be used to help identify accessibility issues in digital services. They're good for finding simple and obvious problems, but aren't able to detect many accessibility issues.
+## 🌟 Product Requirements Document (PRD)
 
-This repo contains a collection of accessibility failures to be used for testing automated accessibility tools and test results from those tools.
+### Vision & Goals
+The ultimate goal of this project is to ensure that **all future coding outputs from AI agents are accessible by default**. 
 
-[Read our blog post](https://accessibility.blog.gov.uk/2017/02/24/what-we-found-when-we-tested-tools-on-the-worlds-least-accessible-webpage/) about how we did the automated tool testing.
+To achieve this, we are building a multi-agent system and a comprehensive suite of system prompts (skills) mapped to WCAG criteria. These skills serve a dual purpose:
+1. **Pre-generation Guardrails:** Evaluating and guiding AI agents *before* and *during* code generation to ensure accessible output.
+2. **Automated Auditing:** Conducting highly accurate, template-aware accessibility audits on existing codebases and pages.
 
-## About the test cases
+### Core Architecture
+This repository is the central workspace for developing, testing, and benchmarking these accessibility skills.
 
-The test cases are a collection of the wide variety of potential accessibility issues that can exist. There's probably loads more we haven't thought of.
+* **`accessibility-audit-skill/`**: The consolidated master skill folder. Contains the main `SKILL.md`, specialized sub-skills (e.g., headings, images, interactive elements), and all benchmark/audit run data.
+* **`wibey-skill/`**: The core agent knowledge base. Contains Catalyst templates (the "How"), Team routing context (the "Where"), and WCAG reference material (the "Why").
+* **`alpha-gov/`**: A reference copy of the UK Government accessibility tool audit project. Provides known inaccessible HTML examples and test cases used as training/audit material.
+* **`broken-pages-for-testing/`**: A dedicated suite of broken pages (e.g., `page1.html` through `page10.html`) used to test, validate, and benchmark our accessibility skills against known inaccessible scenarios.
+* **`template-playground/`**: A standalone offline browser tool for loading, filtering, and reviewing Catalyst accessibility bug templates.
 
-## Contributing / updating results
+---
 
-We welcome issues / pull requests for updated or new test cases or tool results. All relevant content can be found in `tests.json`. (All the HTML files are automatically created from that one file.)
-Read more on [how to contribute](CONTRIBUTING.md).
+## 📋 Master Tasklist
 
-## Installing
+This section tracks our progress. Update this list as we complete tasks or define new ones.
 
-Make sure you have the gulp command installed beforehand.
+### Phase 1: Foundation & MVP (Completed)
+- [x] Consolidate repository structure and create `AGENT_INDEX.md`.
+- [x] Draft initial MVP prompt variants (Baseline, Template-Aware, Pre-Generation).
+- [x] Define a scoring rubric for prompt quality and correctness.
+- [x] Run initial manual benchmark on web fixtures.
+- [x] Create the master `accessibility-audit-skill` directory with v1 sub-skills (Headings, Images, Interactive Elements).
 
-```
-npm install -g gulp
-```
+### Phase 2: Skill Expansion & Automation (Current)
+- [ ] **Expand Sub-Skills:** Create specialized sub-skills for remaining high-priority WCAG areas:
+  - [ ] Forms and Labels (WCAG 1.3.1, 3.3.2)
+  - [ ] Landmarks and Region Navigation (WCAG 1.3.1, 2.4.1)
+  - [ ] Tables and Relationships (WCAG 1.3.1)
+  - [ ] Focus Management and Dialog Behavior (WCAG 2.4.3)
+- [ ] **Automated Runner:** Build a lightweight script or agent workflow to automatically run a given HTML snippet/URL against *all* sub-skills and aggregate the findings.
+- [ ] **Pre-Generation Integration:** Test the "Pre-Generation Guardrail" prompt on 3-5 "generate from scratch" scenarios to measure if the AI produces accessible code on the first try.
 
-Then run the following commands to install the dependencies and generate the static html files.
+### Phase 3: Multi-Agent Orchestration
+- [ ] **Jira/PR Integration:** Test the multi-agent workflow on a real Jira ticket or PR (Ingest -> Retrieve Context -> Fix -> Learn).
+- [ ] **Telemetry & Learning:** Implement the feedback loop to extract new learnings from merged PRs and update the Catalyst templates automatically.
 
-```
-npm install
-gulp
-
-```
-
-Now you can run a local HTTP server to serve the files in this directory. Such as:
-
-```
-python -mSimpleHTTPServer
-```
-
-and click [http://localhost:8000/](http://localhost:8000/) to see the generated HTML output.
-
-You can also run gulp in dev mode, which would keep watching for files to change until you kill it.
-
-```
-gulp dev
-```
-
-## Licence
-
-Released under the MIT Licence, a copy of which can be found in the file `LICENCE`.
+### Phase 4: Platform Expansion
+- [ ] **iOS Expansion:** Adapt the component map and sub-skills for iOS (UIKit/SwiftUI).
+- [ ] **Android Expansion:** Adapt the component map and sub-skills for Android (XML/Compose).

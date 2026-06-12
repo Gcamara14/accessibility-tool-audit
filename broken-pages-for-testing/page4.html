@@ -1,0 +1,3348 @@
+<html lang="en" style="overflow:hidden;background:#f8fafc"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>ORD RSR Dashboard — DC 7042</title>
+  <!-- Strip overflow:hidden from <html> on phones in PORTRAIT only.
+       Portrait phones scroll naturally; landscape phones get fit-to-screen via fitScreen().
+       Phone = touch-capable AND short dimension < 600px (never a TV/monitor).
+       Runs before first paint — zero flicker. -->
+  <script>
+    (function(){
+      var hasTouch  = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+      var smallScr  = Math.min(screen.width, screen.height) < 600;
+      var portrait  = window.innerWidth <= window.innerHeight;
+      if (hasTouch && smallScr && portrait) {
+        document.documentElement.style.overflow = '';
+        document.documentElement.style.height   = '';
+      }
+    })();
+  </script>
+  <style>
+    
+/* base */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;padding:0}
+/* layout */
+.min-h-screen{min-height:100vh}
+.max-w-screen-2xl{max-width:1536px}
+.mx-auto{margin-left:auto;margin-right:auto}
+.overflow-hidden{overflow:hidden}
+/* display */
+.flex{display:flex}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}
+.inline-block{display:inline-block}.inline-flex{display:inline-flex}
+.grid{display:grid}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+/* alignment */
+.items-center{align-items:center}.items-start{align-items:flex-start}
+.items-end{align-items:flex-end}
+.justify-between{justify-content:space-between}
+.justify-center{justify-content:center}
+/* gap */
+.gap-0{gap:0}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}
+.gap-3{gap:.75rem}.gap-4{gap:1rem}
+/* padding */
+.px-3{padding-left:.75rem;padding-right:.75rem}
+.px-4{padding-left:1rem;padding-right:1rem}
+.px-5{padding-left:1.25rem;padding-right:1.25rem}
+.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}
+.py-1{padding-top:.25rem;padding-bottom:.25rem}
+.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}
+.py-2{padding-top:.5rem;padding-bottom:.5rem}
+.py-3{padding-top:.75rem;padding-bottom:.75rem}
+.py-4{padding-top:1rem;padding-bottom:1rem}
+.pt-2{padding-top:.5rem}.pb-0{padding-bottom:0}
+.pl-2{padding-left:.5rem}.pr-2{padding-right:.5rem}
+/* margin */
+.mr-1\.5{margin-right:.375rem}.mb-0\.5{margin-bottom:.125rem}
+.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}
+.mt-0{margin-top:0}.mt-2{margin-top:.5rem}
+/* sizing */
+.w-1{width:.25rem}.w-2{width:.5rem}.w-px{width:1px}.w-full{width:100%}
+.h-1{height:.25rem}.h-8{height:2rem}.h-10{height:2.5rem}.h-full{height:100%}
+/* typography */
+.text-\[9px\]{font-size:9px}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}
+.text-xs{font-size:.75rem;line-height:1rem}
+.text-sm{font-size:.875rem;line-height:1.25rem}
+.text-base{font-size:1rem;line-height:1.5rem}
+.text-lg{font-size:1.125rem;line-height:1.75rem}
+.text-xl{font-size:1.25rem;line-height:1.75rem}
+.text-2xl{font-size:1.5rem;line-height:2rem}
+.font-black{font-weight:900}.font-bold{font-weight:700}.font-semibold{font-weight:600}
+.uppercase{text-transform:uppercase}
+.tracking-widest{letter-spacing:.1em}.tracking-tight{letter-spacing:-.025em}
+.leading-tight{line-height:1.25}
+.text-center{text-align:center}.text-right{text-align:right}
+/* text colors */
+.text-white{color:#fff}.text-blue-200{color:#bfdbfe}
+.text-gray-400{color:#9ca3af}.text-gray-500{color:#6b7280}
+.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}.text-gray-800{color:#1f2937}
+.text-gray-900{color:#111827}
+.text-green-600{color:#16a34a}.text-red-600{color:#dc2626}
+.text-yellow-600{color:#ca8a04}.text-orange-500{color:#f97316}
+.text-orange-600{color:#ea580c}
+/* bg colors */
+.bg-white{background-color:#fff}
+.bg-\[\#ffc220\]{background-color:#ffc220}
+.bg-red-500{background-color:#ef4444}.bg-yellow-400{background-color:#facc15}
+.bg-blue-400{background-color:#60a5fa}.bg-green-500{background-color:#22c55e}
+.rounded-full{border-radius:9999px}.rounded-xl{border-radius:.75rem}
+.rounded-lg{border-radius:.5rem}
+.border{border:1px solid currentColor}
+.border-b{border-bottom:1px solid}.border-t{border-top:1px solid}
+.border-gray-100{border-color:#f3f4f6}.border-gray-200{border-color:#e5e7eb}
+.last\:border-0:last-child{border:0!important}
+/* shadows */
+.shadow-sm{box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1)}
+/* misc */
+.transition-all{transition:all .15s ease}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:#f8fafc; }
+    .tabular-nums { font-variant-numeric:tabular-nums; }
+
+    /* Orderfilling table */
+    .of-header th { background:#334155; color:#f1f5f9; padding:5px 6px;
+                     text-align:center; font-size:1.05rem; white-space:normal;
+                     line-height:1.2; }
+    .of-th        { text-align:center; }
+    .of-th.of-first { text-align:left; }
+    .of-td        { padding:5px 6px; text-align:center; font-size:1.1rem;
+                     color:#1e293b; border-bottom:1px solid #e2e8f0; }
+    .of-first     { text-align:left; font-weight:600; white-space:nowrap; }
+    @media(max-width:700px){
+      .of-first { white-space:normal !important; min-width:4.5rem; }
+    }
+    tbody tr:nth-child(even) { background:#f1f5f9; }
+    tbody tr:nth-child(odd)  { background:#ffffff; }
+    tbody tr:hover           { background:#e2e8f0; }
+    .completed-row td  { background:#dcfce7 !important; font-weight:600; }
+    .carryover-row td  { background:#fef9c3 !important; font-style:italic; color:#78350f; }
+    .total-row td      { background:#0f172a !important; color:#f1f5f9; font-weight:700; }
+    .total-cases-row td { background:#334155 !important; color:#f1f5f9; font-weight:700; }
+
+    /* RSR cards */
+    .table-card { border-radius:0 0 12px 12px; overflow:hidden;
+                   box-shadow:0 4px 18px rgba(0,0,0,.12); }
+    .card { background:#fff; border-radius:0.375rem;
+             box-shadow:0 1px 3px rgba(0,0,0,.08);
+             border:1px solid #e2e8f0; padding:0.6rem 0.8rem; }
+    .card-title { font-size:1.15rem; }
+    .sub-hdr { color:white; padding:5px 12px;
+                border-radius:0.375rem 0.375rem 0 0;
+                font-weight:700; font-size:1.1rem; }
+    .sub-body { background:white; border:1px solid #e2e8f0;
+                 border-top:none; border-radius:0 0 0.375rem 0.375rem;
+                 padding:0.5rem; display:flex; flex-direction:column; gap:0.5rem; }
+
+    /* Shift selector */
+    #shift-sel {
+      background:#1e293b; color:#f1f5f9; border:2px solid #475569;
+      border-radius:8px; padding:5px 10px; font-weight:700;
+      font-size:1rem; cursor:pointer; outline:none;
+      box-shadow:0 2px 8px rgba(0,0,0,0.25);
+    }
+    #shift-sel:hover { border-color:#94a3b8; }
+
+    /* Responsive stats bar */
+    .stats-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+      gap:.15rem 0;
+      width:100%;
+    }
+    .stat-pill {
+      display:flex; flex-direction:column; align-items:center;
+      padding:.25rem .5rem;
+      border-right:1px solid #e5e7eb;
+    }
+    .stat-pill:last-child { border-right:none; }
+
+    /* Responsive OF table wrapper */
+    .of-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; }
+
+    /* Flashing red alert for Priority 01s and dock info */
+    @keyframes flash-alert {
+      0%,100% { opacity:1;  }
+      50%      { opacity:.1; }
+    }
+    .flash-alert {
+      animation: flash-alert 3s ease-in-out infinite;
+    }
+    /* Fire glow ring — pulses behind alert banners like actual flames */
+    @keyframes fire-glow {
+      0%,100% { box-shadow: 0 0 5px 1px #ff8c00, 0 0 10px 3px #ff4500; }
+      35%      { box-shadow: 0 0 14px 5px #ffb300, 0 0 24px 8px #ff6600; }
+      65%      { box-shadow: 0 0 7px 2px #ff2200, 0 0 14px 5px #ff9900; }
+    }
+    .flash-alert-slow {
+      animation: flash-alert 3s ease-in-out infinite,
+                 fire-glow 1.3s ease-in-out infinite;
+      border-radius: .35rem;
+    }
+    /* All flash classes share the same 3 s cycle — readable on any screen */
+    .flash-alert-readable {
+      animation: flash-alert 3s ease-in-out infinite,
+                 fire-glow 1.6s ease-in-out infinite;
+      border-radius: .35rem;
+    }
+
+    /* Whole-card orange warning — fires when putaway Open 500–799 */
+    .card-warn {
+      border:2px solid #fb923c !important;
+      background:#fff7ed;
+    }
+
+    /* Whole-card red pulse — fires when putaway Open ≥ 800 */
+    @keyframes card-bg-flash {
+      0%,100% { background:#fff;    border-color:#fca5a5; box-shadow:0 0 0 2px #fca5a5, 0 0 8px 2px #ff8c00; }
+      50%     { background:#fef2f2; border-color:#ef4444; box-shadow:0 0 16px 5px #ef4444, 0 0 24px 8px #ff5500; }
+    }
+    .card-alert {
+      animation: card-bg-flash 0.9s ease-in-out infinite;
+      border:2px solid #ef4444 !important;
+    }
+    .card-alert * { position:relative; z-index:1; }
+
+    /* ── Generic hover tooltip: hidden .tip-src div, JS floats it ────── */
+    .tip-src { display:none; }
+    #float-tip {
+      display:none;
+      position:fixed;
+      z-index:9000;
+      background:#fff;
+      border:2px solid #fca5a5;
+      border-radius:.55rem;
+      box-shadow:0 8px 28px rgba(0,0,0,.22);
+      padding:.55rem .7rem;
+      min-width:22rem;
+      max-width:50rem;
+      max-height:60vh;
+      overflow-y:auto;
+      pointer-events:none;
+    }
+    @media(max-width:700px){
+      #float-tip { min-width:0 !important; width:calc(100vw - 2rem) !important;
+                    max-width:calc(100vw - 2rem) !important; }
+    }
+
+    /* ── Refresh flash overlay ─────────────────────────────────────────── */
+    #refresh-flash {
+      position:fixed;inset:0;z-index:9999;
+      background:rgba(0,0,0,0.88);
+      pointer-events:none;opacity:0;
+    }
+    /* ── Countdown pill ─────────────────────────────────────────────────── */
+    #refresh-countdown {
+      font-variant-numeric:tabular-nums;
+      transition:color .3s;
+    }
+    /* Main 2-col panel grid — collapses to 1 col on phones */
+    .main-panel-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    @media(max-width:700px){
+      /* ── MOBILE: restore ural scrolling ───────────────────────────────
+         The <html> element has overflow:hidden (inline) to lock the TV
+         dashboard in place. !important overrides that inline style on phones
+         so the full page is scroll-friendly.                               */
+      html  { overflow-y: auto !important; height: auto !important; }
+      body  { overflow-y: auto !important; height: auto !important; }
+      /* Single-column layout on phones */
+      .main-panel-grid {
+        grid-template-columns: 1fr !important;
+      }
+      /* TV zoom is irrelevant on phone */
+      body { zoom: 1 !important; }
+      /* Hide TV-only zoom controls */
+      #zoom-controls { display: none !important; }
+      /* Bigger tap targets + readable font in OF tables */
+      .of-td  { padding:6px 8px !important; font-size:.82rem !important; }
+      .of-th  { padding:6px 8px !important; font-size:.75rem !important; }
+      /* Stat pills: 3-wide grid on phone, no border clipping */
+      .stats-grid {
+        grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+        gap:.25rem !important;
+      }
+      .stat-pill {
+        border-right: none !important;
+        border: 1px solid #e5e7eb;
+        border-radius: .4rem;
+        padding: .3rem .4rem !important;
+        min-width: 0;
+      }
+      .stat-pill:last-child { border: 1px solid #e5e7eb !important; }
+      /* Value number slightly smaller so 3-col fits comfortably */
+      .stat-pill .text-2xl { font-size: 1.05rem !important; }
+      /* Stat pill label — allow wrap so it doesn't blow out the pill */
+      .stat-pill-label { white-space: normal !important; font-size:.65rem !important; }
+      /* Card text readable on small screen */
+      .card-title { font-size:.9rem !important; }
+      /* OF table card header: stack vertically in portrait so nothing overlaps */
+      .of-card-hdr {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: .15rem !important;
+        padding-left: .6rem !important;
+        padding-right: .6rem !important;
+      }
+      .of-card-hdr-label { font-size:.9rem !important; }
+      .of-card-hdr-mid {
+        align-items: flex-start !important;
+        text-align: left !important;
+        width: 100%;
+        flex: unset !important;
+      }
+      .of-card-hdr-right { flex-shrink: unset !important; }
+      /* RSR cards: full-width table cells still need scroll wrapper */
+      .of-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      /* Header right block: hide entirely on phones to save space */
+      #header-refresh { display: none !important; }
+      #header-right   { display: none !important; }
+      .dashboard-title { font-size:1.35rem !important; line-height:1.2 !important; }
+      .dashboard-subtitle { display:none !important; }
+      /* Header left: tighten gap so title + dropdown fit side-by-side */
+      .header-left { gap:.5rem !important; }
+      header { padding:6px 10px !important; }
+      /* Section headings */
+      .section-h2 { font-size:1.05rem !important; line-height:1.25 !important; }
+      /* Main content area: tighter padding on mobile */
+      .mobile-main { padding:.25rem .4rem !important; }
+      /* Alert banner heading (OLD DATE / RSR BEHIND) */
+      .flash-alert-readable { font-size:1rem !important; padding:.3rem .5rem !important; }
+      /* Alert 2-col container: stack to single column on phone */
+      .alert-cols { flex-direction: column !important; }
+      .alert-col  { border-right: none !important;
+                     border-bottom: 1px solid rgba(234,17,0,.2) !important; }
+      /* Alert col sub-header (🔥🔥 PH1 🔥🔥) */
+      .alert-col-header { font-size:1rem !important; }
+      /* Alert col data rows */
+      .alert-col-row { font-size:.95rem !important; }
+      /* RSR putaway inline banner: allow wrap, smaller flames */
+      .rsr-behind-banner {
+        white-space: normal !important;
+        font-size:1rem !important;
+        flex-wrap: wrap !important;
+      }
+      .rsr-behind-flames { font-size:1.4rem !important; }
+      .rsr-behind-text   { font-size:.9rem  !important; }
+      /* RSR mini cards grid: 2 per row instead of 3 */
+      .rsr-mini-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+      }
+      /* Tooltip tap: show on click for touch devices */
+      .tip-tap-active {
+        display: block !important;
+        position: fixed;
+        left: 1rem; right: 1rem;
+        top: 50%; transform: translateY(-50%);
+        z-index: 9001;
+        max-width: calc(100vw - 2rem);
+        max-height: 70vh;
+      }
+    }
+    /* Responsive breakpoints */
+    @media(max-width:1024px){
+      .lg-grid-1 { grid-template-columns:1fr !important; }
+    }
+    @media(max-width:640px){
+      .sm-grid-1 { grid-template-columns:1fr !important; }
+      .stat-pill  { padding:.2rem .35rem; }
+      .of-td      { padding:4px 6px; font-size:0.85rem; }
+    }
+  </style>
+</head>
+<body style="margin: 0px; padding: 0px; background: rgb(248, 250, 252); width: 100%; zoom: 0.4;">
+
+  <!-- HEADER -->
+  <header class="text-white shadow-lg" style="background:linear-gradient(135deg,#1e293b,#0f172a);padding:6px 20px">
+    <div class="flex flex-wrap items-center justify-between gap-2" style="width:100%">
+
+      <!-- Title + shift selector -->
+      <div class="flex flex-wrap items-center gap-4 header-left">
+        <div class="w-1 h-8 rounded-full" style="background:#6272a4"></div>
+        <div>
+          <h1 class="font-black tracking-tight dashboard-title" style="font-size:2.4rem;line-height:1.1">
+            📦 ORD RSR Dashboard</h1>
+          <p class="text-sm dashboard-subtitle" style="color:#94a3b8">DC 7042 • Wednesday, June 10 2026</p>
+        </div>
+        <!-- Shift dropdown -->
+        <div class="flex flex-col items-start">
+          <label for="shift-sel" class="text-[9px] uppercase tracking-widest mb-0.5" style="color:#94a3b8">
+            Shift
+          </label>
+          <select id="shift-sel" onchange="selectShiftManual(this.value)">
+            <option value="A1">A1 — 5:00 AM to 3:30 PM</option><option value="A2">A2 — 4:00 PM to 4:00 AM</option><option value="B1">B1 — 5:00 AM to 6:00 PM</option>
+          </select>
+        </div>
+
+        <!-- Date picker (local server only) -->
+        <div id="date-picker-wrap" class="flex flex-col items-start" style="display:none!important">
+          <label for="hist-date" class="text-[9px] uppercase tracking-widest mb-0.5" style="color:#94a3b8">View Date</label>
+          <div style="display:flex;gap:.3rem;align-items:center">
+            <input id="hist-date" type="date" max="2026-06-10" style="background:#1e293b;color:#f1f5f9;border:2px solid #475569;
+                          border-radius:8px;padding:5px 8px;font-weight:700;
+                          font-size:.9rem;cursor:pointer;outline:none;
+                          box-shadow:0 2px 8px rgba(0,0,0,0.25);
+                          color-scheme:dark" onchange="histDateChanged(this.value)">
+            <button id="hist-live-btn" onclick="histClearDate()" style="display:none;background:#16a34a;color:#fff;
+                           border:none;border-radius:6px;padding:4px 8px;
+                           font-weight:700;font-size:.75rem;cursor:pointer;
+                           white-space:nowrap">▶ Live</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Countdown -->
+      <div id="header-right" class="text-right flex flex-col items-end gap-1">
+        <div style="display:flex;gap:.75rem;align-items:flex-start">
+          <div>
+            <div class="text-[9px] uppercase tracking-widest" style="color:#94a3b8">Last updated</div>
+            <div class="text-sm font-bold">05:45:52 PM</div>
+          </div>
+          <div id="header-refresh">
+            <div class="text-[9px] uppercase tracking-widest" style="color:#94a3b8">Next refresh</div>
+            <div id="refresh-countdown" class="text-sm font-bold">115s</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <!-- Zoom controls (persist via localStorage, survive auto-reload) -->
+          <div id="zoom-controls" style="display:flex;align-items:center;gap:.2rem;
+                       background:rgba(255,255,255,.10);border-radius:.5rem;
+                       padding:.18rem .35rem" title="Adjust zoom for TV vs monitor">
+            <button onclick="setZoomMult(-0.1)" style="background:none;border:none;color:#94a3b8;font-size:1.15rem;
+                           cursor:pointer;padding:.05rem .3rem;font-weight:900;
+                           line-height:1;font-family:inherit">−</button>
+            <span id="zoom-mult-label" style="font-size:.6rem;font-weight:800;color:#fff;
+                         min-width:2.6rem;text-align:center;letter-spacing:.03em">auto</span>
+            <button onclick="setZoomMult(0.1)" style="background:none;border:none;color:#94a3b8;font-size:1.15rem;
+                           cursor:pointer;padding:.05rem .3rem;font-weight:900;
+                           line-height:1;font-family:inherit">+</button>
+          </div>
+
+          <!-- LIVE indicator dot -->
+          <div style="display:flex;align-items:center;gap:.35rem;
+                       background:rgba(255,255,255,0.10);border-radius:.5rem;
+                       padding:.25rem .6rem">
+            <span id="live-dot" style="display: inline-block; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: rgb(245, 158, 11); box-shadow: rgb(245, 158, 11) 0px 0px 6px; transition: background 0.3s, box-shadow 0.3s;"></span>
+            <span id="live-label" class="text-[10px] font-black uppercase tracking-widest" style="color: rgb(245, 158, 11);">AUTO</span>
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+  <!-- SHIFT PANELS (shown/hidden by JS) -->
+  
+    <div id="shift-panel-A1" class="shift-panel" style="display:none">
+
+      <!-- Stats bar -->
+      
+    <div class="bg-white border-b border-gray-200 shadow-sm">
+      <div class="stats-grid px-2 py-0" style="width:100%">
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Workload</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">184,611</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 96,065 | Prime 86,167 | Reserve 1,465</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Fulls</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">96,065</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">58,000 done (60%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Prime</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">86,167</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">66,937 done (78%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Reserves</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">1,465</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">923 done (63%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Completed</span>
+        <span class="text-2xl font-black tabular-nums text-green-600" style="line-height:1.15">126,301</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 58,000 | Prime 66,937 | Reserve 923 | Trips 3,629</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">% Complete</span>
+        <span class="text-2xl font-black tabular-nums text-red-600" style="line-height:1.15">68%</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 60% | Prime 78% | Reserve 63% | Trips 59%</span>
+      </div>
+
+      </div>
+    </div>
+
+      <main class="px-3 py-1 mobile-main" style="width:100%">
+
+        <!--
+          2-column grid:
+            Col 1 = Sub 1 content
+            Col 2 = Sub 2 content
+        -->
+        <div class="main-panel-grid" style="display:grid;
+                    gap:.5rem;
+                    align-items:start">
+
+          <!-- ROW 1: Orderfilling heading (full width) -->
+          <div style="grid-column:1/-1">
+            <h2 class="font-bold text-gray-500 uppercase tracking-widest mb-0 section-h2" style="font-size:1.9rem;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:.3rem">
+              📦 Orderfilling Summary<span style="flex-basis:100%;margin-top:.45rem;display:block"><span class="flash-alert-readable" style="display:block;background:rgba(234,17,0,.1);border:2px solid #ea1100;border-radius:.45rem .45rem 0 0;padding:.4rem .75rem;color:#ea1100;font-weight:900;font-size:2.2rem;text-align:center;letter-spacing:.02em">🔥🔥🔥 OLD DATE WORKLOAD — IMMEDIATE ATTENTION REQUIRED 🔥🔥🔥</span><span class="alert-cols" style="display:flex;border:2px solid #ea1100;border-top:0;border-radius:0 0 .45rem .45rem;overflow:hidden;background:#fff9f9"><div class="alert-col" style="flex:1;padding:.4rem .65rem;border-right:1px solid rgba(234,17,0,.25);"><div class="alert-col-header" style="font-weight:900;color:#ea1100;font-size:1.7rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid rgba(234,17,0,.2);margin-bottom:.25rem;padding-bottom:.2rem">🔥🔥 PH1 🔥🔥</div><div style="border-bottom:1px solid rgba(234,17,0,.15);margin-bottom:.35rem;padding-bottom:.3rem"><div style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">6/9</span><span style="color:#ea1100">15&nbsp;Chase<span style="color:#9ca3af;font-size:1.4rem">&nbsp;(2&nbsp;trips)</span></span></div></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Chase trips</span><span style="color:#ea1100">2</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Chase cases</span><span style="color:#ea1100">15</span></div></div><div class="alert-col" style="flex:1;padding:.4rem .65rem;"><div class="alert-col-header" style="font-weight:900;color:#ea1100;font-size:1.7rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid rgba(234,17,0,.2);margin-bottom:.25rem;padding-bottom:.2rem">🔥🔥 PH2 🔥🔥</div><div style="border-bottom:1px solid rgba(234,17,0,.15);margin-bottom:.35rem;padding-bottom:.3rem"><div style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">6/9</span><span style="color:#ea1100">6&nbsp;Mod + 238&nbsp;Prime + 131&nbsp;Reserve + 349&nbsp;Fulls<span style="color:#9ca3af;font-size:1.4rem">&nbsp;(371&nbsp;trips)</span></span></div></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Total cases</span><span style="color:#ea1100">14,989</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Mod cases</span><span style="color:#ea1100">6</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Prime cases</span><span style="color:#ea1100">238</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Reserve cases</span><span style="color:#ea1100">131</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Fulls (pallets)</span><span style="color:#ea1100">349</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Total trips</span><span style="color:#ea1100">371</span></div></div></span></span>
+            </h2>
+          </div>
+
+          <!-- ROW 2: OF Sub1 | OF Sub2 -->
+          <div style="align-self:stretch;min-width:0">
+    <div>
+      <div class="rounded-xl overflow-hidden shadow-sm" style="background:linear-gradient(135deg,#6272a4,#4f5f8f)">
+        <div class="px-5 flex items-center justify-between of-card-hdr" style="padding-top:.35rem;padding-bottom:.5rem;gap:.75rem;flex-wrap:wrap">
+
+          <!-- Left: sub label -->
+          <h2 class="text-sm font-black leading-tight tracking-tight of-card-hdr-label" style="color:#ffffff;margin:0;flex-shrink:0">Sub 1 (PH1)</h2>
+
+          <!-- Middle: total workload + breakdown (matches top stats bar format) -->
+          <div class="of-card-hdr-mid" style="display:flex;flex-direction:column;align-items:center;
+                      text-align:center;flex:1;min-width:0">
+            <span style="font-size:.58rem;color:#ffffff;text-transform:uppercase;
+                         letter-spacing:.05em;font-weight:700;line-height:1.1;
+                         opacity:.65;white-space:nowrap">Total Workload</span>
+            <span title="4,304 trips  |  avg 19 cases / trip" style="font-size:1.4rem;font-weight:900;line-height:1.15;
+                        color:#ffffff;cursor:help;">83,654</span>
+          </div>
+
+          <!-- Right: workload completed % -->
+          <div class="flex items-baseline of-card-hdr-right" style="gap:.4rem;flex-shrink:0">
+            <span style="font-size:1.05rem;color:#ffffff;
+                         text-transform:uppercase;letter-spacing:.04em;
+                         font-weight:900;white-space:nowrap;line-height:1">
+              Workload Completed</span>
+            <span class="font-black tabular-nums text-yellow-600" style="font-size:1.6rem;color:#ffffff;
+                         opacity:0.9;line-height:1">73%</span>
+          </div>
+        </div>
+      </div>
+      <div class="table-card mt-0">
+        <div class="of-scroll">
+        <table style="border-collapse:collapse;width:100%;font-size:1rem;">
+          <thead>
+            <tr class="of-header">
+              <th class="of-th of-first">Status</th>
+              <th class="of-th">Prime&nbsp;Trips</th>
+              <th class="of-th">Total&nbsp;Trips</th>
+              <th class="of-th">Chase&nbsp;Cases</th>
+              <th class="of-th">Fulls</th>
+              <th class="of-th">Fulls&nbsp;Cases</th>
+              <th class="of-th">Prime&nbsp;Cases</th>
+              
+              <th class="of-th">Reserve&nbsp;Cases</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr class="">
+        <td class="of-td of-first">🔴 Hold</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟡 Unassigned</td>
+        <td class="of-td" title="DC 6019: 1 prime trips
+DC 6036: 1 prime trips
+DC 6068: 1 prime trips" style="cursor:help">3</td>
+        <td class="of-td" title="DC 6019: 407 trips  →  Prime 1 | Fulls 405
+DC 6094: 363 trips  →  Fulls 363
+DC 6036: 288 trips  →  Prime 1 | Fulls 286
+DC 6068: 241 trips  →  Prime 1 | Fulls 239
+DC 6012: 43 trips  →  Fulls 40
+DC 6035: 40 trips  →  Fulls 40
+DC 7036: 33 trips  →  Fulls 33
+DC 6016: 19 trips  →  Fulls 19" style="cursor:help">1,428</td>
+        <td class="of-td" title="DC 6012: 3 chase trips
+DC 6019: 1 chase trips
+DC 6036: 1 chase trips
+DC 6068: 1 chase trips" style="cursor:help">61</td>
+        <td class="of-td" title="DC 6019: 405 fulls trips
+DC 6094: 363 fulls trips
+DC 6036: 286 fulls trips
+DC 6068: 239 fulls trips
+DC 6035: 40 fulls trips
+DC 6012: 40 fulls trips
+DC 7036: 33 fulls trips
+DC 6016: 19 fulls trips" style="cursor:help">1,426</td>
+        <td class="of-td" title="DC 6019: 405 fulls trips
+DC 6094: 363 fulls trips
+DC 6036: 286 fulls trips
+DC 6068: 239 fulls trips
+DC 6035: 40 fulls trips
+DC 6012: 40 fulls trips
+DC 7036: 33 fulls trips
+DC 6016: 19 fulls trips" style="cursor:help">18,064</td>
+        <td class="of-td" title="DC 6019: 1 prime trips
+DC 6036: 1 prime trips
+DC 6068: 1 prime trips" style="cursor:help">61</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🔵 Assigned</td>
+        <td class="of-td" title="DC 6019: 26 prime trips
+DC 6036: 15 prime trips
+DC 6094: 14 prime trips
+DC 6068: 10 prime trips" style="cursor:help">65</td>
+        <td class="of-td" title="DC 6019: 40 trips  →  Prime 26 | Reserve 12
+DC 6094: 21 trips  →  Prime 14 | Reserve 3 | Fulls 1
+DC 6036: 19 trips  →  Prime 15 | Reserve 3
+DC 6068: 12 trips  →  Prime 10 | Reserve 2
+DC 6012: 7 trips  →  Reserve 6
+DC 7036: 7 trips  →  Reserve 7
+DC 6035: 4 trips  →  Reserve 4
+DC 6016: 1 trips  →  Reserve 1" style="cursor:help">111</td>
+        <td class="of-td" title="DC 6094: 3 chase trips
+DC 6019: 2 chase trips
+DC 6036: 1 chase trips
+DC 6012: 1 chase trips" style="cursor:help">99</td>
+        <td class="of-td" title="DC 6094: 1 fulls trips" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6094: 1 fulls trips" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 26 prime trips
+DC 6036: 15 prime trips
+DC 6094: 14 prime trips
+DC 6068: 10 prime trips" style="cursor:help">3,542</td>
+        <td class="of-td" title="DC 6019: 12 reserve trips
+DC 7036: 7 reserve trips
+DC 6012: 6 reserve trips
+DC 6035: 4 reserve trips
+DC 6094: 3 reserve trips
+DC 6036: 3 reserve trips
+DC 6068: 2 reserve trips
+DC 6016: 1 reserve trips" style="cursor:help">208</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟣 Working</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6094: 2 prime trips
+DC 6068: 1 prime trips" style="cursor:help">5</td>
+        <td class="of-td" title="DC 6019: 2 trips  →  Prime 2
+DC 6094: 2 trips  →  Prime 2
+DC 6068: 1 trips  →  Prime 1" style="cursor:help">5</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6094: 2 prime trips
+DC 6068: 1 prime trips" style="cursor:help">871</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="completed-row">
+        <td class="of-td of-first">✅ Completed</td>
+        <td class="of-td" title="DC 6035: 51 prime trips
+DC 6012: 38 prime trips
+DC 7036: 33 prime trips
+DC 6016: 25 prime trips
+DC 6094: 10 prime trips
+DC 6019: 6 prime trips
+DC 6068: 3 prime trips" style="cursor:help">166</td>
+        <td class="of-td" title="DC 6035: 949 trips  →  Prime 51 | Reserve 16 | Fulls 875
+DC 7036: 846 trips  →  Prime 33 | Reserve 10 | Fulls 802
+DC 6012: 524 trips  →  Prime 38 | Reserve 7 | Fulls 478
+DC 6016: 396 trips  →  Prime 25 | Reserve 1 | Fulls 368
+DC 6094: 22 trips  →  Prime 10 | Reserve 1 | Fulls 10
+DC 6019: 14 trips  →  Prime 6 | Fulls 8
+DC 6068: 3 trips  →  Prime 3" style="cursor:help">2,754</td>
+        <td class="of-td" title="DC 6035: 7 chase trips
+DC 6016: 2 chase trips
+DC 6012: 1 chase trips
+DC 7036: 1 chase trips
+DC 6094: 1 chase trips" style="cursor:help">137</td>
+        <td class="of-td" title="DC 6035: 875 fulls trips
+DC 7036: 802 fulls trips
+DC 6012: 478 fulls trips
+DC 6016: 368 fulls trips
+DC 6094: 10 fulls trips
+DC 6019: 8 fulls trips" style="cursor:help">2,541</td>
+        <td class="of-td" title="DC 6035: 875 fulls trips
+DC 7036: 802 fulls trips
+DC 6012: 478 fulls trips
+DC 6016: 368 fulls trips
+DC 6094: 10 fulls trips
+DC 6019: 8 fulls trips" style="cursor:help">47,302</td>
+        <td class="of-td" title="DC 6035: 51 prime trips
+DC 6012: 38 prime trips
+DC 7036: 33 prime trips
+DC 6016: 25 prime trips
+DC 6094: 10 prime trips
+DC 6019: 6 prime trips
+DC 6068: 3 prime trips" style="cursor:help">12,927</td>
+        <td class="of-td" title="DC 6035: 16 reserve trips
+DC 7036: 10 reserve trips
+DC 6012: 7 reserve trips
+DC 6016: 1 reserve trips
+DC 6094: 1 reserve trips" style="cursor:help">382</td>
+      </tr>
+            
+            
+      <tr class="total-row">
+        <td class="of-td of-first">🧮 Total</td>
+        <td class="of-td" title="DC 6035: 51 prime trips
+DC 6012: 38 prime trips
+DC 6019: 35 prime trips
+DC 7036: 33 prime trips
+DC 6094: 26 prime trips
+DC 6016: 25 prime trips
+DC 6036: 16 prime trips
+DC 6068: 15 prime trips" style="cursor:help">239</td>
+        <td class="of-td" title="DC 6035: 993 trips  →  Prime 51 | Reserve 20 | Fulls 915
+DC 7036: 886 trips  →  Prime 33 | Reserve 17 | Fulls 835
+DC 6012: 574 trips  →  Prime 38 | Reserve 13 | Fulls 518
+DC 6019: 463 trips  →  Prime 35 | Reserve 12 | Fulls 413
+DC 6016: 416 trips  →  Prime 25 | Reserve 2 | Fulls 387
+DC 6094: 408 trips  →  Prime 26 | Reserve 4 | Fulls 374
+DC 6036: 307 trips  →  Prime 16 | Reserve 3 | Fulls 286
+DC 6068: 257 trips  →  Prime 15 | Reserve 2 | Fulls 239" style="cursor:help">4,304</td>
+        <td class="of-td" title="DC 6035: 7 chase trips
+DC 6012: 5 chase trips
+DC 6094: 4 chase trips
+DC 6019: 3 chase trips
+DC 6036: 2 chase trips
+DC 6016: 2 chase trips
+DC 7036: 1 chase trips
+DC 6068: 1 chase trips" style="cursor:help">297</td>
+        <td class="of-td" title="DC 6035: 915 fulls trips
+DC 7036: 835 fulls trips
+DC 6012: 518 fulls trips
+DC 6019: 413 fulls trips
+DC 6016: 387 fulls trips
+DC 6094: 374 fulls trips
+DC 6036: 286 fulls trips
+DC 6068: 239 fulls trips" style="cursor:help">3,967</td>
+        <td class="of-td" title="DC 6035: 915 fulls trips
+DC 7036: 835 fulls trips
+DC 6012: 518 fulls trips
+DC 6019: 413 fulls trips
+DC 6016: 387 fulls trips
+DC 6094: 374 fulls trips
+DC 6036: 286 fulls trips
+DC 6068: 239 fulls trips" style="cursor:help">65,366</td>
+        <td class="of-td" title="DC 6035: 51 prime trips
+DC 6012: 38 prime trips
+DC 6019: 35 prime trips
+DC 7036: 33 prime trips
+DC 6094: 26 prime trips
+DC 6016: 25 prime trips
+DC 6036: 16 prime trips
+DC 6068: 15 prime trips" style="cursor:help">17,401</td>
+        <td class="of-td" title="DC 6035: 20 reserve trips
+DC 7036: 17 reserve trips
+DC 6012: 13 reserve trips
+DC 6019: 12 reserve trips
+DC 6094: 4 reserve trips
+DC 6036: 3 reserve trips
+DC 6016: 2 reserve trips
+DC 6068: 2 reserve trips" style="cursor:help">590</td>
+      </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-cases-row">
+              <td class="of-td of-first">🏆 Total Completed</td>
+              <td class="of-td" colspan="6" style="text-align:center;font-size:1rem;">
+                60,611 Cases
+                <span style="font-size:0.70rem;font-weight:400;
+                             opacity:0.82;margin-left:8px;">
+                  (Prime 12,927 cases
+                  
+                  + Reserve 382 cases
+                  + Fulls 47,302 cases)
+                </span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        </div>
+      </div>
+    </div></div>
+          <div style="align-self:stretch;min-width:0">
+    <div>
+      <div class="rounded-xl overflow-hidden shadow-sm" style="background:linear-gradient(135deg,#475569,#334155)">
+        <div class="px-5 flex items-center justify-between of-card-hdr" style="padding-top:.35rem;padding-bottom:.5rem;gap:.75rem;flex-wrap:wrap">
+
+          <!-- Left: sub label -->
+          <h2 class="text-sm font-black leading-tight tracking-tight of-card-hdr-label" style="color:#ffffff;margin:0;flex-shrink:0">Sub 2 (PH2)</h2>
+
+          <!-- Middle: total workload + breakdown (matches top stats bar format) -->
+          <div class="of-card-hdr-mid" style="display:flex;flex-direction:column;align-items:center;
+                      text-align:center;flex:1;min-width:0">
+            <span style="font-size:.58rem;color:#ffffff;text-transform:uppercase;
+                         letter-spacing:.05em;font-weight:700;line-height:1.1;
+                         opacity:.65;white-space:nowrap">Total Workload</span>
+            <span title="1,810 trips  |  avg 56 cases / trip" style="font-size:1.4rem;font-weight:900;line-height:1.15;
+                        color:#ffffff;cursor:help;">100,957</span>
+          </div>
+
+          <!-- Right: workload completed % -->
+          <div class="flex items-baseline of-card-hdr-right" style="gap:.4rem;flex-shrink:0">
+            <span style="font-size:1.05rem;color:#ffffff;
+                         text-transform:uppercase;letter-spacing:.04em;
+                         font-weight:900;white-space:nowrap;line-height:1">
+              Workload Completed</span>
+            <span class="font-black tabular-nums text-red-600" style="font-size:1.6rem;color:#ffffff;
+                         opacity:0.9;line-height:1">65%</span>
+          </div>
+        </div>
+      </div>
+      <div class="table-card mt-0">
+        <div class="of-scroll">
+        <table style="border-collapse:collapse;width:100%;font-size:1rem;">
+          <thead>
+            <tr class="of-header">
+              <th class="of-th of-first">Status</th>
+              <th class="of-th">Prime&nbsp;Trips</th>
+              <th class="of-th">Total&nbsp;Trips</th>
+              <th class="of-th">Chase&nbsp;Cases</th>
+              <th class="of-th">Fulls</th>
+              <th class="of-th">Fulls&nbsp;Cases</th>
+              <th class="of-th">Prime&nbsp;Cases</th>
+              <th class="of-th" title="Mod Prime cases are a subset of Prime Cases shown separately">Mod&nbsp;Prime</th>
+              <th class="of-th">Reserve&nbsp;Cases</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr class="">
+        <td class="of-td of-first">🔴 Hold</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6012: 1 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips
+DC 6068: 1 prime trips" style="cursor:help">6</td>
+        <td class="of-td" title="DC 6019: 2 trips  →  Prime 2
+DC 6012: 1 trips  →  Prime 1
+DC 6016: 1 trips  →  Prime 1
+DC 6036: 1 trips  →  Prime 1
+DC 6068: 1 trips  →  Prime 1" style="cursor:help">6</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6012: 1 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips
+DC 6068: 1 prime trips" style="cursor:help">536</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟡 Unassigned</td>
+        <td class="of-td" title="DC 6019: 1 prime trips" style="cursor:help">1</td>
+        <td class="of-td" title="DC 6019: 94 trips  →  Prime 1 | Fulls 90
+DC 6068: 35 trips  →  Fulls 35
+DC 6012: 34 trips  →  Fulls 34
+DC 6016: 33 trips  →  Fulls 32
+DC 6036: 30 trips  →  Fulls 30
+DC 6094: 12 trips  →  Fulls 12
+DC 7036: 9 trips  →  Fulls 8" style="cursor:help">242</td>
+        <td class="of-td" title="DC 6019: 3 chase trips
+DC 6016: 1 chase trips
+DC 7036: 1 chase trips" style="cursor:help">37</td>
+        <td class="of-td" title="DC 6019: 90 fulls trips
+DC 6068: 35 fulls trips
+DC 6012: 34 fulls trips
+DC 6016: 32 fulls trips
+DC 6036: 30 fulls trips
+DC 6094: 12 fulls trips
+DC 7036: 8 fulls trips" style="cursor:help">241</td>
+        <td class="of-td" title="DC 6019: 90 fulls trips
+DC 6068: 35 fulls trips
+DC 6012: 34 fulls trips
+DC 6016: 32 fulls trips
+DC 6036: 30 fulls trips
+DC 6094: 12 fulls trips
+DC 7036: 8 fulls trips" style="cursor:help">5,387</td>
+        <td class="of-td" title="DC 6019: 1 prime trips" style="cursor:help">115</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🔵 Assigned</td>
+        <td class="of-td" title="DC 6019: 74 prime trips
+DC 6016: 50 prime trips
+DC 6036: 46 prime trips
+DC 6012: 38 prime trips
+DC 6068: 35 prime trips" style="cursor:help">243</td>
+        <td class="of-td" title="DC 6019: 91 trips  →  Prime 74 | Reserve 15
+DC 6016: 54 trips  →  Prime 50 | Reserve 4
+DC 6036: 50 trips  →  Prime 46 | Reserve 4
+DC 6012: 41 trips  →  Prime 38 | Reserve 3
+DC 6068: 38 trips  →  Prime 35 | Reserve 3
+DC 7036: 7 trips
+DC 6035: 6 trips
+DC 6094: 3 trips" style="cursor:help">290</td>
+        <td class="of-td" title="DC 7036: 7 chase trips
+DC 6035: 6 chase trips
+DC 6094: 3 chase trips
+DC 6019: 2 chase trips" style="cursor:help">276</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 74 prime trips
+DC 6016: 50 prime trips
+DC 6036: 46 prime trips
+DC 6012: 38 prime trips
+DC 6068: 35 prime trips" style="cursor:help">9,955</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 15 reserve trips
+DC 6016: 4 reserve trips
+DC 6036: 4 reserve trips
+DC 6012: 3 reserve trips
+DC 6068: 3 reserve trips" style="cursor:help">178</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟣 Working</td>
+        <td class="of-td" title="DC 6019: 16 prime trips
+DC 6012: 2 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">20</td>
+        <td class="of-td" title="DC 6019: 17 trips  →  Prime 16 | Reserve 1
+DC 6012: 2 trips  →  Prime 2
+DC 6016: 1 trips  →  Prime 1
+DC 6036: 1 trips  →  Prime 1" style="cursor:help">21</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 16 prime trips
+DC 6012: 2 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">3,906</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 1 reserve trips" style="cursor:help">25</td>
+      </tr>
+            
+      <tr class="completed-row">
+        <td class="of-td of-first">✅ Completed</td>
+        <td class="of-td" title="DC 6035: 175 prime trips
+DC 7036: 119 prime trips
+DC 7042: 64 prime trips
+DC 6094: 56 prime trips
+DC 6016: 31 prime trips" style="cursor:help">445</td>
+        <td class="of-td" title="DC 7036: 371 trips  →  Prime 119 | Reserve 12 | Fulls 235
+DC 6035: 213 trips  →  Prime 175 | Reserve 16 | Fulls 19
+DC 6094: 133 trips  →  Prime 56 | Reserve 4 | Fulls 71
+DC 7042: 67 trips  →  Prime 64 | Reserve 3
+DC 6016: 34 trips  →  Prime 31 | Reserve 2
+DC 6012: 15 trips  →  Fulls 7
+DC 6019: 15 trips  →  Reserve 1 | Fulls 12
+DC 6068: 2 trips" style="cursor:help">875</td>
+        <td class="of-td" title="DC 6012: 8 chase trips
+DC 7036: 5 chase trips
+DC 6035: 3 chase trips
+DC 6019: 2 chase trips
+DC 6068: 2 chase trips
+DC 6094: 2 chase trips
+DC 6016: 1 chase trips" style="cursor:help">304</td>
+        <td class="of-td" title="DC 7036: 235 fulls trips
+DC 6094: 71 fulls trips
+DC 6035: 19 fulls trips
+DC 6019: 12 fulls trips
+DC 6012: 7 fulls trips" style="cursor:help">369</td>
+        <td class="of-td" title="DC 7036: 235 fulls trips
+DC 6094: 71 fulls trips
+DC 6035: 19 fulls trips
+DC 6019: 12 fulls trips
+DC 6012: 7 fulls trips" style="cursor:help">10,698</td>
+        <td class="of-td" title="DC 6035: 175 prime trips
+DC 7036: 119 prime trips
+DC 7042: 64 prime trips
+DC 6094: 56 prime trips
+DC 6016: 31 prime trips" style="cursor:help">44,508</td>
+        <td class="of-td" title="64 trips  |  avg 148 cases / trip" style="cursor:help">9,502</td>
+        <td class="of-td" title="DC 6035: 16 reserve trips
+DC 7036: 12 reserve trips
+DC 6094: 4 reserve trips
+DC 7042: 3 reserve trips
+DC 6016: 2 reserve trips
+DC 6019: 1 reserve trips" style="cursor:help">541</td>
+      </tr>
+            
+      <tr class="carryover-row">
+        <td class="of-td of-first">📅 Carryover</td>
+        <td class="of-td" title="DC 6012: 218 prime cases
+DC 6094: 20 prime cases
+DC 7042: 6 prime cases" style="cursor:help">8</td>
+        <td class="of-td" title="DC 6012: 282 trips
+DC 6016: 87 trips
+DC 7042: 1 trips
+DC 6094: 1 trips" style="cursor:help">371</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6012: 262 fulls trips
+DC 6016: 87 fulls trips" style="cursor:help">349</td>
+        <td class="of-td" title="DC 6012: 262 fulls trips
+DC 6016: 87 fulls trips" style="cursor:help">14,614</td>
+        <td class="of-td" title="DC 6012: 218 prime cases
+DC 6094: 20 prime cases
+DC 7042: 6 prime cases" style="cursor:help">238</td>
+        <td class="of-td" title="1 trips  |  avg 6 cases / trip" style="cursor:help">6</td>
+        <td class="of-td" title="DC 6012: 131 reserve cases" style="cursor:help">131</td>
+      </tr>
+            
+      <tr class="total-row">
+        <td class="of-td of-first">🧮 Total</td>
+        <td class="of-td" title="DC 6035: 175 prime trips
+DC 7036: 119 prime trips
+DC 6019: 93 prime trips
+DC 6016: 83 prime trips
+DC 7042: 64 prime trips
+DC 6094: 56 prime trips
+DC 6036: 48 prime trips
+DC 6012: 41 prime trips
+DC 6068: 36 prime trips" style="cursor:help">723</td>
+        <td class="of-td" title="DC 7036: 387 trips  →  Prime 119 | Reserve 12 | Fulls 243
+DC 6019: 219 trips  →  Prime 93 | Reserve 17 | Fulls 102
+DC 6035: 219 trips  →  Prime 175 | Reserve 16 | Fulls 19
+DC 6094: 148 trips  →  Prime 56 | Reserve 4 | Fulls 83
+DC 6016: 123 trips  →  Prime 83 | Reserve 6 | Fulls 32
+DC 6012: 93 trips  →  Prime 41 | Reserve 3 | Fulls 41
+DC 6036: 82 trips  →  Prime 48 | Reserve 4 | Fulls 30
+DC 6068: 76 trips  →  Prime 36 | Reserve 3 | Fulls 35
+DC 7042: 67 trips  →  Prime 64 | Reserve 3" style="cursor:help">1,810</td>
+        <td class="of-td" title="DC 7036: 13 chase trips
+DC 6035: 9 chase trips
+DC 6012: 8 chase trips
+DC 6019: 7 chase trips
+DC 6094: 5 chase trips
+DC 6068: 2 chase trips
+DC 6016: 2 chase trips" style="cursor:help">617</td>
+        <td class="of-td" title="DC 7036: 243 fulls trips
+DC 6019: 102 fulls trips
+DC 6094: 83 fulls trips
+DC 6012: 41 fulls trips
+DC 6068: 35 fulls trips
+DC 6016: 32 fulls trips
+DC 6036: 30 fulls trips
+DC 6035: 19 fulls trips" style="cursor:help">959</td>
+        <td class="of-td" title="DC 7036: 243 fulls trips
+DC 6019: 102 fulls trips
+DC 6094: 83 fulls trips
+DC 6012: 41 fulls trips
+DC 6068: 35 fulls trips
+DC 6016: 32 fulls trips
+DC 6036: 30 fulls trips
+DC 6035: 19 fulls trips" style="cursor:help">30,699</td>
+        <td class="of-td" title="DC 6035: 175 prime trips
+DC 7036: 119 prime trips
+DC 6019: 93 prime trips
+DC 6016: 83 prime trips
+DC 7042: 64 prime trips
+DC 6094: 56 prime trips
+DC 6036: 48 prime trips
+DC 6012: 41 prime trips
+DC 6068: 36 prime trips" style="cursor:help">59,258</td>
+        <td class="of-td" style="cursor:help">9,508</td>
+        <td class="of-td" title="DC 6019: 17 reserve trips
+DC 6035: 16 reserve trips
+DC 7036: 12 reserve trips
+DC 6016: 6 reserve trips
+DC 6094: 4 reserve trips
+DC 6036: 4 reserve trips
+DC 6012: 3 reserve trips
+DC 7042: 3 reserve trips
+DC 6068: 3 reserve trips" style="cursor:help">875</td>
+      </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-cases-row">
+              <td class="of-td of-first">🏆 Total Completed</td>
+              <td class="of-td" colspan="7" style="text-align:center;font-size:1rem;">
+                65,249 Cases
+                <span style="font-size:0.70rem;font-weight:400;
+                             opacity:0.82;margin-left:8px;">
+                  (Prime 44,508 cases
+                  + Mod Prime 9,502 cases 
+                  + Reserve 541 cases
+                  + Fulls 10,698 cases)
+                </span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        </div>
+      </div>
+    </div></div>
+
+          <!-- ROW 3: RSR heading (full width) -->
+          <div style="grid-column:1/-1;padding-top:.15rem">
+            <h2 class="font-bold text-gray-500 uppercase tracking-widest mb-0 section-h2" style="font-size:1.9rem;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:.3rem">
+              <span style="display:inline-block;filter:sepia(1) saturate(8) brightness(0.85)">🚜</span> RSR Move Summary
+            </h2>
+          </div>
+
+          <!-- ROW 4: RSR Sub1 | RSR Sub2 -->
+          <div style="align-self:stretch;min-width:0">
+    <div style="height:100%">
+      <div class="sub-hdr" style="background:#6272a4;color:white">
+        Sub 1 — Outstanding Moves</div>
+      <div class="sub-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:clamp(0.2rem,0.4vw,0.5rem)">
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Putaways</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">444</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">182</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">1</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">2,115</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          626</span>
+      </div>
+    </div>
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Replenishments</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">—</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">88</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">—</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">224</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          88</span>
+      </div>
+    </div>
+        </div>
+      </div>
+    </div></div>
+          <div style="align-self:stretch;min-width:0">
+    <div style="height:100%">
+      <div class="sub-hdr" style="background:#475569;color:white">
+        Sub 2 — Outstanding Moves</div>
+      <div class="sub-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:clamp(0.2rem,0.4vw,0.5rem)">
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Putaways</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">221</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">144</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">2</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">1,738</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          365</span>
+      </div>
+    </div>
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Replenishments</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">38</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">172</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">6</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">812</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          210</span>
+      </div>
+    </div>
+        </div>
+      </div>
+    </div></div>
+
+        </div>
+
+      </main>
+    </div>
+    <div id="shift-panel-A2" class="shift-panel" style="">
+
+      <!-- Stats bar -->
+      
+    <div class="bg-white border-b border-gray-200 shadow-sm">
+      <div class="stats-grid px-2 py-0" style="width:100%">
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Workload</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">83,684</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 53,625 | Prime 28,775 | Reserve 811</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Fulls</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">53,625</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">15,560 done (29%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Prime</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">28,775</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">9,545 done (33%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Reserves</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">811</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">269 done (33%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Completed</span>
+        <span class="text-2xl font-black tabular-nums text-green-600" style="line-height:1.15">25,374</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 15,560 | Prime 9,545 | Reserve 269 | Trips 722</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">% Complete</span>
+        <span class="text-2xl font-black tabular-nums text-red-600" style="line-height:1.15">30%</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 29% | Prime 33% | Reserve 33% | Trips 23%</span>
+      </div>
+
+      </div>
+    </div>
+
+      <main class="px-3 py-1 mobile-main" style="width:100%">
+
+        <!--
+          2-column grid:
+            Col 1 = Sub 1 content
+            Col 2 = Sub 2 content
+        -->
+        <div class="main-panel-grid" style="display:grid;
+                    gap:.5rem;
+                    align-items:start">
+
+          <!-- ROW 1: Orderfilling heading (full width) -->
+          <div style="grid-column:1/-1">
+            <h2 class="font-bold text-gray-500 uppercase tracking-widest mb-0 section-h2" style="font-size:1.9rem;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:.3rem">
+              📦 Orderfilling Summary<span style="flex-basis:100%;margin-top:.45rem;display:block"><span class="flash-alert-readable" style="display:block;background:rgba(234,17,0,.1);border:2px solid #ea1100;border-radius:.45rem .45rem 0 0;padding:.4rem .75rem;color:#ea1100;font-weight:900;font-size:2.2rem;text-align:center;letter-spacing:.02em">🔥🔥🔥 OLD DATE WORKLOAD — IMMEDIATE ATTENTION REQUIRED 🔥🔥🔥</span><span class="alert-cols" style="display:flex;border:2px solid #ea1100;border-top:0;border-radius:0 0 .45rem .45rem;overflow:hidden;background:#fff9f9"><div class="alert-col" style="flex:1;padding:.4rem .65rem;border-right:1px solid rgba(234,17,0,.25);"><div class="alert-col-header" style="font-weight:900;color:#ea1100;font-size:1.7rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid rgba(234,17,0,.2);margin-bottom:.25rem;padding-bottom:.2rem">🔥🔥 PH1 🔥🔥</div><div style="border-bottom:1px solid rgba(234,17,0,.15);margin-bottom:.35rem;padding-bottom:.3rem"><div style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">6/9</span><span style="color:#ea1100">15&nbsp;Chase<span style="color:#9ca3af;font-size:1.4rem">&nbsp;(2&nbsp;trips)</span></span></div></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Chase trips</span><span style="color:#ea1100">2</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Chase cases</span><span style="color:#ea1100">15</span></div></div><div class="alert-col" style="flex:1;padding:.4rem .65rem;"><div class="alert-col-header" style="font-weight:900;color:#ea1100;font-size:1.7rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid rgba(234,17,0,.2);margin-bottom:.25rem;padding-bottom:.2rem">🔥🔥 PH2 🔥🔥</div><div style="border-bottom:1px solid rgba(234,17,0,.15);margin-bottom:.35rem;padding-bottom:.3rem"><div style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">6/9</span><span style="color:#ea1100">6&nbsp;Mod + 238&nbsp;Prime + 131&nbsp;Reserve + 349&nbsp;Fulls<span style="color:#9ca3af;font-size:1.4rem">&nbsp;(371&nbsp;trips)</span></span></div></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Total cases</span><span style="color:#ea1100">14,989</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Mod cases</span><span style="color:#ea1100">6</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Prime cases</span><span style="color:#ea1100">238</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Reserve cases</span><span style="color:#ea1100">131</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Fulls (pallets)</span><span style="color:#ea1100">349</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Total trips</span><span style="color:#ea1100">371</span></div></div></span></span>
+            </h2>
+          </div>
+
+          <!-- ROW 2: OF Sub1 | OF Sub2 -->
+          <div style="align-self:stretch;min-width:0">
+    <div>
+      <div class="rounded-xl overflow-hidden shadow-sm" style="background:linear-gradient(135deg,#6272a4,#4f5f8f)">
+        <div class="px-5 flex items-center justify-between of-card-hdr" style="padding-top:.35rem;padding-bottom:.5rem;gap:.75rem;flex-wrap:wrap">
+
+          <!-- Left: sub label -->
+          <h2 class="text-sm font-black leading-tight tracking-tight of-card-hdr-label" style="color:#ffffff;margin:0;flex-shrink:0">Sub 1 (PH1)</h2>
+
+          <!-- Middle: total workload + breakdown (matches top stats bar format) -->
+          <div class="of-card-hdr-mid" style="display:flex;flex-direction:column;align-items:center;
+                      text-align:center;flex:1;min-width:0">
+            <span style="font-size:.58rem;color:#ffffff;text-transform:uppercase;
+                         letter-spacing:.05em;font-weight:700;line-height:1.1;
+                         opacity:.65;white-space:nowrap">Total Workload</span>
+            <span title="1,876 trips  |  avg 15 cases / trip" style="font-size:1.4rem;font-weight:900;line-height:1.15;
+                        color:#ffffff;cursor:help;">28,117</span>
+          </div>
+
+          <!-- Right: workload completed % -->
+          <div class="flex items-baseline of-card-hdr-right" style="gap:.4rem;flex-shrink:0">
+            <span style="font-size:1.05rem;color:#ffffff;
+                         text-transform:uppercase;letter-spacing:.04em;
+                         font-weight:900;white-space:nowrap;line-height:1">
+              Workload Completed</span>
+            <span class="font-black tabular-nums text-red-600" style="font-size:1.6rem;color:#ffffff;
+                         opacity:0.9;line-height:1">19%</span>
+          </div>
+        </div>
+      </div>
+      <div class="table-card mt-0">
+        <div class="of-scroll">
+        <table style="border-collapse:collapse;width:100%;font-size:1rem;">
+          <thead>
+            <tr class="of-header">
+              <th class="of-th of-first">Status</th>
+              <th class="of-th">Prime&nbsp;Trips</th>
+              <th class="of-th">Total&nbsp;Trips</th>
+              <th class="of-th">Chase&nbsp;Cases</th>
+              <th class="of-th">Fulls</th>
+              <th class="of-th">Fulls&nbsp;Cases</th>
+              <th class="of-th">Prime&nbsp;Cases</th>
+              
+              <th class="of-th">Reserve&nbsp;Cases</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr class="">
+        <td class="of-td of-first">🔴 Hold</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟡 Unassigned</td>
+        <td class="of-td" title="DC 6019: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">2</td>
+        <td class="of-td" title="DC 6019: 408 trips  →  Prime 1 | Fulls 405
+DC 6094: 363 trips  →  Fulls 363
+DC 6036: 288 trips  →  Prime 1 | Fulls 286
+DC 6068: 240 trips  →  Fulls 239
+DC 6012: 43 trips  →  Fulls 40
+DC 6035: 40 trips  →  Fulls 40
+DC 7036: 33 trips  →  Fulls 33
+DC 6016: 19 trips  →  Fulls 19" style="cursor:help">1,427</td>
+        <td class="of-td" title="DC 6012: 3 chase trips
+DC 6019: 2 chase trips
+DC 6036: 1 chase trips
+DC 6068: 1 chase trips" style="cursor:help">80</td>
+        <td class="of-td" title="DC 6019: 405 fulls trips
+DC 6094: 363 fulls trips
+DC 6036: 286 fulls trips
+DC 6068: 239 fulls trips
+DC 6035: 40 fulls trips
+DC 6012: 40 fulls trips
+DC 7036: 33 fulls trips
+DC 6016: 19 fulls trips" style="cursor:help">1,426</td>
+        <td class="of-td" title="DC 6019: 405 fulls trips
+DC 6094: 363 fulls trips
+DC 6036: 286 fulls trips
+DC 6068: 239 fulls trips
+DC 6035: 40 fulls trips
+DC 6012: 40 fulls trips
+DC 7036: 33 fulls trips
+DC 6016: 19 fulls trips" style="cursor:help">18,064</td>
+        <td class="of-td" title="DC 6019: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">33</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🔵 Assigned</td>
+        <td class="of-td" title="DC 6019: 26 prime trips
+DC 6036: 15 prime trips
+DC 6094: 14 prime trips
+DC 6068: 11 prime trips" style="cursor:help">66</td>
+        <td class="of-td" title="DC 6019: 39 trips  →  Prime 26 | Reserve 12
+DC 6094: 21 trips  →  Prime 14 | Reserve 3 | Fulls 1
+DC 6036: 19 trips  →  Prime 15 | Reserve 3
+DC 6068: 13 trips  →  Prime 11 | Reserve 2
+DC 6012: 7 trips  →  Reserve 6
+DC 7036: 7 trips  →  Reserve 7
+DC 6035: 4 trips  →  Reserve 4
+DC 6016: 1 trips  →  Reserve 1" style="cursor:help">111</td>
+        <td class="of-td" title="DC 6094: 3 chase trips
+DC 6019: 1 chase trips
+DC 6036: 1 chase trips
+DC 6012: 1 chase trips" style="cursor:help">80</td>
+        <td class="of-td" title="DC 6094: 1 fulls trips" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6094: 1 fulls trips" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 26 prime trips
+DC 6036: 15 prime trips
+DC 6094: 14 prime trips
+DC 6068: 11 prime trips" style="cursor:help">3,570</td>
+        <td class="of-td" title="DC 6019: 12 reserve trips
+DC 7036: 7 reserve trips
+DC 6012: 6 reserve trips
+DC 6035: 4 reserve trips
+DC 6094: 3 reserve trips
+DC 6036: 3 reserve trips
+DC 6068: 2 reserve trips
+DC 6016: 1 reserve trips" style="cursor:help">208</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟣 Working</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6094: 2 prime trips
+DC 6068: 1 prime trips" style="cursor:help">5</td>
+        <td class="of-td" title="DC 6019: 2 trips  →  Prime 2
+DC 6094: 2 trips  →  Prime 2
+DC 6068: 1 trips  →  Prime 1" style="cursor:help">5</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6094: 2 prime trips
+DC 6068: 1 prime trips" style="cursor:help">871</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="completed-row">
+        <td class="of-td of-first">✅ Completed</td>
+        <td class="of-td" title="DC 6019: 3 prime trips" style="cursor:help">3</td>
+        <td class="of-td" title="DC 6019: 127 trips  →  Prime 3 | Reserve 5 | Fulls 119
+DC 6036: 80 trips  →  Reserve 2 | Fulls 78
+DC 6035: 48 trips  →  Fulls 48
+DC 6068: 48 trips  →  Reserve 2 | Fulls 46
+DC 6012: 12 trips  →  Reserve 1 | Fulls 11
+DC 7036: 4 trips  →  Fulls 4
+DC 6094: 4 trips  →  Fulls 4
+DC 6016: 3 trips  →  Reserve 1 | Fulls 2" style="cursor:help">326</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 119 fulls trips
+DC 6036: 78 fulls trips
+DC 6035: 48 fulls trips
+DC 6068: 46 fulls trips
+DC 6012: 11 fulls trips
+DC 7036: 4 fulls trips
+DC 6094: 4 fulls trips
+DC 6016: 2 fulls trips" style="cursor:help">312</td>
+        <td class="of-td" title="DC 6019: 119 fulls trips
+DC 6036: 78 fulls trips
+DC 6035: 48 fulls trips
+DC 6068: 46 fulls trips
+DC 6012: 11 fulls trips
+DC 7036: 4 fulls trips
+DC 6094: 4 fulls trips
+DC 6016: 2 fulls trips" style="cursor:help">4,264</td>
+        <td class="of-td" title="DC 6019: 3 prime trips" style="cursor:help">853</td>
+        <td class="of-td" title="DC 6019: 5 reserve trips
+DC 6036: 2 reserve trips
+DC 6068: 2 reserve trips
+DC 6012: 1 reserve trips
+DC 6016: 1 reserve trips" style="cursor:help">94</td>
+      </tr>
+            
+            
+      <tr class="total-row">
+        <td class="of-td of-first">🧮 Total</td>
+        <td class="of-td" title="DC 6019: 32 prime trips
+DC 6094: 16 prime trips
+DC 6036: 16 prime trips
+DC 6068: 12 prime trips" style="cursor:help">76</td>
+        <td class="of-td" title="DC 6019: 576 trips  →  Prime 32 | Reserve 17 | Fulls 524
+DC 6094: 390 trips  →  Prime 16 | Reserve 3 | Fulls 368
+DC 6036: 387 trips  →  Prime 16 | Reserve 5 | Fulls 364
+DC 6068: 302 trips  →  Prime 12 | Reserve 4 | Fulls 285
+DC 6035: 92 trips  →  Reserve 4 | Fulls 88
+DC 6012: 62 trips  →  Reserve 7 | Fulls 51
+DC 7036: 44 trips  →  Reserve 7 | Fulls 37
+DC 6016: 23 trips  →  Reserve 2 | Fulls 21" style="cursor:help">1,876</td>
+        <td class="of-td" title="DC 6012: 4 chase trips
+DC 6094: 3 chase trips
+DC 6019: 3 chase trips
+DC 6036: 2 chase trips
+DC 6068: 1 chase trips" style="cursor:help">160</td>
+        <td class="of-td" title="DC 6019: 524 fulls trips
+DC 6094: 368 fulls trips
+DC 6036: 364 fulls trips
+DC 6068: 285 fulls trips
+DC 6035: 88 fulls trips
+DC 6012: 51 fulls trips
+DC 7036: 37 fulls trips
+DC 6016: 21 fulls trips" style="cursor:help">1,738</td>
+        <td class="of-td" title="DC 6019: 524 fulls trips
+DC 6094: 368 fulls trips
+DC 6036: 364 fulls trips
+DC 6068: 285 fulls trips
+DC 6035: 88 fulls trips
+DC 6012: 51 fulls trips
+DC 7036: 37 fulls trips
+DC 6016: 21 fulls trips" style="cursor:help">22,328</td>
+        <td class="of-td" title="DC 6019: 32 prime trips
+DC 6094: 16 prime trips
+DC 6036: 16 prime trips
+DC 6068: 12 prime trips" style="cursor:help">5,327</td>
+        <td class="of-td" title="DC 6019: 17 reserve trips
+DC 6012: 7 reserve trips
+DC 7036: 7 reserve trips
+DC 6036: 5 reserve trips
+DC 6035: 4 reserve trips
+DC 6068: 4 reserve trips
+DC 6094: 3 reserve trips
+DC 6016: 2 reserve trips" style="cursor:help">302</td>
+      </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-cases-row">
+              <td class="of-td of-first">🏆 Total Completed</td>
+              <td class="of-td" colspan="6" style="text-align:center;font-size:1rem;">
+                5,211 Cases
+                <span style="font-size:0.70rem;font-weight:400;
+                             opacity:0.82;margin-left:8px;">
+                  (Prime 853 cases
+                  
+                  + Reserve 94 cases
+                  + Fulls 4,264 cases)
+                </span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        </div>
+      </div>
+    </div></div>
+          <div style="align-self:stretch;min-width:0">
+    <div>
+      <div class="rounded-xl overflow-hidden shadow-sm" style="background:linear-gradient(135deg,#475569,#334155)">
+        <div class="px-5 flex items-center justify-between of-card-hdr" style="padding-top:.35rem;padding-bottom:.5rem;gap:.75rem;flex-wrap:wrap">
+
+          <!-- Left: sub label -->
+          <h2 class="text-sm font-black leading-tight tracking-tight of-card-hdr-label" style="color:#ffffff;margin:0;flex-shrink:0">Sub 2 (PH2)</h2>
+
+          <!-- Middle: total workload + breakdown (matches top stats bar format) -->
+          <div class="of-card-hdr-mid" style="display:flex;flex-direction:column;align-items:center;
+                      text-align:center;flex:1;min-width:0">
+            <span style="font-size:.58rem;color:#ffffff;text-transform:uppercase;
+                         letter-spacing:.05em;font-weight:700;line-height:1.1;
+                         opacity:.65;white-space:nowrap">Total Workload</span>
+            <span title="1,331 trips  |  avg 42 cases / trip" style="font-size:1.4rem;font-weight:900;line-height:1.15;
+                        color:#ffffff;cursor:help;">55,567</span>
+          </div>
+
+          <!-- Right: workload completed % -->
+          <div class="flex items-baseline of-card-hdr-right" style="gap:.4rem;flex-shrink:0">
+            <span style="font-size:1.05rem;color:#ffffff;
+                         text-transform:uppercase;letter-spacing:.04em;
+                         font-weight:900;white-space:nowrap;line-height:1">
+              Workload Completed</span>
+            <span class="font-black tabular-nums text-red-600" style="font-size:1.6rem;color:#ffffff;
+                         opacity:0.9;line-height:1">36%</span>
+          </div>
+        </div>
+      </div>
+      <div class="table-card mt-0">
+        <div class="of-scroll">
+        <table style="border-collapse:collapse;width:100%;font-size:1rem;">
+          <thead>
+            <tr class="of-header">
+              <th class="of-th of-first">Status</th>
+              <th class="of-th">Prime&nbsp;Trips</th>
+              <th class="of-th">Total&nbsp;Trips</th>
+              <th class="of-th">Chase&nbsp;Cases</th>
+              <th class="of-th">Fulls</th>
+              <th class="of-th">Fulls&nbsp;Cases</th>
+              <th class="of-th">Prime&nbsp;Cases</th>
+              <th class="of-th" title="Mod Prime cases are a subset of Prime Cases shown separately">Mod&nbsp;Prime</th>
+              <th class="of-th">Reserve&nbsp;Cases</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr class="">
+        <td class="of-td of-first">🔴 Hold</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6012: 1 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips
+DC 6068: 1 prime trips" style="cursor:help">6</td>
+        <td class="of-td" title="DC 6019: 2 trips  →  Prime 2
+DC 6012: 1 trips  →  Prime 1
+DC 6016: 1 trips  →  Prime 1
+DC 6036: 1 trips  →  Prime 1
+DC 6068: 1 trips  →  Prime 1" style="cursor:help">6</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6012: 1 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips
+DC 6068: 1 prime trips" style="cursor:help">536</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟡 Unassigned</td>
+        <td class="of-td" title="DC 6019: 1 prime trips" style="cursor:help">1</td>
+        <td class="of-td" title="DC 6019: 94 trips  →  Prime 1 | Fulls 90
+DC 6068: 35 trips  →  Fulls 35
+DC 6012: 34 trips  →  Fulls 34
+DC 6016: 33 trips  →  Fulls 32
+DC 6036: 30 trips  →  Fulls 30
+DC 6094: 12 trips  →  Fulls 12
+DC 7036: 9 trips  →  Fulls 8" style="cursor:help">242</td>
+        <td class="of-td" title="DC 6019: 3 chase trips
+DC 6016: 1 chase trips
+DC 7036: 1 chase trips" style="cursor:help">37</td>
+        <td class="of-td" title="DC 6019: 90 fulls trips
+DC 6068: 35 fulls trips
+DC 6012: 34 fulls trips
+DC 6016: 32 fulls trips
+DC 6036: 30 fulls trips
+DC 6094: 12 fulls trips
+DC 7036: 8 fulls trips" style="cursor:help">241</td>
+        <td class="of-td" title="DC 6019: 90 fulls trips
+DC 6068: 35 fulls trips
+DC 6012: 34 fulls trips
+DC 6016: 32 fulls trips
+DC 6036: 30 fulls trips
+DC 6094: 12 fulls trips
+DC 7036: 8 fulls trips" style="cursor:help">5,387</td>
+        <td class="of-td" title="DC 6019: 1 prime trips" style="cursor:help">115</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🔵 Assigned</td>
+        <td class="of-td" title="DC 6019: 74 prime trips
+DC 6016: 50 prime trips
+DC 6036: 46 prime trips
+DC 6012: 38 prime trips
+DC 6068: 35 prime trips" style="cursor:help">243</td>
+        <td class="of-td" title="DC 6019: 91 trips  →  Prime 74 | Reserve 15
+DC 6016: 54 trips  →  Prime 50 | Reserve 4
+DC 6036: 50 trips  →  Prime 46 | Reserve 4
+DC 6012: 41 trips  →  Prime 38 | Reserve 3
+DC 6068: 38 trips  →  Prime 35 | Reserve 3
+DC 7036: 7 trips
+DC 6035: 6 trips
+DC 6094: 3 trips" style="cursor:help">290</td>
+        <td class="of-td" title="DC 7036: 7 chase trips
+DC 6035: 6 chase trips
+DC 6094: 3 chase trips
+DC 6019: 2 chase trips" style="cursor:help">276</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 74 prime trips
+DC 6016: 50 prime trips
+DC 6036: 46 prime trips
+DC 6012: 38 prime trips
+DC 6068: 35 prime trips" style="cursor:help">9,955</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 15 reserve trips
+DC 6016: 4 reserve trips
+DC 6036: 4 reserve trips
+DC 6012: 3 reserve trips
+DC 6068: 3 reserve trips" style="cursor:help">178</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟣 Working</td>
+        <td class="of-td" title="DC 6019: 16 prime trips
+DC 6012: 2 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">20</td>
+        <td class="of-td" title="DC 6019: 17 trips  →  Prime 16 | Reserve 1
+DC 6012: 2 trips  →  Prime 2
+DC 6016: 1 trips  →  Prime 1
+DC 6036: 1 trips  →  Prime 1" style="cursor:help">21</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 16 prime trips
+DC 6012: 2 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">3,906</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 1 reserve trips" style="cursor:help">25</td>
+      </tr>
+            
+      <tr class="completed-row">
+        <td class="of-td of-first">✅ Completed</td>
+        <td class="of-td" title="DC 6019: 27 prime trips
+DC 6012: 4 prime trips
+DC 6036: 3 prime trips
+DC 6016: 2 prime trips
+DC 6068: 2 prime trips" style="cursor:help">38</td>
+        <td class="of-td" title="DC 6012: 150 trips  →  Prime 4 | Reserve 2 | Fulls 144
+DC 6019: 107 trips  →  Prime 27 | Reserve 1 | Fulls 79
+DC 6016: 90 trips  →  Prime 2 | Fulls 88
+DC 6036: 36 trips  →  Prime 3 | Fulls 33
+DC 6068: 11 trips  →  Prime 2 | Fulls 9
+DC 6094: 1 trips  →  Fulls 1" style="cursor:help">396</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6012: 144 fulls trips
+DC 6016: 88 fulls trips
+DC 6019: 79 fulls trips
+DC 6036: 33 fulls trips
+DC 6068: 9 fulls trips
+DC 6094: 1 fulls trips" style="cursor:help">355</td>
+        <td class="of-td" title="DC 6012: 144 fulls trips
+DC 6016: 88 fulls trips
+DC 6019: 79 fulls trips
+DC 6036: 33 fulls trips
+DC 6068: 9 fulls trips
+DC 6094: 1 fulls trips" style="cursor:help">11,296</td>
+        <td class="of-td" title="DC 6019: 27 prime trips
+DC 6012: 4 prime trips
+DC 6036: 3 prime trips
+DC 6016: 2 prime trips
+DC 6068: 2 prime trips" style="cursor:help">8,692</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6012: 2 reserve trips
+DC 6019: 1 reserve trips" style="cursor:help">175</td>
+      </tr>
+            
+      <tr class="carryover-row">
+        <td class="of-td of-first">📅 Carryover</td>
+        <td class="of-td" title="DC 6012: 218 prime cases
+DC 6094: 20 prime cases
+DC 7042: 6 prime cases" style="cursor:help">8</td>
+        <td class="of-td" title="DC 6012: 282 trips
+DC 6016: 87 trips
+DC 7042: 1 trips
+DC 6094: 1 trips" style="cursor:help">371</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6012: 262 fulls trips
+DC 6016: 87 fulls trips" style="cursor:help">349</td>
+        <td class="of-td" title="DC 6012: 262 fulls trips
+DC 6016: 87 fulls trips" style="cursor:help">14,614</td>
+        <td class="of-td" title="DC 6012: 218 prime cases
+DC 6094: 20 prime cases
+DC 7042: 6 prime cases" style="cursor:help">238</td>
+        <td class="of-td" title="1 trips  |  avg 6 cases / trip" style="cursor:help">6</td>
+        <td class="of-td" title="DC 6012: 131 reserve cases" style="cursor:help">131</td>
+      </tr>
+            
+      <tr class="total-row">
+        <td class="of-td of-first">🧮 Total</td>
+        <td class="of-td" title="DC 6019: 120 prime trips
+DC 6016: 54 prime trips
+DC 6036: 51 prime trips
+DC 6012: 45 prime trips
+DC 6068: 38 prime trips" style="cursor:help">316</td>
+        <td class="of-td" title="DC 6019: 311 trips  →  Prime 120 | Reserve 17 | Fulls 169
+DC 6012: 228 trips  →  Prime 45 | Reserve 5 | Fulls 178
+DC 6016: 179 trips  →  Prime 54 | Reserve 4 | Fulls 120
+DC 6036: 118 trips  →  Prime 51 | Reserve 4 | Fulls 63
+DC 6068: 85 trips  →  Prime 38 | Reserve 3 | Fulls 44
+DC 6094: 16 trips  →  Fulls 13
+DC 7036: 16 trips  →  Fulls 8
+DC 6035: 6 trips" style="cursor:help">1,331</td>
+        <td class="of-td" title="DC 7036: 8 chase trips
+DC 6035: 6 chase trips
+DC 6019: 5 chase trips
+DC 6094: 3 chase trips
+DC 6016: 1 chase trips" style="cursor:help">313</td>
+        <td class="of-td" title="DC 6012: 178 fulls trips
+DC 6019: 169 fulls trips
+DC 6016: 120 fulls trips
+DC 6036: 63 fulls trips
+DC 6068: 44 fulls trips
+DC 6094: 13 fulls trips
+DC 7036: 8 fulls trips" style="cursor:help">945</td>
+        <td class="of-td" title="DC 6012: 178 fulls trips
+DC 6019: 169 fulls trips
+DC 6016: 120 fulls trips
+DC 6036: 63 fulls trips
+DC 6068: 44 fulls trips
+DC 6094: 13 fulls trips
+DC 7036: 8 fulls trips" style="cursor:help">31,297</td>
+        <td class="of-td" title="DC 6019: 120 prime trips
+DC 6016: 54 prime trips
+DC 6036: 51 prime trips
+DC 6012: 45 prime trips
+DC 6068: 38 prime trips" style="cursor:help">23,442</td>
+        <td class="of-td" style="cursor:help">6</td>
+        <td class="of-td" title="DC 6019: 17 reserve trips
+DC 6012: 5 reserve trips
+DC 6036: 4 reserve trips
+DC 6016: 4 reserve trips
+DC 6068: 3 reserve trips" style="cursor:help">509</td>
+      </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-cases-row">
+              <td class="of-td of-first">🏆 Total Completed</td>
+              <td class="of-td" colspan="7" style="text-align:center;font-size:1rem;">
+                20,163 Cases
+                <span style="font-size:0.70rem;font-weight:400;
+                             opacity:0.82;margin-left:8px;">
+                  (Prime 8,692 cases
+                  + Mod Prime 0 cases 
+                  + Reserve 175 cases
+                  + Fulls 11,296 cases)
+                </span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        </div>
+      </div>
+    </div></div>
+
+          <!-- ROW 3: RSR heading (full width) -->
+          <div style="grid-column:1/-1;padding-top:.15rem">
+            <h2 class="font-bold text-gray-500 uppercase tracking-widest mb-0 section-h2" style="font-size:1.9rem;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:.3rem">
+              <span style="display:inline-block;filter:sepia(1) saturate(8) brightness(0.85)">🚜</span> RSR Move Summary
+            </h2>
+          </div>
+
+          <!-- ROW 4: RSR Sub1 | RSR Sub2 -->
+          <div style="align-self:stretch;min-width:0">
+    <div style="height:100%">
+      <div class="sub-hdr" style="background:#6272a4;color:white">
+        Sub 1 — Outstanding Moves</div>
+      <div class="sub-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:clamp(0.2rem,0.4vw,0.5rem)">
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Putaways</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">443</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">182</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">1</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">191</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          625</span>
+      </div>
+    </div>
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Replenishments</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">—</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">88</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">—</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">31</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          88</span>
+      </div>
+    </div>
+        </div>
+      </div>
+    </div></div>
+          <div style="align-self:stretch;min-width:0">
+    <div style="height:100%">
+      <div class="sub-hdr" style="background:#475569;color:white">
+        Sub 2 — Outstanding Moves</div>
+      <div class="sub-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:clamp(0.2rem,0.4vw,0.5rem)">
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Putaways</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">221</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">145</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">1</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">255</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          366</span>
+      </div>
+    </div>
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Replenishments</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">38</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">172</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">6</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">80</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          210</span>
+      </div>
+    </div>
+        </div>
+      </div>
+    </div></div>
+
+        </div>
+
+      </main>
+    </div>
+    <div id="shift-panel-B1" class="shift-panel" style="display:none">
+
+      <!-- Stats bar -->
+      
+    <div class="bg-white border-b border-gray-200 shadow-sm">
+      <div class="stats-grid px-2 py-0" style="width:100%">
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Workload</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">209,949</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 111,589 | Prime 95,712 | Reserve 1,734</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Fulls</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">111,589</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">73,584 done (66%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Prime</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">95,712</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">76,482 done (80%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Reserves</span>
+        <span class="text-2xl font-black tabular-nums text-gray-900" style="line-height:1.15">1,734</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">1,192 done (69%)</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">Completed</span>
+        <span class="text-2xl font-black tabular-nums text-green-600" style="line-height:1.15">151,699</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 73,584 | Prime 76,482 | Reserve 1,192 | Trips 4,351</span>
+      </div>
+        
+      <div class="stat-pill">
+        <span class="text-[12px] text-gray-600 uppercase tracking-widest font-semibold stat-pill-label" style="white-space:nowrap;line-height:1.1">% Complete</span>
+        <span class="text-2xl font-black tabular-nums text-yellow-600" style="line-height:1.15">72%</span>
+        <span class="text-[11px] text-gray-600 tabular-nums font-semibold" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.1">Fulls 66% | Prime 80% | Reserve 69% | Trips 64%</span>
+      </div>
+
+      </div>
+    </div>
+
+      <main class="px-3 py-1 mobile-main" style="width:100%">
+
+        <!--
+          2-column grid:
+            Col 1 = Sub 1 content
+            Col 2 = Sub 2 content
+        -->
+        <div class="main-panel-grid" style="display:grid;
+                    gap:.5rem;
+                    align-items:start">
+
+          <!-- ROW 1: Orderfilling heading (full width) -->
+          <div style="grid-column:1/-1">
+            <h2 class="font-bold text-gray-500 uppercase tracking-widest mb-0 section-h2" style="font-size:1.9rem;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:.3rem">
+              📦 Orderfilling Summary<span style="flex-basis:100%;margin-top:.45rem;display:block"><span class="flash-alert-readable" style="display:block;background:rgba(234,17,0,.1);border:2px solid #ea1100;border-radius:.45rem .45rem 0 0;padding:.4rem .75rem;color:#ea1100;font-weight:900;font-size:2.2rem;text-align:center;letter-spacing:.02em">🔥🔥🔥 OLD DATE WORKLOAD — IMMEDIATE ATTENTION REQUIRED 🔥🔥🔥</span><span class="alert-cols" style="display:flex;border:2px solid #ea1100;border-top:0;border-radius:0 0 .45rem .45rem;overflow:hidden;background:#fff9f9"><div class="alert-col" style="flex:1;padding:.4rem .65rem;border-right:1px solid rgba(234,17,0,.25);"><div class="alert-col-header" style="font-weight:900;color:#ea1100;font-size:1.7rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid rgba(234,17,0,.2);margin-bottom:.25rem;padding-bottom:.2rem">🔥🔥 PH1 🔥🔥</div><div style="border-bottom:1px solid rgba(234,17,0,.15);margin-bottom:.35rem;padding-bottom:.3rem"><div style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">6/9</span><span style="color:#ea1100">15&nbsp;Chase<span style="color:#9ca3af;font-size:1.4rem">&nbsp;(2&nbsp;trips)</span></span></div></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Chase trips</span><span style="color:#ea1100">2</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Chase cases</span><span style="color:#ea1100">15</span></div></div><div class="alert-col" style="flex:1;padding:.4rem .65rem;"><div class="alert-col-header" style="font-weight:900;color:#ea1100;font-size:1.7rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid rgba(234,17,0,.2);margin-bottom:.25rem;padding-bottom:.2rem">🔥🔥 PH2 🔥🔥</div><div style="border-bottom:1px solid rgba(234,17,0,.15);margin-bottom:.35rem;padding-bottom:.3rem"><div style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">6/9</span><span style="color:#ea1100">6&nbsp;Mod + 238&nbsp;Prime + 131&nbsp;Reserve + 348&nbsp;Fulls<span style="color:#9ca3af;font-size:1.4rem">&nbsp;(370&nbsp;trips)</span></span></div></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Total cases</span><span style="color:#ea1100">14,929</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Mod cases</span><span style="color:#ea1100">6</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Prime cases</span><span style="color:#ea1100">238</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Reserve cases</span><span style="color:#ea1100">131</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Fulls (pallets)</span><span style="color:#ea1100">348</span></div><div class="alert-col-row" style="display:flex;justify-content:space-between;gap:.75rem;font-size:1.7rem;padding:.3rem 0"><span style="font-weight:700;color:#991b1b">Total trips</span><span style="color:#ea1100">370</span></div></div></span></span>
+            </h2>
+          </div>
+
+          <!-- ROW 2: OF Sub1 | OF Sub2 -->
+          <div style="align-self:stretch;min-width:0">
+    <div>
+      <div class="rounded-xl overflow-hidden shadow-sm" style="background:linear-gradient(135deg,#6272a4,#4f5f8f)">
+        <div class="px-5 flex items-center justify-between of-card-hdr" style="padding-top:.35rem;padding-bottom:.5rem;gap:.75rem;flex-wrap:wrap">
+
+          <!-- Left: sub label -->
+          <h2 class="text-sm font-black leading-tight tracking-tight of-card-hdr-label" style="color:#ffffff;margin:0;flex-shrink:0">Sub 1 (PH1)</h2>
+
+          <!-- Middle: total workload + breakdown (matches top stats bar format) -->
+          <div class="of-card-hdr-mid" style="display:flex;flex-direction:column;align-items:center;
+                      text-align:center;flex:1;min-width:0">
+            <span style="font-size:.58rem;color:#ffffff;text-transform:uppercase;
+                         letter-spacing:.05em;font-weight:700;line-height:1.1;
+                         opacity:.65;white-space:nowrap">Total Workload</span>
+            <span title="4,630 trips  |  avg 19 cases / trip" style="font-size:1.4rem;font-weight:900;line-height:1.15;
+                        color:#ffffff;cursor:help;">88,865</span>
+          </div>
+
+          <!-- Right: workload completed % -->
+          <div class="flex items-baseline of-card-hdr-right" style="gap:.4rem;flex-shrink:0">
+            <span style="font-size:1.05rem;color:#ffffff;
+                         text-transform:uppercase;letter-spacing:.04em;
+                         font-weight:900;white-space:nowrap;line-height:1">
+              Workload Completed</span>
+            <span class="font-black tabular-nums text-yellow-600" style="font-size:1.6rem;color:#ffffff;
+                         opacity:0.9;line-height:1">74%</span>
+          </div>
+        </div>
+      </div>
+      <div class="table-card mt-0">
+        <div class="of-scroll">
+        <table style="border-collapse:collapse;width:100%;font-size:1rem;">
+          <thead>
+            <tr class="of-header">
+              <th class="of-th of-first">Status</th>
+              <th class="of-th">Prime&nbsp;Trips</th>
+              <th class="of-th">Total&nbsp;Trips</th>
+              <th class="of-th">Chase&nbsp;Cases</th>
+              <th class="of-th">Fulls</th>
+              <th class="of-th">Fulls&nbsp;Cases</th>
+              <th class="of-th">Prime&nbsp;Cases</th>
+              
+              <th class="of-th">Reserve&nbsp;Cases</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr class="">
+        <td class="of-td of-first">🔴 Hold</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟡 Unassigned</td>
+        <td class="of-td" title="DC 6019: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">2</td>
+        <td class="of-td" title="DC 6019: 408 trips  →  Prime 1 | Fulls 405
+DC 6094: 363 trips  →  Fulls 363
+DC 6036: 288 trips  →  Prime 1 | Fulls 286
+DC 6068: 240 trips  →  Fulls 239
+DC 6012: 43 trips  →  Fulls 40
+DC 6035: 40 trips  →  Fulls 40
+DC 7036: 33 trips  →  Fulls 33
+DC 6016: 19 trips  →  Fulls 19" style="cursor:help">1,427</td>
+        <td class="of-td" title="DC 6012: 3 chase trips
+DC 6019: 2 chase trips
+DC 6036: 1 chase trips
+DC 6068: 1 chase trips" style="cursor:help">80</td>
+        <td class="of-td" title="DC 6019: 405 fulls trips
+DC 6094: 363 fulls trips
+DC 6036: 286 fulls trips
+DC 6068: 239 fulls trips
+DC 6035: 40 fulls trips
+DC 6012: 40 fulls trips
+DC 7036: 33 fulls trips
+DC 6016: 19 fulls trips" style="cursor:help">1,426</td>
+        <td class="of-td" title="DC 6019: 405 fulls trips
+DC 6094: 363 fulls trips
+DC 6036: 286 fulls trips
+DC 6068: 239 fulls trips
+DC 6035: 40 fulls trips
+DC 6012: 40 fulls trips
+DC 7036: 33 fulls trips
+DC 6016: 19 fulls trips" style="cursor:help">18,064</td>
+        <td class="of-td" title="DC 6019: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">33</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🔵 Assigned</td>
+        <td class="of-td" title="DC 6019: 26 prime trips
+DC 6036: 15 prime trips
+DC 6094: 14 prime trips
+DC 6068: 11 prime trips" style="cursor:help">66</td>
+        <td class="of-td" title="DC 6019: 39 trips  →  Prime 26 | Reserve 12
+DC 6094: 21 trips  →  Prime 14 | Reserve 3 | Fulls 1
+DC 6036: 19 trips  →  Prime 15 | Reserve 3
+DC 6068: 13 trips  →  Prime 11 | Reserve 2
+DC 6012: 7 trips  →  Reserve 6
+DC 7036: 7 trips  →  Reserve 7
+DC 6035: 4 trips  →  Reserve 4
+DC 6016: 1 trips  →  Reserve 1" style="cursor:help">111</td>
+        <td class="of-td" title="DC 6094: 3 chase trips
+DC 6019: 1 chase trips
+DC 6036: 1 chase trips
+DC 6012: 1 chase trips" style="cursor:help">80</td>
+        <td class="of-td" title="DC 6094: 1 fulls trips" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6094: 1 fulls trips" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 26 prime trips
+DC 6036: 15 prime trips
+DC 6094: 14 prime trips
+DC 6068: 11 prime trips" style="cursor:help">3,570</td>
+        <td class="of-td" title="DC 6019: 12 reserve trips
+DC 7036: 7 reserve trips
+DC 6012: 6 reserve trips
+DC 6035: 4 reserve trips
+DC 6094: 3 reserve trips
+DC 6036: 3 reserve trips
+DC 6068: 2 reserve trips
+DC 6016: 1 reserve trips" style="cursor:help">208</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟣 Working</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6094: 2 prime trips
+DC 6068: 1 prime trips" style="cursor:help">5</td>
+        <td class="of-td" title="DC 6019: 2 trips  →  Prime 2
+DC 6094: 2 trips  →  Prime 2
+DC 6068: 1 trips  →  Prime 1" style="cursor:help">5</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6094: 2 prime trips
+DC 6068: 1 prime trips" style="cursor:help">871</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="completed-row">
+        <td class="of-td of-first">✅ Completed</td>
+        <td class="of-td" title="DC 6035: 51 prime trips
+DC 6012: 38 prime trips
+DC 7036: 33 prime trips
+DC 6016: 25 prime trips
+DC 6094: 10 prime trips
+DC 6019: 9 prime trips
+DC 6068: 3 prime trips" style="cursor:help">169</td>
+        <td class="of-td" title="DC 6035: 997 trips  →  Prime 51 | Reserve 16 | Fulls 923
+DC 7036: 850 trips  →  Prime 33 | Reserve 10 | Fulls 806
+DC 6012: 536 trips  →  Prime 38 | Reserve 8 | Fulls 489
+DC 6016: 399 trips  →  Prime 25 | Reserve 2 | Fulls 370
+DC 6019: 141 trips  →  Prime 9 | Reserve 5 | Fulls 127
+DC 6036: 80 trips  →  Reserve 2 | Fulls 78
+DC 6068: 51 trips  →  Prime 3 | Reserve 2 | Fulls 46
+DC 6094: 26 trips  →  Prime 10 | Reserve 1 | Fulls 14" style="cursor:help">3,080</td>
+        <td class="of-td" title="DC 6035: 7 chase trips
+DC 6016: 2 chase trips
+DC 6012: 1 chase trips
+DC 7036: 1 chase trips
+DC 6094: 1 chase trips" style="cursor:help">137</td>
+        <td class="of-td" title="DC 6035: 923 fulls trips
+DC 7036: 806 fulls trips
+DC 6012: 489 fulls trips
+DC 6016: 370 fulls trips
+DC 6019: 127 fulls trips
+DC 6036: 78 fulls trips
+DC 6068: 46 fulls trips
+DC 6094: 14 fulls trips" style="cursor:help">2,853</td>
+        <td class="of-td" title="DC 6035: 923 fulls trips
+DC 7036: 806 fulls trips
+DC 6012: 489 fulls trips
+DC 6016: 370 fulls trips
+DC 6019: 127 fulls trips
+DC 6036: 78 fulls trips
+DC 6068: 46 fulls trips
+DC 6094: 14 fulls trips" style="cursor:help">51,566</td>
+        <td class="of-td" title="DC 6035: 51 prime trips
+DC 6012: 38 prime trips
+DC 7036: 33 prime trips
+DC 6016: 25 prime trips
+DC 6094: 10 prime trips
+DC 6019: 9 prime trips
+DC 6068: 3 prime trips" style="cursor:help">13,780</td>
+        <td class="of-td" title="DC 6035: 16 reserve trips
+DC 7036: 10 reserve trips
+DC 6012: 8 reserve trips
+DC 6019: 5 reserve trips
+DC 6016: 2 reserve trips
+DC 6036: 2 reserve trips
+DC 6068: 2 reserve trips
+DC 6094: 1 reserve trips" style="cursor:help">476</td>
+      </tr>
+            
+            
+      <tr class="total-row">
+        <td class="of-td of-first">🧮 Total</td>
+        <td class="of-td" title="DC 6035: 51 prime trips
+DC 6012: 38 prime trips
+DC 6019: 38 prime trips
+DC 7036: 33 prime trips
+DC 6094: 26 prime trips
+DC 6016: 25 prime trips
+DC 6036: 16 prime trips
+DC 6068: 15 prime trips" style="cursor:help">242</td>
+        <td class="of-td" title="DC 6035: 1,041 trips  →  Prime 51 | Reserve 20 | Fulls 963
+DC 7036: 890 trips  →  Prime 33 | Reserve 17 | Fulls 839
+DC 6019: 590 trips  →  Prime 38 | Reserve 17 | Fulls 532
+DC 6012: 586 trips  →  Prime 38 | Reserve 14 | Fulls 529
+DC 6016: 419 trips  →  Prime 25 | Reserve 3 | Fulls 389
+DC 6094: 412 trips  →  Prime 26 | Reserve 4 | Fulls 378
+DC 6036: 387 trips  →  Prime 16 | Reserve 5 | Fulls 364
+DC 6068: 305 trips  →  Prime 15 | Reserve 4 | Fulls 285" style="cursor:help">4,630</td>
+        <td class="of-td" title="DC 6035: 7 chase trips
+DC 6012: 5 chase trips
+DC 6094: 4 chase trips
+DC 6019: 3 chase trips
+DC 6036: 2 chase trips
+DC 6016: 2 chase trips
+DC 7036: 1 chase trips
+DC 6068: 1 chase trips" style="cursor:help">297</td>
+        <td class="of-td" title="DC 6035: 963 fulls trips
+DC 7036: 839 fulls trips
+DC 6019: 532 fulls trips
+DC 6012: 529 fulls trips
+DC 6016: 389 fulls trips
+DC 6094: 378 fulls trips
+DC 6036: 364 fulls trips
+DC 6068: 285 fulls trips" style="cursor:help">4,279</td>
+        <td class="of-td" title="DC 6035: 963 fulls trips
+DC 7036: 839 fulls trips
+DC 6019: 532 fulls trips
+DC 6012: 529 fulls trips
+DC 6016: 389 fulls trips
+DC 6094: 378 fulls trips
+DC 6036: 364 fulls trips
+DC 6068: 285 fulls trips" style="cursor:help">69,630</td>
+        <td class="of-td" title="DC 6035: 51 prime trips
+DC 6012: 38 prime trips
+DC 6019: 38 prime trips
+DC 7036: 33 prime trips
+DC 6094: 26 prime trips
+DC 6016: 25 prime trips
+DC 6036: 16 prime trips
+DC 6068: 15 prime trips" style="cursor:help">18,254</td>
+        <td class="of-td" title="DC 6035: 20 reserve trips
+DC 6019: 17 reserve trips
+DC 7036: 17 reserve trips
+DC 6012: 14 reserve trips
+DC 6036: 5 reserve trips
+DC 6094: 4 reserve trips
+DC 6068: 4 reserve trips
+DC 6016: 3 reserve trips" style="cursor:help">684</td>
+      </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-cases-row">
+              <td class="of-td of-first">🏆 Total Completed</td>
+              <td class="of-td" colspan="6" style="text-align:center;font-size:1rem;">
+                65,822 Cases
+                <span style="font-size:0.70rem;font-weight:400;
+                             opacity:0.82;margin-left:8px;">
+                  (Prime 13,780 cases
+                  
+                  + Reserve 476 cases
+                  + Fulls 51,566 cases)
+                </span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        </div>
+      </div>
+    </div></div>
+          <div style="align-self:stretch;min-width:0">
+    <div>
+      <div class="rounded-xl overflow-hidden shadow-sm" style="background:linear-gradient(135deg,#475569,#334155)">
+        <div class="px-5 flex items-center justify-between of-card-hdr" style="padding-top:.35rem;padding-bottom:.5rem;gap:.75rem;flex-wrap:wrap">
+
+          <!-- Left: sub label -->
+          <h2 class="text-sm font-black leading-tight tracking-tight of-card-hdr-label" style="color:#ffffff;margin:0;flex-shrink:0">Sub 2 (PH2)</h2>
+
+          <!-- Middle: total workload + breakdown (matches top stats bar format) -->
+          <div class="of-card-hdr-mid" style="display:flex;flex-direction:column;align-items:center;
+                      text-align:center;flex:1;min-width:0">
+            <span style="font-size:.58rem;color:#ffffff;text-transform:uppercase;
+                         letter-spacing:.05em;font-weight:700;line-height:1.1;
+                         opacity:.65;white-space:nowrap">Total Workload</span>
+            <span title="2,205 trips  |  avg 55 cases / trip" style="font-size:1.4rem;font-weight:900;line-height:1.15;
+                        color:#ffffff;cursor:help;">121,084</span>
+          </div>
+
+          <!-- Right: workload completed % -->
+          <div class="flex items-baseline of-card-hdr-right" style="gap:.4rem;flex-shrink:0">
+            <span style="font-size:1.05rem;color:#ffffff;
+                         text-transform:uppercase;letter-spacing:.04em;
+                         font-weight:900;white-space:nowrap;line-height:1">
+              Workload Completed</span>
+            <span class="font-black tabular-nums text-yellow-600" style="font-size:1.6rem;color:#ffffff;
+                         opacity:0.9;line-height:1">71%</span>
+          </div>
+        </div>
+      </div>
+      <div class="table-card mt-0">
+        <div class="of-scroll">
+        <table style="border-collapse:collapse;width:100%;font-size:1rem;">
+          <thead>
+            <tr class="of-header">
+              <th class="of-th of-first">Status</th>
+              <th class="of-th">Prime&nbsp;Trips</th>
+              <th class="of-th">Total&nbsp;Trips</th>
+              <th class="of-th">Chase&nbsp;Cases</th>
+              <th class="of-th">Fulls</th>
+              <th class="of-th">Fulls&nbsp;Cases</th>
+              <th class="of-th">Prime&nbsp;Cases</th>
+              <th class="of-th" title="Mod Prime cases are a subset of Prime Cases shown separately">Mod&nbsp;Prime</th>
+              <th class="of-th">Reserve&nbsp;Cases</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr class="">
+        <td class="of-td of-first">🔴 Hold</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6012: 1 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips
+DC 6068: 1 prime trips" style="cursor:help">6</td>
+        <td class="of-td" title="DC 6019: 2 trips  →  Prime 2
+DC 6012: 1 trips  →  Prime 1
+DC 6016: 1 trips  →  Prime 1
+DC 6036: 1 trips  →  Prime 1
+DC 6068: 1 trips  →  Prime 1" style="cursor:help">6</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 2 prime trips
+DC 6012: 1 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips
+DC 6068: 1 prime trips" style="cursor:help">536</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟡 Unassigned</td>
+        <td class="of-td" title="DC 6019: 1 prime trips" style="cursor:help">1</td>
+        <td class="of-td" title="DC 6019: 94 trips  →  Prime 1 | Fulls 90
+DC 6068: 35 trips  →  Fulls 35
+DC 6012: 34 trips  →  Fulls 34
+DC 6016: 33 trips  →  Fulls 32
+DC 6036: 30 trips  →  Fulls 30
+DC 6094: 12 trips  →  Fulls 12
+DC 7036: 9 trips  →  Fulls 8" style="cursor:help">242</td>
+        <td class="of-td" title="DC 6019: 3 chase trips
+DC 6016: 1 chase trips
+DC 7036: 1 chase trips" style="cursor:help">37</td>
+        <td class="of-td" title="DC 6019: 90 fulls trips
+DC 6068: 35 fulls trips
+DC 6012: 34 fulls trips
+DC 6016: 32 fulls trips
+DC 6036: 30 fulls trips
+DC 6094: 12 fulls trips
+DC 7036: 8 fulls trips" style="cursor:help">241</td>
+        <td class="of-td" title="DC 6019: 90 fulls trips
+DC 6068: 35 fulls trips
+DC 6012: 34 fulls trips
+DC 6016: 32 fulls trips
+DC 6036: 30 fulls trips
+DC 6094: 12 fulls trips
+DC 7036: 8 fulls trips" style="cursor:help">5,387</td>
+        <td class="of-td" title="DC 6019: 1 prime trips" style="cursor:help">115</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">0</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🔵 Assigned</td>
+        <td class="of-td" title="DC 6019: 74 prime trips
+DC 6016: 50 prime trips
+DC 6036: 46 prime trips
+DC 6012: 38 prime trips
+DC 6068: 35 prime trips" style="cursor:help">243</td>
+        <td class="of-td" title="DC 6019: 91 trips  →  Prime 74 | Reserve 15
+DC 6016: 54 trips  →  Prime 50 | Reserve 4
+DC 6036: 50 trips  →  Prime 46 | Reserve 4
+DC 6012: 41 trips  →  Prime 38 | Reserve 3
+DC 6068: 38 trips  →  Prime 35 | Reserve 3
+DC 7036: 7 trips
+DC 6035: 6 trips
+DC 6094: 3 trips" style="cursor:help">290</td>
+        <td class="of-td" title="DC 7036: 7 chase trips
+DC 6035: 6 chase trips
+DC 6094: 3 chase trips
+DC 6019: 2 chase trips" style="cursor:help">276</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 74 prime trips
+DC 6016: 50 prime trips
+DC 6036: 46 prime trips
+DC 6012: 38 prime trips
+DC 6068: 35 prime trips" style="cursor:help">9,955</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 15 reserve trips
+DC 6016: 4 reserve trips
+DC 6036: 4 reserve trips
+DC 6012: 3 reserve trips
+DC 6068: 3 reserve trips" style="cursor:help">178</td>
+      </tr>
+            
+      <tr class="">
+        <td class="of-td of-first">🟣 Working</td>
+        <td class="of-td" title="DC 6019: 16 prime trips
+DC 6012: 2 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">20</td>
+        <td class="of-td" title="DC 6019: 17 trips  →  Prime 16 | Reserve 1
+DC 6012: 2 trips  →  Prime 2
+DC 6016: 1 trips  →  Prime 1
+DC 6036: 1 trips  →  Prime 1" style="cursor:help">21</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 16 prime trips
+DC 6012: 2 prime trips
+DC 6016: 1 prime trips
+DC 6036: 1 prime trips" style="cursor:help">3,906</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6019: 1 reserve trips" style="cursor:help">25</td>
+      </tr>
+            
+      <tr class="completed-row">
+        <td class="of-td of-first">✅ Completed</td>
+        <td class="of-td" title="DC 6035: 175 prime trips
+DC 7036: 119 prime trips
+DC 7042: 64 prime trips
+DC 6094: 56 prime trips
+DC 6016: 33 prime trips
+DC 6019: 27 prime trips
+DC 6012: 4 prime trips
+DC 6036: 3 prime trips
+DC 6068: 2 prime trips" style="cursor:help">483</td>
+        <td class="of-td" title="DC 7036: 371 trips  →  Prime 119 | Reserve 12 | Fulls 235
+DC 6035: 213 trips  →  Prime 175 | Reserve 16 | Fulls 19
+DC 6012: 165 trips  →  Prime 4 | Reserve 2 | Fulls 151
+DC 6094: 134 trips  →  Prime 56 | Reserve 4 | Fulls 72
+DC 6016: 125 trips  →  Prime 33 | Reserve 2 | Fulls 89
+DC 6019: 122 trips  →  Prime 27 | Reserve 2 | Fulls 91
+DC 7042: 67 trips  →  Prime 64 | Reserve 3
+DC 6036: 36 trips  →  Prime 3 | Fulls 33
+DC 6068: 13 trips  →  Prime 2 | Fulls 9" style="cursor:help">1,271</td>
+        <td class="of-td" title="DC 6012: 8 chase trips
+DC 7036: 5 chase trips
+DC 6035: 3 chase trips
+DC 6019: 2 chase trips
+DC 6094: 2 chase trips
+DC 6068: 2 chase trips
+DC 6016: 1 chase trips" style="cursor:help">304</td>
+        <td class="of-td" title="DC 7036: 235 fulls trips
+DC 6012: 151 fulls trips
+DC 6019: 91 fulls trips
+DC 6016: 89 fulls trips
+DC 6094: 72 fulls trips
+DC 6036: 33 fulls trips
+DC 6035: 19 fulls trips
+DC 6068: 9 fulls trips" style="cursor:help">724</td>
+        <td class="of-td" title="DC 7036: 235 fulls trips
+DC 6012: 151 fulls trips
+DC 6019: 91 fulls trips
+DC 6016: 89 fulls trips
+DC 6094: 72 fulls trips
+DC 6036: 33 fulls trips
+DC 6035: 19 fulls trips
+DC 6068: 9 fulls trips" style="cursor:help">22,018</td>
+        <td class="of-td" title="DC 6035: 175 prime trips
+DC 7036: 119 prime trips
+DC 7042: 64 prime trips
+DC 6094: 56 prime trips
+DC 6016: 33 prime trips
+DC 6019: 27 prime trips
+DC 6012: 4 prime trips
+DC 6036: 3 prime trips
+DC 6068: 2 prime trips" style="cursor:help">53,200</td>
+        <td class="of-td" title="64 trips  |  avg 148 cases / trip" style="cursor:help">9,502</td>
+        <td class="of-td" title="DC 6035: 16 reserve trips
+DC 7036: 12 reserve trips
+DC 6094: 4 reserve trips
+DC 7042: 3 reserve trips
+DC 6012: 2 reserve trips
+DC 6019: 2 reserve trips
+DC 6016: 2 reserve trips" style="cursor:help">716</td>
+      </tr>
+            
+      <tr class="carryover-row">
+        <td class="of-td of-first">📅 Carryover</td>
+        <td class="of-td" title="DC 6012: 218 prime cases
+DC 6094: 20 prime cases
+DC 7042: 6 prime cases" style="cursor:help">8</td>
+        <td class="of-td" title="DC 6012: 282 trips
+DC 6016: 86 trips
+DC 7042: 1 trips
+DC 6094: 1 trips" style="cursor:help">370</td>
+        <td class="of-td" style="cursor:help">—</td>
+        <td class="of-td" title="DC 6012: 262 fulls trips
+DC 6016: 86 fulls trips" style="cursor:help">348</td>
+        <td class="of-td" title="DC 6012: 262 fulls trips
+DC 6016: 86 fulls trips" style="cursor:help">14,554</td>
+        <td class="of-td" title="DC 6012: 218 prime cases
+DC 6094: 20 prime cases
+DC 7042: 6 prime cases" style="cursor:help">238</td>
+        <td class="of-td" title="1 trips  |  avg 6 cases / trip" style="cursor:help">6</td>
+        <td class="of-td" title="DC 6012: 131 reserve cases" style="cursor:help">131</td>
+      </tr>
+            
+      <tr class="total-row">
+        <td class="of-td of-first">🧮 Total</td>
+        <td class="of-td" title="DC 6035: 175 prime trips
+DC 6019: 120 prime trips
+DC 7036: 119 prime trips
+DC 6016: 85 prime trips
+DC 7042: 64 prime trips
+DC 6094: 56 prime trips
+DC 6036: 51 prime trips
+DC 6012: 45 prime trips
+DC 6068: 38 prime trips" style="cursor:help">761</td>
+        <td class="of-td" title="DC 7036: 387 trips  →  Prime 119 | Reserve 12 | Fulls 243
+DC 6019: 326 trips  →  Prime 120 | Reserve 18 | Fulls 181
+DC 6012: 243 trips  →  Prime 45 | Reserve 5 | Fulls 185
+DC 6035: 219 trips  →  Prime 175 | Reserve 16 | Fulls 19
+DC 6016: 214 trips  →  Prime 85 | Reserve 6 | Fulls 121
+DC 6094: 149 trips  →  Prime 56 | Reserve 4 | Fulls 84
+DC 6036: 118 trips  →  Prime 51 | Reserve 4 | Fulls 63
+DC 6068: 87 trips  →  Prime 38 | Reserve 3 | Fulls 44
+DC 7042: 67 trips  →  Prime 64 | Reserve 3" style="cursor:help">2,205</td>
+        <td class="of-td" title="DC 7036: 13 chase trips
+DC 6035: 9 chase trips
+DC 6012: 8 chase trips
+DC 6019: 7 chase trips
+DC 6094: 5 chase trips
+DC 6068: 2 chase trips
+DC 6016: 2 chase trips" style="cursor:help">617</td>
+        <td class="of-td" title="DC 7036: 243 fulls trips
+DC 6012: 185 fulls trips
+DC 6019: 181 fulls trips
+DC 6016: 121 fulls trips
+DC 6094: 84 fulls trips
+DC 6036: 63 fulls trips
+DC 6068: 44 fulls trips
+DC 6035: 19 fulls trips" style="cursor:help">1,313</td>
+        <td class="of-td" title="DC 7036: 243 fulls trips
+DC 6012: 185 fulls trips
+DC 6019: 181 fulls trips
+DC 6016: 121 fulls trips
+DC 6094: 84 fulls trips
+DC 6036: 63 fulls trips
+DC 6068: 44 fulls trips
+DC 6035: 19 fulls trips" style="cursor:help">41,959</td>
+        <td class="of-td" title="DC 6035: 175 prime trips
+DC 6019: 120 prime trips
+DC 7036: 119 prime trips
+DC 6016: 85 prime trips
+DC 7042: 64 prime trips
+DC 6094: 56 prime trips
+DC 6036: 51 prime trips
+DC 6012: 45 prime trips
+DC 6068: 38 prime trips" style="cursor:help">67,950</td>
+        <td class="of-td" style="cursor:help">9,508</td>
+        <td class="of-td" title="DC 6019: 18 reserve trips
+DC 6035: 16 reserve trips
+DC 7036: 12 reserve trips
+DC 6016: 6 reserve trips
+DC 6012: 5 reserve trips
+DC 6094: 4 reserve trips
+DC 6036: 4 reserve trips
+DC 7042: 3 reserve trips
+DC 6068: 3 reserve trips" style="cursor:help">1,050</td>
+      </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-cases-row">
+              <td class="of-td of-first">🏆 Total Completed</td>
+              <td class="of-td" colspan="7" style="text-align:center;font-size:1rem;">
+                85,436 Cases
+                <span style="font-size:0.70rem;font-weight:400;
+                             opacity:0.82;margin-left:8px;">
+                  (Prime 53,200 cases
+                  + Mod Prime 9,502 cases 
+                  + Reserve 716 cases
+                  + Fulls 22,018 cases)
+                </span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        </div>
+      </div>
+    </div></div>
+
+          <!-- ROW 3: RSR heading (full width) -->
+          <div style="grid-column:1/-1;padding-top:.15rem">
+            <h2 class="font-bold text-gray-500 uppercase tracking-widest mb-0 section-h2" style="font-size:1.9rem;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:.3rem">
+              <span style="display:inline-block;filter:sepia(1) saturate(8) brightness(0.85)">🚜</span> RSR Move Summary
+            </h2>
+          </div>
+
+          <!-- ROW 4: RSR Sub1 | RSR Sub2 -->
+          <div style="align-self:stretch;min-width:0">
+    <div style="height:100%">
+      <div class="sub-hdr" style="background:#6272a4;color:white">
+        Sub 1 — Outstanding Moves</div>
+      <div class="sub-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:clamp(0.2rem,0.4vw,0.5rem)">
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Putaways</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">441</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">182</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">3</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">2,306</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          623</span>
+      </div>
+    </div>
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Replenishments</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">—</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">88</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">—</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">255</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          88</span>
+      </div>
+    </div>
+        </div>
+      </div>
+    </div></div>
+          <div style="align-self:stretch;min-width:0">
+    <div style="height:100%">
+      <div class="sub-hdr" style="background:#475569;color:white">
+        Sub 2 — Outstanding Moves</div>
+      <div class="sub-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:clamp(0.2rem,0.4vw,0.5rem)">
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Putaways</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">221</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">145</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">1</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">1,993</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          366</span>
+      </div>
+    </div>
+          
+    <div class="card">
+      <div class="card-title font-bold text-gray-800 text-center" style="margin-bottom:.25rem;font-size:1.1rem">Replenishments</div>
+      <table class="w-full" style="font-size:1.05rem">
+        <tbody>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5"></span>Open</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">37</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>Pending</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">172</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-1.5"></span>Working</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">5</td>
+      </tr>
+          
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-1 pl-1" style="font-size:1.1rem"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>Completed</td>
+        <td class="py-1 pr-1 text-right font-bold tabular-nums
+                   text-gray-900" style="font-size:1.1rem">892</td>
+      </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.35rem;padding-top:.35rem;border-top:1px solid #f3f4f6;
+                  display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:#9ca3af;text-transform:uppercase">Total Available</span>
+        <span class="font-black text-gray-900 tabular-nums" style="font-size:1.3rem">
+          209</span>
+      </div>
+    </div>
+        </div>
+      </div>
+    </div></div>
+
+        </div>
+
+      </main>
+    </div>
+
+  <div id="refresh-flash" style="transition: opacity 0.4s; opacity: 0;"></div>
+  
+    <script>
+      // ─── Flash overlay ───────────────────────────────────────────────────
+      // Briefly flashes the screen black on every data refresh.
+      // Called with no args: fire-and-forget.
+      // Called with a callback: flash → wait → then run callback.
+      function flashScreen(cb) {
+        var fl = document.getElementById('refresh-flash');
+        if (!fl) { if (cb) cb(); return; }
+        fl.style.transition = 'none';
+        fl.style.opacity    = '1';
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {   // double-rAF: forces browser to paint the opaque frame
+            fl.style.transition = 'opacity 0.4s ease';
+            fl.style.opacity    = '0';
+            if (cb) setTimeout(cb, 200);
+          });
+        });
+      }
+
+      // Flash on every page load — the page only reloads when data is fresh.
+      // Small delay so the content paints before the flash fires.
+      setTimeout(flashScreen, 120);
+
+      // ─── Countdown to next refresh ────────────────────────────────────────
+      (function() {
+        var secs = 120;
+        var el   = document.getElementById('refresh-countdown');
+        function tick() {
+          if (!el) return;
+          el.textContent = secs + 's';
+          el.style.color = (secs <= 10) ? '#f97316' : '';
+          if (secs > 0) { secs--; setTimeout(tick, 1000); }
+        }
+        tick();
+      })();
+
+      // ─── Fit to screen + manual zoom multiplier ───────────────────────────────────
+      // Auto-fits content height to the viewport, then multiplies by a user
+      // zoom preference stored in localStorage (persists across auto-reloads).
+      // Cap raised to 3.0 so 4K/large TVs can scale up enough.
+      // +/− buttons in the header let Victor tune it per display without
+      // touching any code.
+      var _userZoomMult = 1.0;
+      try {
+        _userZoomMult = parseFloat(localStorage.getItem('zoomMult') || '1.0') || 1.0;
+      } catch(e) {}
+
+      function _updateZoomLabel() {
+        var el = document.getElementById('zoom-mult-label');
+        if (el) el.textContent = (_userZoomMult === 1.0)
+          ? 'auto' : _userZoomMult.toFixed(1) + '×';
+      }
+
+      window.setZoomMult = function(delta) {
+        _userZoomMult = Math.round((_userZoomMult + delta) * 10) / 10;
+        _userZoomMult = Math.max(0.4, Math.min(_userZoomMult, 3.0));
+        try { localStorage.setItem('zoomMult', _userZoomMult); } catch(e) {}
+        _updateZoomLabel();
+        fitScreen();
+      };
+
+      // Initialize label on load
+      _updateZoomLabel();
+
+      // Zoom in when content is shorter than the viewport (TVs), zoom out
+      // Auto-fit logic:
+      //   Phone portrait  → natural scroll (no zoom, overflow unlocked)
+      //   Phone landscape → fit-to-screen (same zoom math as TV)
+      //   TV / monitor    → fit-to-screen always
+      // Phone = touch-capable AND short physical dimension < 600px
+      // (blocks false-positives: Windows Chrome reports maxTouchPoints:10 on non-touch monitors)
+      var _hasTouch = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+      var _smallScr = Math.min(screen.width, screen.height) < 600;
+      var _isPhone  = _hasTouch && _smallScr;
+
+      var _fitTimer = null;
+      function fitScreen() {
+        clearTimeout(_fitTimer);
+
+        if (_isPhone) {
+          var landscape = window.innerWidth > window.innerHeight;
+
+          if (!landscape) {
+            // ── Portrait: unlock everything, let the page scroll naturally ──
+            document.body.style.zoom                    = '';
+            document.documentElement.style.overflow     = '';
+            document.documentElement.style.height       = '';
+            document.body.style.overflow                = '';
+            document.body.style.height                  = '';
+            return;
+          }
+
+          // ── Landscape: clear overflow (allow scroll) and zoom to fit ──
+          document.documentElement.style.overflow = '';
+          document.documentElement.style.height   = '';
+          document.body.style.overflow            = '';
+          document.body.style.height              = '';
+        }
+
+        // ── TV / monitor / phone-landscape: auto-fit height to viewport ───
+        _fitTimer = setTimeout(function() {
+          // 1. Reset zoom so we measure true natural size
+          document.body.style.zoom = '';
+          // 2. rAF lets browser finish layout before we sample
+          requestAnimationFrame(function() {
+            var h   = document.body.scrollHeight;
+            var vh  = window.innerHeight;
+            // fitZ = zoom that makes content exactly fill the viewport.
+            // autoZ caps it at 3.0 so tiny content never goes huge on 4K TVs.
+            // The user multiplier tunes within [0.4, fitZ] — it can zoom out
+            // below fitZ (to see more) but NEVER above fitZ (which would clip
+            // content behind overflow:hidden on the html element).
+            var fitZ  = vh / h;
+            var autoZ = Math.min(fitZ, 3.0);
+            var z     = Math.max(0.4, Math.min(autoZ * _userZoomMult, fitZ));
+            document.body.style.zoom = z;
+          });
+        }, 50);
+      }
+      window.addEventListener('resize', fitScreen);
+
+      // ─── Shift selector ──────────────────────────────────────────────────
+      function selectShift(key) {
+        document.querySelectorAll('.shift-panel').forEach(function(p) {
+          p.style.display = 'none';
+        });
+        var panel = document.getElementById('shift-panel-' + key);
+        if (panel) panel.style.display = '';
+        var sel = document.getElementById('shift-sel');
+        if (sel) sel.value = key;
+        try { localStorage.setItem('selectedShift', key); } catch(e) {}
+        fitScreen();  // ← measure AFTER panel is visible
+      }
+
+      // ─── Shift schedule (mirrors shifts.py) ─────────────────────────────
+      var SHIFT_SCHEDULE = [{"key": "A1", "startH": 5, "startMin": 0, "endH": 15, "endMin": 30, "crossesMidnight": false}, {"key": "A2", "startH": 16, "startMin": 0, "endH": 4, "endMin": 0, "crossesMidnight": true}, {"key": "B1", "startH": 5, "startMin": 0, "endH": 18, "endMin": 0, "crossesMidnight": false}];
+
+      function activeShiftKey() {
+        var now   = new Date();
+        var nowM  = now.getHours() * 60 + now.getMinutes();
+        for (var i = 0; i < SHIFT_SCHEDULE.length; i++) {
+          var s      = SHIFT_SCHEDULE[i];
+          var startM = s.startH * 60 + s.startMin;
+          var endM   = s.endH   * 60 + s.endMin;
+          var active = s.crossesMidnight
+            ? (nowM >= startM || nowM < endM)   // wraps midnight
+            : (nowM >= startM && nowM < endM);
+          if (active) return s.key;
+        }
+        return null;  // gap between shifts
+      }
+
+      // Manual-override flag: set when user explicitly picks a shift.
+      // Survives page reloads via localStorage so the auto-detect never
+      // overrides a deliberate choice.
+      var _manualOverride = false;
+
+      // Called ONLY from user interaction (dropdown onchange).
+      // Sets the sticky override so auto-detect stays out of the way.
+      window.selectShiftManual = function(key) {
+        _manualOverride = true;
+        try { localStorage.setItem('shiftManualOverride', '1'); } catch(e) {}
+        selectShift(key);
+      };
+
+      // On load: restore manual pick if user had set one; otherwise auto-detect.
+      var _lastAutoShift = activeShiftKey();
+      var _savedShift    = null;
+      try { _savedShift    = localStorage.getItem('selectedShift'); }       catch(e) {}
+      try { _manualOverride = localStorage.getItem('shiftManualOverride') === '1'; } catch(e) {}
+
+      if (_manualOverride && _savedShift) {
+        selectShift(_savedShift);   // honour what the user last picked
+      } else {
+        selectShift(_lastAutoShift || 'A2');  // nothing saved — auto-detect
+      }
+
+      // Every 30 s: auto-switch ONLY when no manual override is active.
+      setInterval(function() {
+        if (_manualOverride) return;   // user is in control — hands off
+        var cur = activeShiftKey();
+        if (cur && cur !== _lastAutoShift) {
+          _lastAutoShift = cur;
+          selectShift(cur);
+        }
+      }, 30000);
+
+      // ─── SSE (local TV) or polling (shareable link) — hostname decides ─────
+      // Never rely on SSE error behaviour to detect the environment;
+      // puppy.walmart.com can fire onopen even for a 404 and confuse the logic.
+      (function() {
+        var dot = document.getElementById('live-dot');
+        var lbl = document.getElementById('live-label');
+
+        function setStatus(mode) {
+          var colors = { live:'#22c55e', poll:'#f59e0b', off:'#9ca3af' };
+          var labels = { live:'LIVE',    poll:'AUTO',    off:'offline' };
+          var c = colors[mode] || colors.off;
+          if (dot) { dot.style.background = c; dot.style.boxShadow = '0 0 6px ' + c; }
+          if (lbl) { lbl.textContent = labels[mode] || mode; lbl.style.color = c; }
+        }
+
+        var h = window.location.hostname;
+        var isLocalServer = (
+          h === 'localhost' || h === '127.0.0.1' ||
+          h.startsWith('10.') || h.startsWith('192.168.') ||
+          (h.startsWith('172.') &&
+           parseInt(h.split('.')[1],10) >= 16 &&
+           parseInt(h.split('.')[1],10) <= 31)
+        );
+
+
+        if (location.protocol === 'file:') {
+          setStatus('off');
+
+        } else if (isLocalServer) {
+          // ── Local TV screen: SSE push — waits 2 min after data is ready ──
+          // (Instant reload was jarring mid-read. The cycle is already 2 min,
+          //  so we wait the same interval before surfacing the new data.)
+          setStatus('live');
+          var _sseReloadTimer = null;
+          function connectSSE() {
+            var es = new EventSource('/events');
+            es.onopen    = function()  { setStatus('live'); };
+            es.onmessage = function(e) {
+              if (e.data !== 'update') return;
+              // Cancel any pending reload timer before scheduling a new one
+              clearTimeout(_sseReloadTimer);
+              _sseReloadTimer = setTimeout(function() {
+                location.reload();
+              }, 120 * 1000);
+            };
+            es.onerror   = function()  {
+              setStatus('off');
+              es.close();
+              setTimeout(connectSSE, 5000);
+            };
+          }
+          connectSSE();
+
+        } else {
+          // ── Shareable link ────────────────────────────────────────────────
+          // Auto-refresh is handled by the two-step fetch→parent-reload script
+          // injected by generate.py. Do NOT call location.reload() here —
+          // it only reloads the iframe and leaves the SPA's cache stale.
+          setStatus('poll');
+        }
+      })();
+
+      // ── Generic hover tooltip (P01 rows + carryover cells) ────────────────
+      (function() {
+        var tip = null;
+        function _getTip() {
+          if (!tip) tip = document.getElementById('float-tip');
+          return tip;
+        }
+        function _pos(evt) {
+          var t = _getTip(); if (!t) return;
+          var tw = t.offsetWidth  || 420;
+          var th = t.offsetHeight || 280;
+          var vw = window.innerWidth;
+          var vh = window.innerHeight;
+          var x = evt.clientX + 16;
+          var y = evt.clientY + 16;
+          if (x + tw > vw - 10) x = evt.clientX - tw - 8;
+          if (y + th > vh - 10) y = evt.clientY - th - 8;
+          t.style.left = Math.max(4, x) + 'px';
+          t.style.top  = Math.max(4, y) + 'px';
+        }
+        window.showTip = function(el, evt) {
+          var src = el.querySelector('.tip-src');
+          if (!src) return;
+          var t = _getTip(); if (!t) return;
+          t.innerHTML = src.innerHTML;
+          t.style.display = 'block';
+          _pos(evt);
+        };
+        window.hideTip = function() {
+          var t = _getTip(); if (t) t.style.display = 'none';
+        };
+        // Touch tap: toggle tooltip centered on screen (mobile has no hover)
+        var _touchTipEl = null;
+        document.addEventListener('touchstart', function(e) {
+          var target = e.target.closest('[onmouseenter]');
+          if (!target) { hideTip(); _touchTipEl = null; return; }
+          e.preventDefault();
+          if (_touchTipEl === target) {
+            hideTip(); _touchTipEl = null; return;
+          }
+          var src = target.querySelector('.tip-src');
+          if (!src) return;
+          var t = _getTip(); if (!t) return;
+          t.innerHTML = src.innerHTML;
+          // Center on screen for touch
+          t.style.left      = '50%';
+          t.style.top       = '50%';
+          t.style.transform = 'translate(-50%,-50%)';
+          t.style.display   = 'block';
+          _touchTipEl = target;
+        }, { passive: false });
+        document.addEventListener('mousemove', function(e) {
+          var t = _getTip();
+          if (t && t.style.display !== 'none') _pos(e);
+        });
+      })();
+
+      // ─── History date picker (local TV server only) ──────────────────────
+      // Only shown when we're running on the local server (port 8765).
+      // Fetches /history?date=YYYY-MM-DD&shift=XX and injects the HTML
+      // fragment into the active shift panel, replacing its live content.
+      (function() {
+        var isLocal = (window.location.port === '8765');
+        var wrap    = document.getElementById('date-picker-wrap');
+        var liveBtn = document.getElementById('hist-live-btn');
+        var picker  = document.getElementById('hist-date');
+
+        // Show the control only on the local TV server
+        if (isLocal && wrap) {
+          wrap.style.removeProperty('display');
+          wrap.style.display = 'flex';
+        }
+
+        // Per-shift original HTML cache — so we can restore when going back to live
+        var _liveCache = {};
+
+        function _activeShiftKey() {
+          var sel = document.getElementById('shift-sel');
+          return sel ? sel.value : 'A2';
+        }
+
+        function _activePanel() {
+          return document.getElementById('shift-panel-' + _activeShiftKey());
+        }
+
+        function _saveCurrentPanelIfNeeded(key) {
+          if (!_liveCache[key]) {
+            var p = document.getElementById('shift-panel-' + key);
+            if (p) _liveCache[key] = p.innerHTML;
+          }
+        }
+
+        window.histDateChanged = function(val) {
+          if (!val) { window.histClearDate(); return; }
+          var today = new Date().toISOString().slice(0, 10);
+          if (val === today) { window.histClearDate(); return; }
+          _loadHistory(val);
+        };
+
+        window.histClearDate = function() {
+          if (picker) picker.value = '';
+          if (liveBtn) liveBtn.style.display = 'none';
+          // Restore all cached live panels
+          Object.keys(_liveCache).forEach(function(key) {
+            var p = document.getElementById('shift-panel-' + key);
+            if (p && _liveCache[key]) p.innerHTML = _liveCache[key];
+          });
+          _liveCache = {};
+          fitScreen();
+        };
+
+        function _loadHistory(dateStr) {
+          var key   = _activeShiftKey();
+          var panel = _activePanel();
+          if (!panel) return;
+
+          // Cache live content before first replacement
+          _saveCurrentPanelIfNeeded(key);
+
+          panel.innerHTML = (
+            '<div style="display:flex;align-items:center;justify-content:center;'
+            + 'padding:3rem;gap:1rem;color:#94a3b8">'
+            + '<span style="font-size:1.5rem;animation:spin 1s linear infinite">&#9696;</span>'
+            + '<span style="font-size:1.1rem;font-weight:700">Loading history for '
+            + dateStr + ' — ' + key + '…</span></div>'
+          );
+
+          fetch('/history?date=' + dateStr + '&shift=' + key)
+            .then(function(r) { return r.text(); })
+            .then(function(html) {
+              panel.innerHTML = html;
+              if (liveBtn) liveBtn.style.display = 'inline-block';
+              fitScreen();
+            })
+            .catch(function(err) {
+              panel.innerHTML = '<div style="padding:1rem;color:#dc2626;font-weight:700">&#10060; Fetch error: ' + err + '</div>';
+            });
+        }
+
+        // Re-fetch when shift changes while a date is selected
+        var _origSelectShift = window.selectShiftManual;
+        window.selectShiftManual = function(key) {
+          _origSelectShift(key);
+          var pickerVal = picker ? picker.value : '';
+          var today = new Date().toISOString().slice(0, 10);
+          if (pickerVal && pickerVal !== today) {
+            _saveCurrentPanelIfNeeded(key);
+            setTimeout(function() { _loadHistory(pickerVal); }, 60);
+          }
+        };
+      })();
+
+    </script>
+
+  <footer class="text-center text-[9px] text-gray-400 py-1">
+    ORD RSR Dashboard • DC 7042 •
+    RSR Move Summary + Orderfilling •
+    Live • auto-updates every ~120s •
+    Generated by Code Puppy 🐶
+  </footer>
+
+  <!-- Generic floating tooltip — populated by showTip() on hover -->
+  <div id="float-tip" style="display:none;position:fixed;z-index:9000;
+              background:#fff;border:2px solid #fca5a5;border-radius:.55rem;
+              box-shadow:0 8px 28px rgba(0,0,0,.22);padding:.55rem .7rem;
+              min-width:22rem;max-width:50rem;max-height:60vh;overflow-y:auto;
+              pointer-events:none;font-family:sans-serif">
+  </div>
+
+
+<script>
+(function() {
+  var API_URL     = 'https://puppy.walmart.com/api/sharing/view/v0f0012/ops-summary';
+  var INTERVAL_MS = 120000;
+  function refresh() {
+    fetch(API_URL, { cache: 'reload', credentials: 'include' })
+      .then(function()  { window.parent.location.reload(); })
+      .catch(function() { window.parent.location.reload(); });
+  }
+  setTimeout(refresh, INTERVAL_MS);
+})();
+</script>
+
+
+</body></html>

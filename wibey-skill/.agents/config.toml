@@ -1,0 +1,4 @@
+# Bark agent configuration
+
+[skill-packs]
+allow = ["barkos-skills"]

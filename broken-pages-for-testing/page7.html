@@ -1,0 +1,1330 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="refresh" content="180">
+  <title>Status Puppy</title>
+  <style>
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f5f5; color: #1d1d1d; line-height: 1.5;
+}
+.page-header {
+  background: #0053e2; color: white;
+  padding: 14px 28px; display: flex; align-items: center; gap: 16px;
+  position: sticky; top: 0; z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.page-header h1 { margin: 0; font-size: 1.5rem; flex: 1; }
+/* Back-to-Hub pill -- mirrors the fixed pill on the other hub-linked pages
+ * (DMAIC slides et al.), but lives inline in the sticky header here since
+ * Status Puppy already has a header bar to anchor it. Same destination slug. */
+.back-hub {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.15); color: #fff; text-decoration: none;
+  font-weight: 600; font-size: 0.9rem;
+  padding: 8px 16px 8px 13px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.4);
+  transition: background 0.15s ease;
+}
+.back-hub:hover { background: rgba(255,255,255,0.28); }
+.back-hub:focus-visible { outline: 3px solid #ffc220; outline-offset: 2px; }
+.back-hub .arrow { font-size: 1.05rem; line-height: 1; }
+.refresh-btn {
+  background: #ffc220; color: #1d1d1d;
+  border: none; padding: 10px 20px; font-weight: 700;
+  border-radius: 4px; cursor: pointer; font-size: 0.95rem;
+  transition: background 0.15s;
+}
+.refresh-btn:hover { background: #ffcc4d; }
+.refresh-btn:active { background: #e6ae00; }
+.refresh-btn:focus-visible { outline: 3px solid white; outline-offset: 2px; }
+
+/* Fluid width -- spread across big screens, never letterbox.
+ * Philosophy borrowed from the VOTA page: viewport width is the signal,
+ * pure CSS, no JS UA-sniffing. Instead of a hard 1400px cap (which wasted
+ * everything past it on wide monitors), use the full viewport minus gutters
+ * up to a very generous ceiling, so a 4K/ultrawide display actually fills
+ * with more card columns. The card-grid's auto-fill (below) then lays in as
+ * many columns as fit. Tiered breakpoints below tune the card min-width per
+ * screen class. */
+main { width: min(96vw, 3200px); margin: 0 auto; padding: 24px; }
+
+.overall-banner {
+  display: flex; align-items: center; gap: 24px;
+  padding: 24px 28px; border-radius: 8px;
+  margin-bottom: 24px;
+}
+.overall-icon { font-size: 3rem; }
+.overall-headline { font-size: 1.75rem; font-weight: 800; }
+.overall-counts { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+/* Count pills are now clickable status filters (buttons). They keep the pill
+ * look but gain affordances: pointer cursor, hover lift, and a clear pressed
+ * state via aria-pressed (driven by JS). */
+.count-pill {
+  padding: 6px 14px; border-radius: 999px; font-weight: 700;
+  font-size: 0.9rem; border: 2px solid transparent; cursor: pointer;
+  font-family: inherit; line-height: 1.2;
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+}
+.count-pill:hover { filter: brightness(0.95); transform: translateY(-1px); }
+.count-pill:active { transform: translateY(0); }
+.count-pill:focus-visible { outline: 3px solid #0053e2; outline-offset: 2px; }
+.count-pill[aria-pressed="true"] {
+  border-color: currentColor;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+@media (prefers-reduced-motion: reduce) {
+  .count-pill { transition: none; }
+  .count-pill:hover { transform: none; }
+}
+/* When a filter is active, sections with no matching cards collapse away. */
+.cat-section.filtered-empty { display: none; }
+.card.filtered-hidden { display: none; }
+
+/* 🤫 Pause banner -- shown ONLY when pause_state.json exists. UNMISSABLE. */
+.pause-banner {
+  display: flex; align-items: center; gap: 28px;
+  padding: 28px 32px; border-radius: 10px;
+  margin-bottom: 24px;
+  background: #fff8e6;
+  border: 4px solid #ffc220;
+  box-shadow: 0 4px 16px rgba(255, 194, 32, 0.3);
+  animation: pause-pulse 3s ease-in-out infinite;
+}
+@keyframes pause-pulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(255, 194, 32, 0.3); }
+  50%      { box-shadow: 0 4px 28px rgba(255, 194, 32, 0.65); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pause-banner { animation: none; }
+}
+.pause-icon { font-size: 3.5rem; line-height: 1; }
+.pause-text { flex: 1; }
+.pause-headline {
+  font-size: 1.65rem; font-weight: 800; color: #995213;
+  letter-spacing: 0.5px; margin-bottom: 6px;
+}
+.pause-detail {
+  color: #1d1d1d; font-size: 1rem; margin-bottom: 4px;
+}
+.pause-hint {
+  color: #6b7280; font-size: 0.9rem; font-style: italic;
+}
+
+.qrf-section {
+  background: white; padding: 20px 28px; border-radius: 8px;
+  margin-bottom: 24px; border: 2px solid #0053e2;
+}
+.qrf-section h2 { margin: 0 0 8px; color: #0053e2; }
+.qrf-summary { margin: 4px 0 16px; color: #6b7280; font-style: italic; }
+.table-wrap { overflow-x: auto; }
+.qrf-table { width: 100%; border-collapse: collapse; }
+.qrf-table th, .qrf-table td {
+  padding: 8px 12px; text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+.qrf-table th { background: #f5f5f5; font-weight: 700; }
+.qrf-table code { font-size: 0.85rem; }
+.escalation-list {
+  margin-top: 16px; padding: 16px;
+  background: #fef2f2; border-radius: 6px;
+  border-left: 4px solid #ea1100;
+}
+.escalation-list ul { margin: 8px 0; padding-left: 24px; }
+.escalation-hint { margin: 8px 0 0; color: #6b7280; font-size: 0.9rem; }
+
+.cat-section { margin-bottom: 32px; }
+.cat-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 2px solid #0053e2; padding-bottom: 6px;
+  margin: 0 0 14px; color: #0053e2;
+}
+.cat-mini-counts { font-size: 0.85rem; color: #6b7280; font-weight: 400; }
+
+/* Card grid auto-fills as many columns as fit at the current width.
+ * Base card min-width is 320px; the tiered media queries below bump it up
+ * on larger screens so cards get roomier (not just more numerous) -- and
+ * down on small laptops so we still get 2-up before stacking. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: white; padding: 16px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.card-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.card-icon { font-size: 1.4rem; }
+.card-title { margin: 0; font-size: 1.05rem; flex: 1; }
+.card-badge {
+  padding: 4px 10px; border-radius: 4px;
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px;
+}
+.card-summary {
+  margin: 4px 0 8px; color: #1d1d1d;
+}
+.fix-hint {
+  margin: 6px 0; padding: 6px 10px;
+  background: #f5f5f5; border-radius: 4px;
+  font-size: 0.85rem; color: #6b7280;
+}
+.fix-hint code { color: #0053e2; font-weight: 700; }
+.card-details { margin-top: 8px; }
+.card-details summary {
+  cursor: pointer; color: #0053e2;
+  font-size: 0.9rem; user-select: none;
+  padding: 4px 0;
+}
+.card-details summary:hover { text-decoration: underline; }
+.card-details summary:focus-visible {
+  outline: 2px solid #0053e2; outline-offset: 2px;
+}
+.card-details pre {
+  background: #fafafa; padding: 10px; border-radius: 4px;
+  overflow-x: auto; font-size: 0.82rem; line-height: 1.4;
+  margin: 8px 0 0;
+}
+
+.page-footer {
+text-align: center; padding: 24px; color: #6b7280;
+  font-size: 0.85rem;
+}
+
+/* ── Tiered responsive breakpoints (VOTA-style: pure CSS, viewport-driven) ──
+ * The card-grid auto-fills columns; these tiers tune the per-card MIN width so
+ * cards get roomier on big displays and stack gracefully on small ones. Each
+ * cutoff is documented so future-me knows WHY, not just what.
+ *
+ *   >= 2400px  ultrawide / 4K   -> wide cards (~440px), lots of columns
+ *   >= 1600px  full desktop     -> roomy cards (~380px)
+ *   1100-1599  laptop           -> base 320px (handled by .card-grid default)
+ *   768-1099   small laptop     -> force a tidy 2-up
+ *   <= 767px   tablet/phone     -> single column, stacked header
+ * Mirrors the VOTA page's 1600/768 cutoffs so the two dashboards feel the
+ * same across screen sizes. */
+@media (min-width: 2400px) {
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 20px; }
+}
+@media (min-width: 1600px) and (max-width: 2399px) {
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+}
+@media (min-width: 768px) and (max-width: 1099px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  main { padding: 12px; }
+  .overall-banner { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .pause-banner { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .overall-icon { font-size: 2rem; }
+  .overall-headline { font-size: 1.25rem; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+  <header class="page-header">
+    <!-- Back-to-Hub button removed 2026-06-08: cards open in a new tab now -->
+    <h1>🐶 Status Puppy</h1>
+    <span style="opacity:0.85;font-size:0.9rem;">Generated 2026-06-10 17:44:01</span>
+    <button class="refresh-btn" type="button">↻ Auto-refresh: 180s</button>
+  </header>
+  <main>
+    
+    
+    <div class="overall-banner" style="background:#f0fdf4;border-left:8px solid #2a8703;">
+      <div class="overall-icon" aria-hidden="true">✅</div>
+      <div class="overall-text">
+        <div class="overall-headline" style="color:#2a8703;">ALL SYSTEMS GO</div>
+        <div class="overall-counts" role="group" aria-label="Filter checks by status">
+          <button type="button" class="count-pill" data-filter="ALL" aria-pressed="true" style="background:#0053e2;color:#fff;">
+            ◉ Show all</button>
+          <button type="button" class="count-pill" data-filter="OK" aria-pressed="false" style="background:#f0fdf4;color:#2a8703;">
+            ✅ 43 OK</button>
+          <button type="button" class="count-pill" data-filter="FAIL" aria-pressed="false" style="background:#fef2f2;color:#ea1100;">
+            ❌ 0 FAIL</button>
+          <button type="button" class="count-pill" data-filter="UNKNOWN" aria-pressed="false" style="background:#f5f5f5;color:#6b7280;">
+            ❓ 0 UNKNOWN</button>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+          <section class="cat-section">
+            <h2 class="cat-header">
+              <span>Scheduled Tasks</span>
+              <span class="cat-mini-counts">
+                21 OK ·
+                0 FAIL
+              </span>
+            </h2>
+            <div class="card-grid">
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">VOTA Review (15-min refresh)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 14m ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 17:30:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">MSGraph Watchdog Keep-Alive</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 7m ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 17:37:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">MSGraph Proactive Reauth</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 1h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 16:00:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Axonify Proactive Reauth</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 1d ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-09 06:30:01
+Missed runs: 1</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">DMS Attendance Sync</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 2d ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-08 03:00:00
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Manage Moves Heartbeat (1-min)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 20s ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 17:44:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Power BI Token Keeper (30-min)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 7m ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 17:36:44
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">WPS Preauth (6x/day)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 54m ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 16:50:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Lift Availability (daily 2 AM)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 9h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 08:29:48
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Dwell Report Email (00:30)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 9h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 08:29:52
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Dwell Report Email (07:30)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 7h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 09:59:28
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Manager Hub Refresh (15-min)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 8m ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 17:36:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">WPS Preauth Retry (00:55)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Enabled, last exit 0 (last ran 11d ago; conditional task -- no staleness check)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-05-30 00:55:00
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">WPS Preauth Retry (08:55)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Enabled, last exit 0 (last ran 12d ago; conditional task -- no staleness check)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-05-29 08:55:00
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Audit Story Refresh (daily 5:30 AM)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 9h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 08:29:56
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">RT Trailer Build (daily 2 AM)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 9h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 08:30:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Fleet Status Publish (5-min)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 54s ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Running
+Enabled: True
+Last result code: 267009
+Last run: 2026-06-10 17:44:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Wiring Nightly (daily 1 AM)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 9h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 08:30:06
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Usage Dashboard Task (6-hr)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 3h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 13:59:27
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Atlas Snapshot (9-min)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 7m ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 17:38:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Scorecard Data Check (4-hr)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last ran 3h ago (exit 0)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>State: Ready
+Enabled: True
+Last result code: 0
+Last run: 2026-06-10 14:09:01
+Missed runs: 0</pre>
+          </details>
+        
+      </article>
+    </div>
+          </section>
+        
+
+          <section class="cat-section">
+            <h2 class="cat-header">
+              <span>Daemons</span>
+              <span class="cat-mini-counts">
+                4 OK ·
+                0 FAIL
+              </span>
+            </h2>
+            <div class="card-grid">
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Full Auto Daemon</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Running (PID 19644), cycles current</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>PID: 19644
+Process alive: yes
+Last 15-min cycle: 14m ago</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">MSGraph Auth Watchdog</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Running (PID 25120), token healthy</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>PID: 25120
+Process alive: yes
+Last token refresh: ?</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Grocery Index App (:8085)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Healthy (49 DCs, BQ 3h ago)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Endpoint: http://127.0.0.1:8085/api/data
+HTTP status: 200
+DC count: 49
+query_time: 2026-06-10 14:27:09.622902
+BQ data age: 3h ago</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Pallet Dwell Monitor</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Running (PID 21244, source=HYBRID, last cycle 8s ago)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>PID: 21244
+Process alive: yes
+Log: daemon_20260610.log
+Last log line: 2026-06-10 17:45:03 (8s ago)
+Configured DATA_SOURCE: hybrid
+Runtime data source: HYBRID
+Latest CANCELLED filter: DAEMON - INFO - Filtered out 9623 CANCELLED moves</pre>
+          </details>
+        
+      </article>
+    </div>
+          </section>
+        
+
+          <section class="cat-section">
+            <h2 class="cat-header">
+              <span>Token Caches</span>
+              <span class="cat-mini-counts">
+                3 OK ·
+                0 FAIL
+              </span>
+            </h2>
+            <div class="card-grid">
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">MSAL Token (Power BI)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Healthy (9,032 bytes, touched 45m ago)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Path: C:\X - CodePuppy\PowerBI Dataset Refresh\.msal_token_cache.json
+Size: 9,032 bytes
+Last touched: 2026-06-10 17:00:02 (45m ago)</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">MSGraph Token</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Watchdog healthy, 2/2 daily sends recent</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Watchdog status: healthy
+Last refresh:    2026-06-10T17:37:10.724238
+Token expires:   2026-06-10T19:04:58.724238</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Atlas JWT Token</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Retired 2026-05-16 -- Atlas uses WMT-UserId + AD, no JWT required</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>This check is a permanent-OK stub. See checks.py docstring.</pre>
+          </details>
+        
+      </article>
+    </div>
+          </section>
+        
+
+          <section class="cat-section">
+            <h2 class="cat-header">
+              <span>Email Pipeline</span>
+              <span class="cat-mini-counts">
+                1 OK ·
+                0 FAIL
+              </span>
+            </h2>
+            <div class="card-grid">
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Daily DA Email</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">All 2 daily sends succeeded</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>--- 9:30 AM DA Send ---
+  Last successful send: 2026-06-10
+  Last attempt: 2026-06-10 09:00:26
+  Status: clean
+--- 5 AM Leadership Recap ---
+  Last successful send: 2026-06-09
+  Last attempt: 2026-06-09 05:00:24
+  Status: clean</pre>
+          </details>
+        
+      </article>
+    </div>
+          </section>
+        
+
+          <section class="cat-section">
+            <h2 class="cat-header">
+              <span>Liveness</span>
+              <span class="cat-mini-counts">
+                8 OK ·
+                0 FAIL
+              </span>
+            </h2>
+            <div class="card-grid">
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">VOTA Page File</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Fresh (14m ago)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Path: C:\X - CodePuppy\PowerBI Dataset Refresh\amm_review\amm_review.html
+Size: 779,194 bytes
+Last regenerated: 2026-06-10 17:30:31 (14m ago)</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">WPS Cert Freshness</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Fresh (14m ago)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Cache: C:\X - CodePuppy\daily_wps_daemon\snapshots\certifications_cache.json
+Snapshot: 2026-06-10 17:30:25 (14m ago)
+Totals: 82 overdue users, 175 due users</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">puppy.walmart.com</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">HTTP 200</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>GET https://puppy.walmart.com -&gt; 200</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">RT Trailer Dashboard</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Fresh build + confirmed publish (9h ago)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Local build: 2026-06-10 08:30:27 (9h ago)
+Publish confirmed today (success flag set).</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Puppy Pages Fleet</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">All 15 live pages current</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>    ok  Dry Rankings -- 7m old (cadence 9m)
+    ok  MP Rankings -- 7m old (cadence 9m)
+    ok  FDD Rankings -- 6m old (cadence 9m)
+    ok  VOTA Review -- 14m old (cadence 15m)
+    ok  Performance Index -- 3h 18m old (cadence 4h 0m)
+    ok  Rank Wall -- 3h 17m old (cadence 4h 0m)
+    ok  Manager Hub -- 9m old (cadence 15m)
+    ok  Usage Dashboard -- 3h 44m old (cadence 6h 0m)
+    ok  DA Daily Recap -- 3h 39m old (cadence 4h 0m)
+    ok  WPS By-Exception -- 13m old (cadence 4h 0m)
+    ok  RT Trailer Dashboard -- 9h 14m old (cadence 1d 0h)
+    ok  Audit Story -- 9h 8m old (cadence 1d 0h)
+    ok  Pallet Dwell Recap -- 7h 45m old (cadence 7d 0h)
+    ok  VOTA Change Recap -- 1d 13h old (cadence 1d 0h)
+    ok  Fleet Status Wall -- 3m old (cadence 5m)</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Usage Dashboard Integrity</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">24 pages tracked</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Path: C:\X - CodePuppy\puppy_usage_dashboard\output\analytics.json
+Generated: 2026-06-10T14:00:20
+page_count: 24 (floor: 5)</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Failure State Files</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">No active failure_state.json files</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>C:\X - CodePuppy\PowerBI Dataset Refresh\amm_review\failure_state.json
+C:\X - CodePuppy\Full Auto Daemon\failure_state.json
+C:\X - CodePuppy\dc6085_live\failure_state.json
+C:\X - CodePuppy\dc6085_live\bq_failure_state.json</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Manage Moves State</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Last upload 1m ago (3359 rows), last decision: SKIP</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Last decision: SKIP @ 2026-06-10T17:45:03
+  reason: only 1.0m since last upload (need 4m for hour 17)
+Last upload:   2026-06-10T17:44:03 (prod)
+  rows: 3359
+  upload age: 1m ago</pre>
+          </details>
+        
+      </article>
+    </div>
+          </section>
+        
+
+          <section class="cat-section">
+            <h2 class="cat-header">
+              <span>Data Sources</span>
+              <span class="cat-mini-counts">
+                1 OK ·
+                0 FAIL
+              </span>
+            </h2>
+            <div class="card-grid">
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Data Source Freshness</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">All 11 data sources fresh</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>    ok  WPS Certifications data -- 14m old (cadence 1d 0h) via snapshot_at
+    ok  WPS CBLs data -- 17h 45m old (cadence 1d 0h) via snapshot_date
+    ok  WPS Coaching vs Workday data -- 14m old (cadence 4h 0m) via fetched_at
+    ok  WPS Dwell Time data -- 14m old (cadence 4h 0m) via fetched_at
+    ok  WPS Out-of-Aisle Hauls data -- 14m old (cadence 4h 0m) via fetched_at
+    ok  WPS QA Recall data -- 14m old (cadence 4h 0m) via fetched_at
+    ok  WPS PTO Requests data -- 13m old (cadence 4h 0m) via fetched_at
+    ok  WPS Check-ins data -- 13m old (cadence 4h 0m) via fetched_at
+    ok  WPS Reload Errors data -- 14m old (cadence 4h 0m) via fetched_at
+    ok  DC6085 Live (Perf Index + Rank Wall) data -- 3h 18m old (cadence 4h 0m) via updated
+    ok  RT Trailer Accountability data -- 9h 15m old (cadence 1d 0h) via generated_at</pre>
+          </details>
+        
+      </article>
+    </div>
+          </section>
+        
+
+          <section class="cat-section">
+            <h2 class="cat-header">
+              <span>System</span>
+              <span class="cat-mini-counts">
+                5 OK ·
+                0 FAIL
+              </span>
+            </h2>
+            <div class="card-grid">
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Disk Space (C:)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">342 GB free (72%)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Total: 475.8 GB
+Used:  133.4 GB
+Free:  342.5 GB (72.0%)</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Log File Sizes</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">Total 18.7 MB</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Total log size: 18.7 MB</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Network (VPN)</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">All 2 Walmart endpoints reachable</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>pypi.ci.artifacts.walmart.com:443 -&gt; reachable
+puppy.walmart.com:443 -&gt; reachable</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Downtime Catch-Up</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">No significant downtime (max gap 10 min)</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>Largest heartbeat gap (last 24h): 10 min
+  from 2026-06-09 19:57:06
+  to   2026-06-09 20:07:08
+Threshold: 60 min</pre>
+          </details>
+        
+      </article>
+    
+      <article class="card" data-status="OK" style="border-left:6px solid #2a8703;">
+        <header class="card-header">
+          <span class="card-icon" aria-hidden="true">✅</span>
+          <h3 class="card-title">Wiring Integrity</h3>
+          <span class="card-badge" style="background:#f0fdf4;color:#2a8703;">
+            OK
+          </span>
+        </header>
+        <p class="card-summary">All layers wired consistently</p>
+        
+        
+          <details class="card-details">
+            <summary>Diagnostic details</summary>
+            <pre>42 checks, 12 handlers, 7 categories -- all consistent.</pre>
+          </details>
+        
+      </article>
+    </div>
+          </section>
+        
+  </main>
+  
+    <footer class="page-footer">
+      <p>Generated 2026-06-10 17:44:01 ·
+         Status Puppy 1.0 · Click <strong>Refresh</strong> to re-run all checks</p>
+    </footer>
+    
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.querySelector('.refresh-btn');
+  if (btn) {
+    // Best-effort browser refresh -- the real refresh comes from re-running
+    // the launcher .bat. The button reloads so users see the latest write.
+    btn.addEventListener('click', () => {
+      btn.textContent = 'Refreshing...';
+      btn.disabled = true;
+      location.reload();
+    });
+  }
+
+  // ── Status filtering ──────────────────────────────────────────────────
+  // Click a count pill to show only checks with that status. 'ALL' clears.
+  // Pure client-side, no reload -- and the meta-refresh re-applies the
+  // active filter on each auto-refresh via the URL hash (#filter=FAIL).
+  const pills = Array.from(document.querySelectorAll('.count-pill[data-filter]'));
+  if (!pills.length) return;
+  const cards = Array.from(document.querySelectorAll('.card[data-status]'));
+  const sections = Array.from(document.querySelectorAll('.cat-section'));
+
+  function apply(filter) {
+    cards.forEach(c => {
+      const show = filter === 'ALL' || c.dataset.status === filter;
+      c.classList.toggle('filtered-hidden', !show);
+    });
+    // Hide category sections that have no visible cards under this filter.
+    sections.forEach(s => {
+      const anyVisible = s.querySelector('.card:not(.filtered-hidden)');
+      s.classList.toggle('filtered-empty', !anyVisible);
+    });
+    pills.forEach(p => p.setAttribute('aria-pressed',
+      String(p.dataset.filter === filter)));
+    // Persist across the meta auto-refresh.
+    if (filter === 'ALL') {
+      history.replaceState(null, '', location.pathname + location.search);
+    } else {
+      location.hash = 'filter=' + filter;
+    }
+  }
+
+  pills.forEach(p => p.addEventListener('click',
+    () => apply(p.dataset.filter)));
+
+  // Restore filter from the URL hash on (re)load.
+  const m = location.hash.match(/filter=(OK|FAIL|UNKNOWN)/);
+  apply(m ? m[1] : 'ALL');
+});
+</script>
+
+
+</body></html>

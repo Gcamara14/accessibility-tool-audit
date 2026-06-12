@@ -1,0 +1,1017 @@
+{
+  "DS-CE-Component-LD-Button": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Button",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/button/",
+    "description": "Trigger actions and choices with a single press.",
+    "platform": "web",
+    "class_name": "Button"
+  },
+  "DS-CE-Component-LD-ButtonGroup": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Button Group",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/button-group/",
+    "description": "Multiple related actions in a horizontal row.",
+    "platform": "web",
+    "class_name": "ButtonGroup"
+  },
+  "DS-CE-Component-LD-IconButton": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Icon Button",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/icon-button/",
+    "description": "Actions triggered solely by icons.",
+    "platform": "web",
+    "class_name": "IconButton"
+  },
+  "DS-CE-Component-LD-LinkButton": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Link Button",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/link-button/",
+    "description": "Actions that look like standard hyperlinks.",
+    "platform": "web",
+    "class_name": "LinkButton"
+  },
+  "DS-CE-Component-LD-Menu": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Menu",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/menu/",
+    "description": "Containers for user-triggered action items.",
+    "platform": "web",
+    "class_name": "Menu"
+  },
+  "DS-CE-Component-LD-Badge": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Badge",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/badge/",
+    "description": "Visual indicators of status or count.",
+    "platform": "web",
+    "class_name": "Badge"
+  },
+  "DS-CE-Component-LD-DataTable": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Data Table",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/data-table/",
+    "description": "Rows and columns for scanning large data sets.",
+    "platform": "web",
+    "class_name": "DataTable"
+  },
+  "DS-CE-Component-LD-List": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "List",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/list/",
+    "description": "Vertical indexes of related information.",
+    "platform": "web",
+    "class_name": "List"
+  },
+  "DS-CE-Component-LD-Metric": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Metric",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/metric/",
+    "description": "Displays significant data point values.",
+    "platform": "web",
+    "class_name": "Metric"
+  },
+  "DS-CE-Component-LD-ProgressIndicator": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Progress Indicator",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/progress-indicator/",
+    "description": "Visual completion of a task or process.",
+    "platform": "web",
+    "class_name": "ProgressIndicator"
+  },
+  "DS-CE-Component-LD-ProgressTracker": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Progress Tracker",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/progress-tracker/",
+    "description": "Steps needed to complete a process.",
+    "platform": "web",
+    "class_name": "ProgressTracker"
+  },
+  "DS-CE-Component-LD-Rating": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Rating",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/rating/",
+    "description": "Insight into product or service reception.",
+    "platform": "web",
+    "class_name": "Rating"
+  },
+  "DS-CE-Component-LD-Tag": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Tag",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/tag/",
+    "description": "Non-interactive cues for traits/availability.",
+    "platform": "web",
+    "class_name": "Tag"
+  },
+  "DS-CE-Component-LD-Alert": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Alert",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/alert/",
+    "description": "Brief information and feedback.",
+    "platform": "web",
+    "class_name": "Alert"
+  },
+  "DS-CE-Component-LD-Banner": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Banner",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/banner/",
+    "description": "Info regarding incidents affecting many users.",
+    "platform": "web",
+    "class_name": "Banner"
+  },
+  "DS-CE-Component-LD-Callout": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Callout",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/callout/",
+    "description": "Overlays for onboarding or coaching.",
+    "platform": "web",
+    "class_name": "Callout"
+  },
+  "DS-CE-Component-LD-ContentMessage": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Content Message",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/content-message/",
+    "description": "Layout with descriptive content and actions.",
+    "platform": "web",
+    "class_name": "ContentMessage"
+  },
+  "DS-CE-Component-LD-MagicBox": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Magic Box",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/magic-box/",
+    "description": "Highlights AI-emphasized content.",
+    "platform": "web",
+    "class_name": "MagicBox"
+  },
+  "DS-CE-Component-LD-Nudge": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Nudge",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/nudge/",
+    "description": "Reminders for the next step in a process.",
+    "platform": "web",
+    "class_name": "Nudge"
+  },
+  "DS-CE-Component-LD-SpotIcon": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Spot Icon",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/spot-icon/",
+    "description": "Decorative elements for visual interest.",
+    "platform": "web",
+    "class_name": "SpotIcon"
+  },
+  "DS-CE-Component-LD-Checkbox": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Checkbox",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/checkbox/",
+    "description": "Selectable options in a group (multi-select).",
+    "platform": "web",
+    "class_name": "Checkbox"
+  },
+  "DS-CE-Component-LD-Chip": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Chip",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/chip/",
+    "description": "Selections, filters, or action triggers.",
+    "platform": "web",
+    "class_name": "Chip"
+  },
+  "DS-CE-Component-LD-ChipGroup": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Chip Group",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/chip-group/",
+    "description": "Horizontal arrangement for related chips.",
+    "platform": "web",
+    "class_name": "ChipGroup"
+  },
+  "DS-CE-Component-LD-DateField": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Date Field",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/date-picker/date-field/",
+    "description": "Text input for a single date.",
+    "platform": "web",
+    "class_name": "DateField"
+  },
+  "DS-CE-Component-LD-DatePicker": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Date Picker",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/date-picker/date-picker/",
+    "description": "Calendar picker for a single date.",
+    "platform": "web",
+    "class_name": "DatePicker"
+  },
+  "DS-CE-Component-LD-DateRangeField": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Date Range Field",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/date-picker/date-range-field/",
+    "description": "Text inputs for start and end dates.",
+    "platform": "web",
+    "class_name": "DateRangeField"
+  },
+  "DS-CE-Component-LD-DateRangePicker": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Date Range Picker",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/date-picker/date-range-picker/",
+    "description": "Calendar pickers for start and end dates.",
+    "platform": "web",
+    "class_name": "DateRangePicker"
+  },
+  "DS-CE-Component-LD-FormGroup": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Form Group",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/form-group/",
+    "description": "Organizes form elements into a grouped list.",
+    "platform": "web",
+    "class_name": "FormGroup"
+  },
+  "DS-CE-Component-LD-Radio": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Radio",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/radio/",
+    "description": "Mutually exclusive choices (single-select).",
+    "platform": "web",
+    "class_name": "Radio"
+  },
+  "DS-CE-Component-LD-Select": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Select",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/select/",
+    "description": "Single selection from predefined options.",
+    "platform": "web",
+    "class_name": "Select"
+  },
+  "DS-CE-Component-LD-Switch": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Switch",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/switch/",
+    "description": "Binary (on/off) settings toggle.",
+    "platform": "web",
+    "class_name": "Switch"
+  },
+  "DS-CE-Component-LD-TextArea": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Text Area",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/text-area/",
+    "description": "Multi-line freeform text input.",
+    "platform": "web",
+    "class_name": "TextArea"
+  },
+  "DS-CE-Component-LD-TextField": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Text Field",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/text-field/",
+    "description": "Single-line text entry and editing.",
+    "platform": "web",
+    "class_name": "TextField"
+  },
+  "DS-CE-Component-LD-Divider": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Divider",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/divider/",
+    "description": "Creates visual breaks in content.",
+    "platform": "web",
+    "class_name": "Divider"
+  },
+  "DS-CE-Component-LD-Skeleton": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Skeleton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/skeleton/",
+    "description": "Low-fidelity shapes for perceived responsiveness.",
+    "platform": "web",
+    "class_name": "Skeleton"
+  },
+  "DS-CE-Component-LD-Spinner": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Spinner",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/spinner/",
+    "description": "Indicates a process of indeterminate time.",
+    "platform": "web",
+    "class_name": "Spinner"
+  },
+  "DS-CE-Component-LD-Breadcrumb": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Breadcrumb",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/breadcrumb/",
+    "description": "Secondary navigation for hierarchy tracking.",
+    "platform": "web",
+    "class_name": "Breadcrumb"
+  },
+  "DS-CE-Component-LD-Link": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Link",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/link/",
+    "description": "Standard navigational elements.",
+    "platform": "web",
+    "class_name": "Link"
+  },
+  "DS-CE-Component-LD-SideNavigation": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Side Navigation",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/side-navigation/",
+    "description": "Categorized links for specific URLs.",
+    "platform": "web",
+    "class_name": "SideNavigation"
+  },
+  "DS-CE-Component-LD-TabNavigation": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Tab Navigation",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/tab-navigation/",
+    "description": "Page-level navigation between content sets.",
+    "platform": "web",
+    "class_name": "TabNavigation"
+  },
+  "DS-CE-Component-LD-BottomSheet": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Bottom Sheet",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/bottom-sheet/",
+    "description": "Surfaces anchored to the bottom of the screen.",
+    "platform": "web",
+    "class_name": "BottomSheet"
+  },
+  "DS-CE-Component-LD-Card": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Card",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/card/",
+    "description": "Organized containers for text, images, and icons.",
+    "platform": "web",
+    "class_name": "Card"
+  },
+  "DS-CE-Component-LD-Modal": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Modal",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/modal/",
+    "description": "Focused window sitting on top of page content.",
+    "platform": "web",
+    "class_name": "Modal"
+  },
+  "DS-CE-Component-LD-Panel": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Panel",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/panel/",
+    "description": "Supplemental info related to the primary canvas.",
+    "platform": "web",
+    "class_name": "Panel"
+  },
+  "DS-CE-Component-LD-Popover": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Popover",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/popover/",
+    "description": "Contextual content displayed on demand.",
+    "platform": "web",
+    "class_name": "Popover"
+  },
+  "DS-CE-Component-LD-Snackbar": {
+    "system": "LD",
+    "date_ingested": "2026-03-19",
+    "component_name": "Snackbar",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/components/snackbar/",
+    "description": "Short operation messages at the bottom screen."
+  },
+  "DS-CE-Component-LD-Android-Spinner": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-09",
+    "component_name": "Spinner",
+    "class_name": "living.design.themed.Spinner",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/spinner/",
+    "description": "Indicates a process of indeterminate time."
+  },
+  "DS-CE-Component-LD-Android-SpotIcon": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-09",
+    "component_name": "Spot Icon",
+    "class_name": "living.design.themed.SpotIcon",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/spot-icon/",
+    "description": "Decorative elements for visual interest."
+  },
+  "DS-CE-Component-LD-Android-Switch": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-09",
+    "component_name": "Switch",
+    "class_name": "living.design.themed.Switch",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/switch/",
+    "description": "Binary (on/off) settings toggle."
+  },
+  "DS-CE-Component-LD-Android-TabNavigation": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-09",
+    "component_name": "Tab Navigation",
+    "class_name": "living.design.themed.TabNavigation",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/tab-navigation/",
+    "description": "Page-level navigation between content sets."
+  },
+  "DS-CE-Component-LD-Android-Tag": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-09",
+    "component_name": "Tag",
+    "class_name": "living.design.themed.Tag",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/tag/",
+    "description": "Non-interactive cues for traits/availability."
+  },
+  "DS-CE-Component-LD-Android-TextArea": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-09",
+    "component_name": "Text Area",
+    "class_name": "living.design.themed.TextArea",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/text-area/",
+    "description": "Multi-line freeform text input."
+  },
+  "DS-CE-Component-LD-Android-TextField": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-09",
+    "component_name": "Text Field",
+    "class_name": "living.design.themed.TextField",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/text-field/",
+    "description": "Single-line text entry and editing."
+  },
+  "DS-CE-Component-LD-iOS-AccessoryToolbar": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "AccessoryToolbar",
+    "class_name": "LDAccessoryToolbar",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/accessory-toolbar/",
+    "description": "Accessory toolbar used over keyboard for switching between textfields with controls like \u276e, \u276f, Done and Cancel. Inherits from `LDRootToolbar`."
+  },
+  "DS-CE-Component-LD-iOS-Alert": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Alert",
+    "class_name": "LDAlert",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/alert/",
+    "description": "Alerts surface information within a flow that is important to the user's journey. They are system-created and non-dismissible. Use an Alert to relay errors, reinforce success, warn about a potential i"
+  },
+  "DS-CE-Component-LD-iOS-Badge": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Badge",
+    "class_name": "LDBadge",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/badge/",
+    "description": "LDBadge highlights an object to visually indicate count or status. Badges are not interactive. Inherits from `LDRootView`."
+  },
+  "DS-CE-Component-LD-iOS-Banner": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Banner",
+    "class_name": "LDBanner",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/banner/",
+    "description": "A Banner displays an important, succinct message to broad user-groups. Banners are system-generated (not user-generated) and require a user action to be dismissed. Inherits from `LDRootView`."
+  },
+  "DS-CE-Component-LD-iOS-BottomSheet": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "BottomSheet",
+    "class_name": "LDBottomSheetNavigationController",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/bottom-sheet/",
+    "description": "A container view controller that adopts the `LDBottomSheetable` protocol and defines a stack-based scheme for navigating hierarchical content. Any view controller wishing to be displayed inside the bo"
+  },
+  "DS-CE-Component-LD-iOS-Button": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Button",
+    "class_name": "LDButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/button/",
+    "description": "The fundamental interactive component, adjusted primarily via `LDButton.Variant`. Inherits from `LDRootButton`."
+  },
+  "DS-CE-Component-LD-iOS-Callout": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Callout",
+    "class_name": "LDCallout",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/callout/",
+    "description": "Use a Callout to display system-generated onboarding or other coaching content targeted at a specific, interactive interface element. Inherits from `LDRootView`."
+  },
+  "DS-CE-Component-LD-iOS-Card": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Card",
+    "class_name": "LDCard",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/card/",
+    "description": "A vertical stack view with a custom shadowed background layer that creates the appearance of a card. Consumers can add custom content or action slots as needed. Inherits from `LDRootView`."
+  },
+  "DS-CE-Component-LD-iOS-Checkbox": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Checkbox",
+    "class_name": "LDCheckbox",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/checkbox/",
+    "description": "Complex icon used for checkbox throughout the app. Implements `LDMediaProtocol`, which is used to display complex icons that use multiple colors."
+  },
+  "DS-CE-Component-LD-iOS-CheckboxButton": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "CheckboxButton",
+    "class_name": "LDCheckboxButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/checkbox-button/",
+    "description": "Checkboxes are selectable options presented in a group or on their own. When in a group, a user may select any number of Checkboxes, including all or none."
+  },
+  "DS-CE-Component-LD-iOS-Chip": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Chip",
+    "class_name": "LDChipButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/chip/",
+    "description": "LD chip button for displaying selections in single row and multiline. Supports leading and trailing icons with borders showing selection."
+  },
+  "DS-CE-Component-LD-iOS-Divider": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Divider",
+    "class_name": "LDDivider",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/divider/",
+    "description": "A divider is a thin line that groups content in lists and layouts."
+  },
+  "DS-CE-Component-LD-iOS-Error": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Error",
+    "class_name": "LDError",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/error/",
+    "description": "Error Messages provide a familiar layout with descriptive content and suggested actions for error scenarios."
+  },
+  "DS-CE-Component-LD-iOS-FormGroup": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "FormGroup",
+    "class_name": "LDFormGroup",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/form-group/",
+    "description": "Offers encapsulation of single select, multi-select, and required form group implementations. Wraps button components (checkboxes, radios) in a group with optional title, helper text, and error text."
+  },
+  "DS-CE-Component-LD-iOS-IconButton": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "IconButton",
+    "class_name": "LDIconButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/icon-button/",
+    "description": "The Icon Button triggers an action or invokes navigation to another screen, similar to Button. It should be used in scenarios where space is limited."
+  },
+  "DS-CE-Component-LD-iOS-Label": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Label",
+    "class_name": "LDLabel",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/label/",
+    "description": "Labels should use standard fonts and colors. This is by far the most used component in the library, designed to be as simple as possible. Refer to `LDTextStyle` for available font types."
+  },
+  "DS-CE-Component-LD-iOS-LinkButton": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "LinkButton",
+    "class_name": "LDLinkButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/link-button/",
+    "description": "Link buttons are used when designs call for a bit of underlined text to trigger an action. Link buttons can also display leading and trailing icons to help convey purpose to the action."
+  },
+  "DS-CE-Component-LD-iOS-List": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "List",
+    "class_name": "LDListItem",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/list/",
+    "description": "Lists are a continuous, vertical group of related information. They are composed of items containing text, icons, spot icons or images, and they should contain at least one action."
+  },
+  "DS-CE-Component-LD-iOS-Metric": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Metric",
+    "class_name": "LDMetric",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/metric/",
+    "description": "Metric emphasizes a single, specific value that informs users of a critical data point. It allows users to identify meaningful changes and act on them. Leverage Metric to show point-in-time data, tren"
+  },
+  "DS-CE-Component-LD-iOS-ProgressIndicator": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "ProgressIndicator",
+    "class_name": "LDProgressIndicator",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/progress-indicator/",
+    "description": "Progress Indicators visually quantify the completion of a process. They can be used for both user and system tasks. When used for user-tasks they show completion of the total task and do not display t"
+  },
+  "DS-CE-Component-LD-iOS-ProgressTracker": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "ProgressTracker",
+    "class_name": "LDProgressTracker",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/progress-tracker/",
+    "description": "Progress Trackers show the steps of a process and highlight the current, completed, and future steps. It can also have a state used to indicate warnings related to the process or completion of the pro"
+  },
+  "DS-CE-Component-LD-iOS-Radio": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Radio",
+    "class_name": "LDRadio",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/radio/",
+    "description": "Complex icon used for radio buttons throughout the app. This class implements a special `LDMediaProtocol` used to display complex icons that use multiple colors."
+  },
+  "DS-CE-Component-LD-iOS-RadioButton": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "RadioButton",
+    "class_name": "LDRadioButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/radio-button/",
+    "description": "`LDRadioButton` is used for providing quick entry from users for boolean selection. Radio Buttons are usually placed in groups of two or more. They can be used in forms on a full page, in modals, or o"
+  },
+  "DS-CE-Component-LD-iOS-Rating": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Rating",
+    "class_name": "LDRating",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/rating/",
+    "description": "Ratings provide insight into how well a product or service has been received by those who have bought or used it previously."
+  },
+  "DS-CE-Component-LD-iOS-RatingStar": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "RatingStar",
+    "class_name": "LDRatingStar",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/ratingstar/",
+    "description": "Complex icon used for rating stars throughout the app. This class implements a special `LDMediaProtocol` used to display complex icons that use multiple colors."
+  },
+  "DS-CE-Component-LD-iOS-Select": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Select",
+    "class_name": "LDSelect",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/select/",
+    "description": "`LDSelect` is a subclass of `LDTextField`. Use when selecting a single option from a list of options. The text label should clearly provide instruction for the field. Add additional copy above the Sel"
+  },
+  "DS-CE-Component-LD-iOS-Skeleton": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Skeleton",
+    "class_name": "LDSkeleton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/skeleton/",
+    "description": "Used to show a highlighted area as an alternative to a loading indicator. It is important to make the skeleton views appear similar to the structure after loading is complete. Use the size and shape v"
+  },
+  "DS-CE-Component-LD-iOS-Snackbar": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Snackbar",
+    "class_name": "LDSnackbar",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/snackbar/",
+    "description": "Snackbars provide brief messages at the bottom of the screen regarding app processes. Snackbars contain brief text directly related to the operation performed. They may contain an action, but no icons"
+  },
+  "DS-CE-Component-LD-iOS-Spinner": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Spinner",
+    "class_name": "LDSpinner",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/spinner/",
+    "description": "Spinners visually indicate that a process is taking place for an indeterminate amount of time."
+  },
+  "DS-CE-Component-LD-iOS-SpotIcon": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "SpotIcon",
+    "class_name": "LDSpotIcon",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/spot-icon/",
+    "description": "Spot Icons are decorative elements that add visual interest to messaging or other screen elements such as list items."
+  },
+  "DS-CE-Component-LD-iOS-Switch": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Switch",
+    "class_name": "LDSwitch",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/switch/",
+    "description": "`LDSwitch` is intended to work well using the `isOn` modifier. To listen for changes to switch values, use the `.valueChanged` target action."
+  },
+  "DS-CE-Component-LD-iOS-SwitchButton": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "SwitchButton",
+    "class_name": "LDSwitchButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/switch-button/",
+    "description": "`LDSwitchButton` allows for a version of the switch with a text label next to it."
+  },
+  "DS-CE-Component-LD-iOS-TabNavigation": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "TabNavigation",
+    "class_name": "LDTabNavigation",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/tab-navigation/",
+    "description": "Use Tab Navigation to allow users to navigate easily between views within the same context. `fullWidth` \u2014 if set to true, each tab will stretch to fill the available width (useful for a small number o"
+  },
+  "DS-CE-Component-LD-iOS-Tag": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "Tag",
+    "class_name": "LDTag",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/tag/",
+    "description": "Tags are used to draw a customer's focus to item traits such as availability, status, or media rating. Items may be products, fulfillment slots, or something else. They are visual only and non-interac"
+  },
+  "DS-CE-Component-LD-iOS-TextArea": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "TextArea",
+    "class_name": "LDTextArea",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/text-area/",
+    "description": "Text areas collect free form input from the user, unconstrained by validation of content type. They are visually taller than other text inputs to indicate that longer entries are possible and encourag"
+  },
+  "DS-CE-Component-LD-iOS-TextField": {
+    "system": "LD-iOS",
+    "platform": "ios",
+    "date_ingested": "2026-04-30",
+    "component_name": "TextField",
+    "class_name": "LDTextField",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/ios/components/text-field/",
+    "description": "Text Fields are found within forms, and can also be part of card, search, or modal. Inputs may include names, descriptions, emails, etc. Text field does not support the use of placeholder text \u2014 use h"
+  },
+  "DS-CE-Component-LD-Android-Alert": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Alert",
+    "class_name": "living.design.themed.Alert",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/alert/",
+    "description": "To create an Alert on Android, use the custom view `living.design.themed.Alert` and specify the message to display and what variant to use."
+  },
+  "DS-CE-Component-LD-Android-Badge": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Badge",
+    "class_name": "living.design.themed.Badge",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/badge/",
+    "description": "To create a Badge on Android, use the custom view `living.design.themed.Badge` and specify the text (if applicable) and color."
+  },
+  "DS-CE-Component-LD-Android-Banner": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Banner",
+    "class_name": "living.design.themed.Banner",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/banner/",
+    "description": "To create a Banner on Android, use the custom view `living.design.themed.Banner` and specify the text to display and what variant to use."
+  },
+  "DS-CE-Component-LD-Android-BottomSheet": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "BottomSheet",
+    "class_name": "living.design.themed.BottomSheet",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/bottom-sheet/",
+    "description": "To create a Bottom Sheet on Android, extend the abstract custom view `living.design.themed.BottomSheet` and supply a `ViewBinding` subclass for your content layout type. The `inflateViewBinding` abstract method needs to be implemented, and it should"
+  },
+  "DS-CE-Component-LD-Android-Button": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Button",
+    "class_name": "living.design.themed.Button",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/button/",
+    "description": "To create a Button on Android, use the custom view `living.design.themed.Button` and specify the text, variant and size. The component is an extension of `MaterialButton`."
+  },
+  "DS-CE-Component-LD-Android-Callout": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Callout",
+    "class_name": "living.design.themed.Callout",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/callout/",
+    "description": "To create a Callout on Android, use the custom view `living.design.themed.Callout` and its `create` method."
+  },
+  "DS-CE-Component-LD-Android-Card": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Card",
+    "class_name": "living.design.themed.Card",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/card/",
+    "description": "To create a Card on Android, use the custom view `living.design.themed.Card` and apply the `?ld.card` style. The component is mostly an extension of `MaterialCardView` with some custom styling."
+  },
+  "DS-CE-Component-LD-Android-Checkbox": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Checkbox",
+    "class_name": "living.design.themed.Checkbox",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/checkbox/",
+    "description": "To create a Checkbox on Android, use the custom view `living.design.themed.Checkbox`. The component is an extension of `AppCompatCheckBox` with custom styling and enhancements to support indeterminate state."
+  },
+  "DS-CE-Component-LD-Android-Chip": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Chip",
+    "class_name": "living.design.themed.Chip",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/chip/",
+    "description": "To create a Chip on Android, use the custom view `living.design.themed.Chip`. The component is mostly an extension of `com.google.android.material.chip.Chip` with some custom styling. If a Chip Group is needed, a `com.google.android.material.chip.Chi"
+  },
+  "DS-CE-Component-LD-Android-ContentMessage": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "ContentMessage",
+    "class_name": "living.design.themed.ContentMessage",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/content-message/",
+    "description": "To create Content Message on Android, use the custom view `living.design.themed.ContentMessage`. To add an action view to Content Message, add it as a child view. The action slot is implemented using a Placeholder and allows any one view (e.g., a but"
+  },
+  "DS-CE-Component-LD-Android-Divider": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Divider",
+    "class_name": "living.design.themed.Divider",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/divider/",
+    "description": "To create a Divider on Android, use the custom view `living.design.themed.Divider` and apply the `?ld.divider` style."
+  },
+  "DS-CE-Component-LD-Android-IconButton": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "IconButton",
+    "class_name": "living.design.themed.IconButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/icon-button/",
+    "description": "To create an Icon Button on Android, use the custom view `living.design.themed.IconButton` and specify the icon and size."
+  },
+  "DS-CE-Component-LD-Android-LinkButton": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "LinkButton",
+    "class_name": "living.design.themed.LinkButton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/link-button/",
+    "description": "To create a Link Button on Android, use the custom view `living.design.themed.LinkButton` and specify the text, color and size. The component is an extension of `MaterialButton`."
+  },
+  "DS-CE-Component-LD-Android-List": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "List",
+    "class_name": "living.design.themed.List",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/list/",
+    "description": "To create a List on Android, use the custom view `living.design.themed.List`, its inner abstract class `living.design.themed.List.Adapter`, and `living.design.themed.list.ListItem`. The component is mostly an extension of `RecyclerView` with a custom"
+  },
+  "DS-CE-Component-LD-Android-MagicBox": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "MagicBox",
+    "class_name": "living.design.themed.MagicBox",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/magic-box/",
+    "description": "The `MagicBox` component highlights content being emphasized or updated by AI. It displays an animated gradient border around a specified view."
+  },
+  "DS-CE-Component-LD-Android-Metric": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Metric",
+    "class_name": "living.design.themed.Metric",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/metric/",
+    "description": "To create a Metric on Android, use the custom view `living.design.themed.Metric`, and specify the variant, title, timescope, value, unit and text label. Aside from variant, all other fields are strings."
+  },
+  "DS-CE-Component-LD-Android-Nudge": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Nudge",
+    "class_name": "living.design.themed.Nudge",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/nudge/",
+    "description": "To create a Nudge on Android, use the custom view `living.design.themed.Nudge` and specify the title, content text, leading slot, and action slot."
+  },
+  "DS-CE-Component-LD-Android-ProgressIndicator": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "ProgressIndicator",
+    "class_name": "living.design.themed.ProgressIndicator",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/progress-indicator/",
+    "description": "To create a Progress Indicator on Android, use the custom view `living.design.themed.ProgressIndicator`. It is added to layouts and then programmatically configured to render a particular state and step as data is updated."
+  },
+  "DS-CE-Component-LD-Android-ProgressTracker": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "ProgressTracker",
+    "class_name": "living.design.themed.ProgressTracker",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/progress-tracker/",
+    "description": "To create a Progress Tracker on Android, use the custom view `living.design.themed.ProgressTracker`. It is added to layouts and then programmatically configured to render a particular state and step as data is updated."
+  },
+  "DS-CE-Component-LD-Android-Radio": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Radio",
+    "class_name": "living.design.themed.Radio",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/radio/",
+    "description": "To create a Radio on Android, use the custom view `living.design.themed.Radio`. The component is mostly an extension of `AppCompatRadioButton` with some custom styling."
+  },
+  "DS-CE-Component-LD-Android-Rating": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Rating",
+    "class_name": "living.design.themed.Rating",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/rating/",
+    "description": "To create a Rating on Android, use the custom view `living.design.themed.Rating`. There are two sizes available."
+  },
+  "DS-CE-Component-LD-Android-Select": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Select",
+    "class_name": "living.design.themed.Select",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/select/",
+    "description": "The `Select` component allows users to choose a single option from a dropdown list. Use the custom view `living.design.themed.Select` and specify the label and style. You can optionally add a leading icon and helper text."
+  },
+  "DS-CE-Component-LD-Android-Skeleton": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Skeleton",
+    "class_name": "living.design.themed.Skeleton",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/skeleton/",
+    "description": "The `Skeleton` component is a placeholder that visually represents the shape of UI elements while content is loading. Add the custom view `living.design.themed.Skeleton` to your layout. You can configure its shape, number of lines, line height, and w"
+  },
+  "DS-CE-Component-LD-Android-Snackbar": {
+    "system": "LD-Android",
+    "platform": "android",
+    "date_ingested": "2026-04-30",
+    "component_name": "Snackbar",
+    "class_name": "living.design.themed.Snackbar",
+    "doc_site_link": "https://digitaltoolkit.livingdesign.walmart.com/develop/android/components/snackbar/",
+    "description": "To create a Snackbar on Android, use `living.design.themed.Snackbar` and its `make` factory methods."
+  }
+}
