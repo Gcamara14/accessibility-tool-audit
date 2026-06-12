@@ -30,28 +30,24 @@ await loadEnvFile();
 const ROOT = process.cwd();
 const DEFAULT_PAGE = path.join(ROOT, "broken-pages-for-testing", "page1.html");
 const RESULTS_DIR = path.join(ROOT, "accessibility-audit-skill", "results");
-const V1_PROMPT_PATH = path.join(
-  ROOT,
-  "accessibility-audit-skill",
-  "sub-skills",
-  "headings",
-  "SKILL_V1.md",
-);
 const LEGACY_PROMPT_PATH = path.join(ROOT, "existing-skills", "01-headings.md");
-const VISUAL_HEADING_PROMPT = `You are an expert accessibility auditor specializing in web heading structure.
+const VISUAL_GAP_PROMPT = `You are an expert accessibility auditor specializing in web heading structure.
 
-Analyze the screenshot only. Identify visible text that functions as a page or section heading.
+Analyze the screenshot and identify visible heading-like text that is MISSING from the DOM heading scan.
 
 Rules:
-- Include the main page title and section headings that organize content below them.
+- The provided DOM heading list is already covered. Do not repeat those headings.
+- Only return visual headings that are not represented by h1-h6 or role="heading".
+- Include fake headings: styled div/span/card titles that visually organize content but are not semantic headings.
 - Exclude buttons, labels, data values, badges, table cell values, chart labels, and decorative text.
 - Return only a JSON array. Do not use markdown fences.
-- Each finding must include: text, level, reason, bbox.
+- Each finding must include: text, level, reason, issue_type, bbox.
 - Use bbox as [x, y, width, height] in screenshot pixel coordinates.
+- Return [] if the DOM heading scan already covers the visual heading structure.
 
 Example:
 [
-  { "text": "Dashboard", "level": "H1", "reason": "Main page title", "bbox": [24, 16, 180, 32] }
+  { "text": "Shipping Summary", "level": "H2", "reason": "Styled card title missing from DOM heading scan", "issue_type": "fake_heading", "bbox": [24, 160, 180, 24] }
 ]`;
 const WALMART_LLM_BASE_URL =
   process.env.WALMART_LLM_BASE_URL || "https://wmtllmgateway.stage.walmart.com/wmtllmgateway";
@@ -139,7 +135,6 @@ async function extractHeadingCandidates(page) {
     return nodes
       .map((node) => {
         const text = (node.textContent || "").trim();
-        if (!text) return null;
         const rect = node.getBoundingClientRect();
         if (!rect.width || !rect.height) return null;
         const style = window.getComputedStyle(node);
@@ -347,9 +342,9 @@ async function runSkillPrompt(prompt, base64Image) {
   return result.result ?? "";
 }
 
-function normalizeV1Finding(row) {
+function normalizeDomFinding(row) {
   return {
-    source: "heading-screenshot-code",
+    source: "dom-heading-scan",
     text: row.heading_text || "",
     level: row.heading_level && row.heading_level !== "null" ? `H${row.heading_level}` : null,
     reason: row.notes || "",
@@ -357,6 +352,7 @@ function normalizeV1Finding(row) {
     status: row.status || "",
     severity: row.severity || "",
     issue_type: row.hierarchy_issue_type || "",
+    bbox: Array.isArray(row.bbox) ? row.bbox : null,
   };
 }
 
@@ -375,61 +371,135 @@ function candidateToCodeRow(candidate, sourceRow) {
   };
 }
 
-function repairCodeRows(rows, candidates) {
-  const usedSelectors = new Set();
-  const repaired = [];
+function candidateToDomRow(candidate, pageId, pagePath) {
+  return {
+    page_id: pageId,
+    page_url_or_fixture: pagePath,
+    skill_name: "dom_heading_scan",
+    element_type: "heading",
+    selector_or_location: candidate.selector,
+    wcag_candidate: "1.3.1",
+    severity: "info",
+    status: "found",
+    notes: "Existing semantic DOM heading found by Playwright scan",
+    heading_text: candidate.text,
+    heading_level: candidate.headingLevel || "",
+    is_hierarchy_valid: "needs_review",
+    hierarchy_issue_type: "none",
+    bbox: candidate.bbox,
+  };
+}
 
-  for (const row of rows) {
-    const selector = row.selector_or_location || "";
-    const rowText = normalizeText(row.heading_text);
-    const isGrouped =
-      /\bmultiple\b/i.test(selector) ||
-      /^various\b/i.test(row.heading_text || "") ||
-      /\bvarious\b/i.test(row.notes || "");
+function levelNumber(row) {
+  const value = String(row.heading_level || "").trim();
+  const parsed = Number.parseInt(value, 10);
+  return Number.isInteger(parsed) ? parsed : null;
+}
 
-    if (isGrouped) {
-      const tagMatch = selector.match(/\b(h[1-6])\b/i);
-      const matchingCandidates = candidates.filter((candidate) => {
-        if (tagMatch && candidate.tag !== tagMatch[1].toLowerCase()) return false;
-        return !usedSelectors.has(candidate.selector);
-      });
+function analyzeHeadingHierarchy(rows) {
+  const analyzed = rows.map((row) => ({ ...row }));
+  const issues = [];
+  const h1Rows = analyzed.filter((row) => levelNumber(row) === 1);
 
-      for (const candidate of matchingCandidates) {
-        usedSelectors.add(candidate.selector);
-        repaired.push(candidateToCodeRow(candidate, row));
-      }
-      continue;
-    }
-
-    const exactCandidate = candidates.find((candidate) => {
-      if (usedSelectors.has(candidate.selector)) return false;
-      if (selector === candidate.selector) return true;
-      return rowText && normalizeText(candidate.text) === rowText;
+  if (h1Rows.length === 0) {
+    issues.push({
+      type: "missing_h1",
+      severity: "high",
+      message: "No H1 heading was found in the DOM heading scan.",
     });
-
-    if (exactCandidate) {
-      usedSelectors.add(exactCandidate.selector);
-      repaired.push(candidateToCodeRow(exactCandidate, row));
-    } else {
-      repaired.push(row);
-    }
   }
 
-  return repaired;
+  if (h1Rows.length > 1) {
+    issues.push({
+      type: "multiple_h1",
+      severity: "medium",
+      message: `${h1Rows.length} H1 headings were found. Confirm this is intentional for the page structure.`,
+    });
+    h1Rows.slice(1).forEach((row) => {
+      row.status = "needs_review";
+      row.severity = "medium";
+      row.notes = "Additional H1 found. Confirm whether multiple H1 headings are intentional.";
+      row.is_hierarchy_valid = "needs_review";
+      row.hierarchy_issue_type = "other";
+    });
+  }
+
+  let previousLevel = null;
+  analyzed.forEach((row) => {
+    const level = levelNumber(row);
+    const text = String(row.heading_text || "").trim();
+
+    if (!text) {
+      row.status = "fail";
+      row.severity = "high";
+      row.notes = "Empty heading found. Headings must contain accessible text.";
+      row.is_hierarchy_valid = "false";
+      row.hierarchy_issue_type = "empty_heading";
+      issues.push({
+        type: "empty_heading",
+        severity: "high",
+        message: `Empty heading found at ${row.selector_or_location}.`,
+      });
+      return;
+    }
+
+    if (!level || level < 1 || level > 6) {
+      row.status = "fail";
+      row.severity = "high";
+      row.notes = "Invalid heading level found. Use h1-h6 or role=heading with aria-level 1-6.";
+      row.is_hierarchy_valid = "false";
+      row.hierarchy_issue_type = "other";
+      issues.push({
+        type: "invalid_level",
+        severity: "high",
+        message: `Invalid heading level for "${text}".`,
+      });
+      return;
+    }
+
+    if (previousLevel !== null && level > previousLevel + 1) {
+      row.status = "fail";
+      row.severity = "high";
+      row.notes = `Skipped heading level: H${previousLevel} is followed by H${level}.`;
+      row.is_hierarchy_valid = "false";
+      row.hierarchy_issue_type = "skipped_level";
+      issues.push({
+        type: "skipped_level",
+        severity: "high",
+        message: `Skipped heading level before "${text}": H${previousLevel} to H${level}.`,
+      });
+    } else if (row.status === "found") {
+      row.status = "pass";
+      row.severity = "info";
+      row.is_hierarchy_valid = "true";
+      row.hierarchy_issue_type = "none";
+    }
+
+    previousLevel = level;
+  });
+
+  return { rows: analyzed, issues };
 }
 
 function normalizeVisualFinding(row) {
   return {
-    source: "heading-screenshot-only",
+    source: "ai-visual-gaps",
     text: row.text || row.heading_text || "",
-    level: row.level || row.heading_level || null,
+    level: row.level || row.level_guess || row.heading_level || null,
     reason: row.reason || row.notes || "",
+    status: row.status || "needs_review",
+    severity: row.severity || "medium",
+    issue_type: row.issue_type || row.hierarchy_issue_type || "fake_heading",
     bbox: Array.isArray(row.bbox) ? row.bbox : null,
   };
 }
 
 function v1Color(row) {
-  return "#dc2626";
+  const status = String(row.status || "").toLowerCase();
+  const issueType = String(row.hierarchy_issue_type || row.issue_type || "").toLowerCase();
+  if (status === "fail" || issueType === "skipped_level" || issueType === "empty_heading") return "#dc2626";
+  if (status === "needs_review" || status === "warn") return "#f59e0b";
+  return "#16a34a";
 }
 
 async function highlightV1(page, rows) {
@@ -457,13 +527,14 @@ async function highlightV1(page, rows) {
 
         target.style.outline = `4px solid ${payload.color}`;
         target.style.outlineOffset = "2px";
-        target.style.boxShadow = `0 0 0 4px rgba(220, 38, 38, 0.18)`;
+        target.style.boxShadow = `0 0 0 4px ${payload.shadow}`;
         target.setAttribute("data-heading-skill", payload.label);
         target.setAttribute("title", payload.label);
       },
       {
         selector,
         color,
+        shadow: color === "#16a34a" ? "rgba(22, 163, 74, 0.18)" : color === "#f59e0b" ? "rgba(245, 158, 11, 0.18)" : "rgba(220, 38, 38, 0.18)",
         text: row.heading_text || "",
         label: `${row.status || "unknown"}:${row.hierarchy_issue_type || "none"}`,
       },
@@ -482,18 +553,28 @@ async function highlightLegacy(page, rows) {
     container.style.pointerEvents = "none";
     container.style.zIndex = "2147483647";
 
+    const colorFor = (row) => {
+      const status = String(row.status || "").toLowerCase();
+      const issue = String(row.issue_type || row.hierarchy_issue_type || "").toLowerCase();
+      if (status === "pass" || status === "found") return "#16a34a";
+      if (status === "warn" || status === "needs_review") return "#f59e0b";
+      if (issue === "fake_heading" || issue === "skipped_level" || status === "fail") return "#dc2626";
+      return "#dc2626";
+    };
+
     inRows.forEach((row) => {
       if (!Array.isArray(row.bbox) || row.bbox.length !== 4) return;
       const [x, y, w, h] = row.bbox;
+      const color = colorFor(row);
       const box = document.createElement("div");
       box.style.position = "absolute";
       box.style.left = `${x}px`;
       box.style.top = `${y}px`;
       box.style.width = `${w}px`;
       box.style.height = `${h}px`;
-      box.style.border = "4px solid #dc2626";
+      box.style.border = `4px solid ${color}`;
       box.style.boxSizing = "border-box";
-      box.style.background = "rgba(220,38,38,0.12)";
+      box.style.background = color === "#16a34a" ? "rgba(22,163,74,0.12)" : color === "#f59e0b" ? "rgba(245,158,11,0.12)" : "rgba(220,38,38,0.12)";
 
       const tag = document.createElement("div");
       tag.textContent = `legacy ${row.level}: ${row.text}`;
@@ -501,7 +582,7 @@ async function highlightLegacy(page, rows) {
       tag.style.left = "0";
       tag.style.top = "-18px";
       tag.style.font = "11px/1.2 sans-serif";
-      tag.style.background = "#dc2626";
+      tag.style.background = color;
       tag.style.color = "white";
       tag.style.padding = "1px 4px";
       tag.style.maxWidth = "340px";
@@ -516,32 +597,39 @@ async function highlightLegacy(page, rows) {
   }, rows);
 }
 
-async function writeReport(outPath, pagePath, visualRows, codeRows, visualRaw, codeRaw) {
+async function writeReport(outPath, pagePath, domRows, gapRows, domRaw, gapRaw, headingIssues = [], gapError = null) {
   const content = [
     "# Heading Skill Comparison Report",
     "",
     `- page: \`${pagePath}\``,
-    `- screenshot-only finding count: ${visualRows.length}`,
-    `- screenshot + code finding count: ${codeRows.length}`,
+    `- DOM heading count: ${domRows.length}`,
+    `- AI visual gap count: ${gapRows.length}`,
+    `- heading hierarchy issue count: ${headingIssues.length}`,
+    gapError ? `- AI visual gap error: ${gapError}` : "- AI visual gap error: none",
     "",
-    "## Screenshot-only parsed rows",
+    "## Heading hierarchy issues",
     "```json",
-    JSON.stringify(visualRows, null, 2),
+    JSON.stringify(headingIssues, null, 2),
     "```",
     "",
-    "## Screenshot + code parsed rows",
+    "## DOM headings found",
     "```json",
-    JSON.stringify(codeRows, null, 2),
+    JSON.stringify(domRows, null, 2),
     "```",
     "",
-    "## Screenshot-only raw model output",
-    "```text",
-    visualRaw,
+    "## AI visual gaps / fake headings",
+    "```json",
+    JSON.stringify(gapRows, null, 2),
     "```",
     "",
-    "## Screenshot + code raw model output",
+    "## DOM scan raw output",
     "```text",
-    codeRaw,
+    domRaw,
+    "```",
+    "",
+    "## AI visual gap raw model output",
+    "```text",
+    gapRaw,
     "```",
     "",
   ].join("\n");
@@ -567,46 +655,78 @@ function renderFindingRows(pageIndex, runIndex, findings) {
   }
 
   return findings
-    .map(
-      (finding) => `<tr>
+    .map((finding, findingIndex) => {
+      const status = String(finding.status || finding.severity || finding.issue_type || "found").toLowerCase();
+      const rowClass = status === "pass" || status === "found" || status === "info"
+        ? "row-pass"
+        : status === "fail" || status === "high" || status === "skipped_level" || status === "empty_heading"
+          ? "row-fail"
+          : "row-review";
+      return `<tr class="${rowClass}">
         <td>${htmlEscape(finding.text)}</td>
         <td>${htmlEscape(finding.level || "n/a")}</td>
-        <td>${htmlEscape(finding.status || finding.severity || finding.issue_type || "found")}</td>
+        <td><span class="status-chip ${rowClass}">${htmlEscape(finding.status || finding.severity || finding.issue_type || "found")}</span></td>
         <td>${htmlEscape(finding.reason)}</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(${pageIndex}, ${runIndex}, ${findings.indexOf(finding)})">Review</button></td>
-      </tr>`,
-    )
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(${pageIndex}, ${runIndex}, ${findingIndex})">Review</button></td>
+      </tr>`;
+    })
     .join("\n");
+}
+
+function renderIssueSummary(issues) {
+  if (!issues?.length) {
+    return '<div class="issue-summary ok"><strong>No heading hierarchy issues detected.</strong></div>';
+  }
+
+  return `<div class="issue-summary alert">
+    <strong>${issues.length} heading issue${issues.length === 1 ? "" : "s"} detected</strong>
+    <ul>
+      ${issues.map((issue) => `<li><span class="severity">${htmlEscape(issue.severity)}</span> ${htmlEscape(issue.message)}</li>`).join("")}
+    </ul>
+  </div>`;
+}
+
+function renderAiError(error) {
+  if (!error) return "";
+  return `<div class="issue-summary alert">
+    <strong>AI visual gap pass did not complete</strong>
+    <p>${htmlEscape(error)}</p>
+  </div>`;
 }
 
 async function writeReviewHtml(outPath, results) {
   const cards = results
     .map((result, pageIndex) => {
-      const visual = result.runs.find((run) => run.skill === "heading-screenshot-only");
-      const code = result.runs.find((run) => run.skill === "heading-screenshot-code");
-      const visualIndex = result.runs.indexOf(visual);
-      const codeIndex = result.runs.indexOf(code);
+      const dom = result.runs.find((run) => run.skill === "dom-heading-scan");
+      const gaps = result.runs.find((run) => run.skill === "ai-visual-gaps");
+      const domIndex = result.runs.indexOf(dom);
+      const gapsIndex = result.runs.indexOf(gaps);
       return `<section class="card">
         <div class="card-header">
           <div>
             <h2>${htmlEscape(result.page_id)}</h2>
             <p>${htmlEscape(result.page_path)}</p>
           </div>
-          <div class="pill">${htmlEscape(result.backend)} · ${htmlEscape(result.model)}</div>
+          <div class="header-pills">
+            <div class="pill">${htmlEscape(result.backend)} · ${htmlEscape(result.model)}</div>
+            <div class="pill ${result.heading_issues?.length ? "danger" : "success"}">${result.heading_issues?.length || 0} hierarchy issues</div>
+          </div>
         </div>
+        ${renderIssueSummary(result.heading_issues || [])}
+        ${renderAiError(result.ai_visual_gap_error)}
         <div class="images">
           <figure><div class="image-scroll"><img src="${htmlEscape(result.original_image)}" alt="Original page screenshot"></div><figcaption>Original</figcaption></figure>
-          <figure><button class="image-open" type="button" onclick="openRunDialog(${pageIndex}, ${visualIndex})"><div class="image-scroll"><img src="${htmlEscape(visual.highlighted_image)}" alt="Screenshot-only highlighted headings"></div></button><figcaption>Screenshot only · ${visual.findings_count} findings</figcaption></figure>
-          <figure><button class="image-open" type="button" onclick="openRunDialog(${pageIndex}, ${codeIndex})"><div class="image-scroll"><img src="${htmlEscape(code.highlighted_image)}" alt="Screenshot plus code highlighted headings"></div></button><figcaption>Screenshot + code · ${code.findings_count} findings</figcaption></figure>
+          <figure><button class="image-open" type="button" onclick="openRunDialog(${pageIndex}, ${domIndex})"><div class="image-scroll"><img src="${htmlEscape(dom.highlighted_image)}" alt="DOM heading scan highlighted headings"></div></button><figcaption>DOM headings found · ${dom.findings_count} findings</figcaption></figure>
+          <figure><button class="image-open" type="button" onclick="openRunDialog(${pageIndex}, ${gapsIndex})"><div class="image-scroll"><img src="${htmlEscape(gaps.highlighted_image)}" alt="AI visual gaps highlighted headings"></div></button><figcaption>AI visual gaps / fake headings · ${gaps.findings_count} findings</figcaption></figure>
         </div>
         <div class="tables">
           <div>
-            <h3>Screenshot-Only Headings</h3>
-            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody>${renderFindingRows(pageIndex, visualIndex, visual.findings)}</tbody></table></div>
+            <h3>DOM Headings Found</h3>
+            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody>${renderFindingRows(pageIndex, domIndex, dom.findings)}</tbody></table></div>
           </div>
           <div>
-            <h3>Screenshot + Code Headings</h3>
-            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody>${renderFindingRows(pageIndex, codeIndex, code.findings)}</tbody></table></div>
+            <h3>AI Visual Gaps / Fake Headings</h3>
+            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody>${renderFindingRows(pageIndex, gapsIndex, gaps.findings)}</tbody></table></div>
           </div>
         </div>
       </section>`;
@@ -631,7 +751,15 @@ async function writeReviewHtml(outPath, results) {
     h3 { font-size: 15px; margin-bottom: 10px; }
     p { margin: 6px 0 0; color: #64748b; font-size: 13px; }
     .card-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; padding: 18px; border-bottom: 1px solid var(--border); }
+    .header-pills { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
     .pill { background: #dbeafe; color: #1d4ed8; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .pill.danger { background: #fee2e2; color: #991b1b; }
+    .pill.success { background: #dcfce7; color: #166534; }
+    .issue-summary { margin: 14px 18px 0; border-radius: 8px; padding: 12px 14px; font-size: 13px; }
+    .issue-summary.ok { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .issue-summary.alert { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .issue-summary ul { margin: 8px 0 0; padding-left: 18px; }
+    .severity { text-transform: uppercase; font-size: 11px; font-weight: 800; margin-right: 4px; }
     .images { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 18px; }
     figure { margin: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #f1f5f9; }
     .image-scroll { height: 420px; overflow: auto; background: white; }
@@ -643,6 +771,13 @@ async function writeReviewHtml(outPath, results) {
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
     th, td { border: 1px solid var(--border); padding: 8px; text-align: left; vertical-align: top; }
     th { background: #f8fafc; color: #475569; position: sticky; top: 0; z-index: 1; }
+    tr.row-pass td { background: #f0fdf4; }
+    tr.row-fail td { background: #fef2f2; border-color: #fecaca; }
+    tr.row-review td { background: #fffbeb; border-color: #fde68a; }
+    .status-chip { display: inline-block; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .status-chip.row-pass { background: #dcfce7; color: #166534; }
+    .status-chip.row-fail { background: #fee2e2; color: #991b1b; }
+    .status-chip.row-review { background: #fef3c7; color: #92400e; }
     .link-btn { border: 1px solid #dc2626; color: #dc2626; background: #fff; border-radius: 6px; padding: 4px 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
     .link-btn:hover { background: #fef2f2; }
     .empty { color: #94a3b8; text-align: center; }
@@ -666,7 +801,7 @@ async function writeReviewHtml(outPath, results) {
 <body>
   <header>
     <h1>Heading Skill Review</h1>
-    <p>Compare screenshot-only heading detection against screenshot + code heading detection.</p>
+    <p>Scan real DOM headings first, then use AI to find visual headings the DOM scan missed.</p>
   </header>
   ${cards}
   <div id="detail-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -732,6 +867,7 @@ async function writeReviewHtml(outPath, results) {
             '<h3>' + escapeHtml(finding.text || '(no text)') + '</h3>' +
             '<p><strong>Level:</strong> ' + escapeHtml(finding.level || 'n/a') + '</p>' +
             '<p><strong>Status:</strong> ' + escapeHtml(findingStatus(finding)) + '</p>' +
+            (finding.issue_type ? '<p><strong>Issue:</strong> ' + escapeHtml(finding.issue_type) + '</p>' : '') +
             (finding.selector ? '<p><strong>Selector:</strong> <code>' + escapeHtml(finding.selector) + '</code></p>' : '') +
             (finding.bbox ? '<p><strong>BBox:</strong> <code>' + escapeHtml(JSON.stringify(finding.bbox)) + '</code></p>' : '') +
             '<p><strong>Reason:</strong> ' + escapeHtml(finding.reason || '') + '</p>' +
@@ -770,8 +906,6 @@ async function evaluatePage(pagePath) {
   const backend = resolveBackend();
   const model = backend === "walmart-llm" ? DEFAULT_WALMART_MODEL : backend;
 
-  const v1PromptTemplate = await loadPromptCore(V1_PROMPT_PATH);
-
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
   await page.goto(pageUri);
@@ -783,64 +917,63 @@ async function evaluatePage(pagePath) {
   const originalImage = `${pageId}_original.png`;
   await fs.writeFile(path.join(RESULTS_DIR, originalImage), screenshotBuffer);
 
-  const [html, headingCandidates] = await Promise.all([extractHtml(page), extractHeadingCandidates(page)]);
-  const codePrompt = v1PromptTemplate
-    .replace("{{PAGE_ID}}", pageId)
-    .replace("{{PAGE_FIXTURE}}", pagePath)
-    .replace("{{HTML_CONTENT}}", html) + [
-      "",
-      "Highlighting contract:",
-      "- Return one table row per concrete heading element. Never group findings.",
-      "- Do not use selectors like `h2 (multiple)`, `h3`, `various`, or `div with font-weight`.",
-      "- For every real heading, use the exact `selector` value from the candidate list below in selector_or_location.",
-      "- If a heading is not in the candidate list, set status to needs_review and do not invent a selector.",
-      "",
-      "Concrete heading candidates JSON:",
-      JSON.stringify(headingCandidates, null, 2),
-    ].join("\n");
+  const headingCandidates = await extractHeadingCandidates(page);
+  const domAnalysis = analyzeHeadingHierarchy(
+    headingCandidates.map((candidate) => candidateToDomRow(candidate, pageId, pagePath)),
+  );
+  const domRows = domAnalysis.rows;
+  const headingIssues = domAnalysis.issues;
+  const domRaw = JSON.stringify(headingCandidates, null, 2);
 
-  const visualPrompt = [
-    VISUAL_HEADING_PROMPT,
+  const gapPrompt = [
+    VISUAL_GAP_PROMPT,
     "",
     `Page: ${pagePath}`,
-    "Use the screenshot as your only source of truth. Do not use or infer from DOM/code.",
+    "DOM headings already found JSON:",
+    JSON.stringify(
+      headingCandidates.map((candidate) => ({
+        text: candidate.text,
+        level: candidate.headingLevel,
+        selector: candidate.selector,
+        bbox: candidate.bbox,
+      })),
+      null,
+      2,
+    ),
   ].join("\n");
 
-  let visualRaw, codeRaw;
+  let gapRaw;
+  let gapError = null;
   if (backend === "mock") {
     console.log("Running in MOCK mode (skipping SDK call)");
-    codeRaw = `| page_id | page_url_or_fixture | skill_name | element_type | selector_or_location | wcag_candidate | severity | status | notes | heading_text | heading_level | is_hierarchy_valid | hierarchy_issue_type |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| PG-001 | mock | headings_inventory | heading | h1 | 1.3.1 | low | pass | Mock valid heading | Mock H1 | 1 | true | none |
-| PG-001 | mock | headings_inventory | heading | .fake-heading | 1.3.1 | high | fail | Mock fake heading | Fake Heading | null | false | fake_heading |`;
-    visualRaw = `[
-      { "text": "Mock H1", "level": "H1", "reason": "Mock valid heading", "bbox": [10, 10, 200, 40] },
-      { "text": "Fake Heading", "level": "H2", "reason": "Mock fake heading", "bbox": [10, 60, 200, 30] }
+    gapRaw = `[
+      { "text": "Fake Heading", "level": "H2", "reason": "Mock styled heading missing from DOM scan", "issue_type": "fake_heading", "bbox": [10, 60, 200, 30] }
     ]`;
   } else if (backend === "results-file") {
     console.log(`Reading AI results from ${process.env.RESULTS_FILE}`);
     const resultsData = JSON.parse(await fs.readFile(process.env.RESULTS_FILE, "utf8"));
-    visualRaw = resultsData.visualRaw || resultsData.legacyRaw;
-    codeRaw = resultsData.codeRaw || resultsData.v1Raw;
+    gapRaw = resultsData.gapRaw || resultsData.visualRaw || resultsData.legacyRaw || "[]";
   } else {
-    [visualRaw, codeRaw] = await Promise.all([
-      runSkillPrompt(visualPrompt, base64Image),
-      runSkillPrompt(codePrompt, base64Image)
-    ]);
+    try {
+      gapRaw = await runSkillPrompt(gapPrompt, base64Image);
+    } catch (error) {
+      gapError = error.message;
+      gapRaw = "[]";
+      console.warn(`AI visual gap pass failed; continuing with DOM heading report. ${error.message}`);
+    }
   }
-  const visualRows = parseFirstJsonArray(visualRaw);
-  const codeRows = repairCodeRows(parseMarkdownTable(codeRaw), headingCandidates);
+  const gapRows = parseFirstJsonArray(gapRaw);
 
-  await highlightLegacy(page, visualRows);
-  const visualHighlightedImage = `${pageId}_screenshot_only_highlighted.png`;
-  await page.screenshot({ path: path.join(RESULTS_DIR, visualHighlightedImage), fullPage: true });
+  await highlightV1(page, domRows);
+  const domHighlightedImage = `${pageId}_dom_headings_highlighted.png`;
+  await page.screenshot({ path: path.join(RESULTS_DIR, domHighlightedImage), fullPage: true });
 
   await page.reload();
-  await highlightV1(page, codeRows);
-  const codeHighlightedImage = `${pageId}_screenshot_code_highlighted.png`;
-  await page.screenshot({ path: path.join(RESULTS_DIR, codeHighlightedImage), fullPage: true });
+  await highlightLegacy(page, gapRows);
+  const gapHighlightedImage = `${pageId}_ai_visual_gaps_highlighted.png`;
+  await page.screenshot({ path: path.join(RESULTS_DIR, gapHighlightedImage), fullPage: true });
 
-  await writeReport(path.join(RESULTS_DIR, `${pageId}_comparison_report.md`), pagePath, visualRows, codeRows, visualRaw, codeRaw);
+  await writeReport(path.join(RESULTS_DIR, `${pageId}_comparison_report.md`), pagePath, domRows, gapRows, domRaw, gapRaw, headingIssues, gapError);
   const result = {
     page_id: pageId,
     page_path: pagePath,
@@ -849,22 +982,24 @@ async function evaluatePage(pagePath) {
     model,
     generated_at: new Date().toISOString(),
     original_image: originalImage,
+    heading_issues: headingIssues,
+    ai_visual_gap_error: gapError,
     runs: [
       {
-        skill: "heading-screenshot-only",
-        label: "Screenshot only",
-        findings_count: visualRows.length,
-        findings: visualRows.map(normalizeVisualFinding),
-        highlighted_image: visualHighlightedImage,
-        raw_response: visualRaw,
+        skill: "dom-heading-scan",
+        label: "DOM headings found",
+        findings_count: domRows.length,
+        findings: domRows.map(normalizeDomFinding),
+        highlighted_image: domHighlightedImage,
+        raw_response: domRaw,
       },
       {
-        skill: "heading-screenshot-code",
-        label: "Screenshot + code",
-        findings_count: codeRows.length,
-        findings: codeRows.map(normalizeV1Finding),
-        highlighted_image: codeHighlightedImage,
-        raw_response: codeRaw,
+        skill: "ai-visual-gaps",
+        label: "AI visual gaps / fake headings",
+        findings_count: gapRows.length,
+        findings: gapRows.map(normalizeVisualFinding),
+        highlighted_image: gapHighlightedImage,
+        raw_response: gapRaw,
       },
     ],
   };

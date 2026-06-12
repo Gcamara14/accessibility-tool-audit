@@ -15,7 +15,15 @@
     h3 { font-size: 15px; margin-bottom: 10px; }
     p { margin: 6px 0 0; color: #64748b; font-size: 13px; }
     .card-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; padding: 18px; border-bottom: 1px solid var(--border); }
+    .header-pills { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
     .pill { background: #dbeafe; color: #1d4ed8; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .pill.danger { background: #fee2e2; color: #991b1b; }
+    .pill.success { background: #dcfce7; color: #166534; }
+    .issue-summary { margin: 14px 18px 0; border-radius: 8px; padding: 12px 14px; font-size: 13px; }
+    .issue-summary.ok { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .issue-summary.alert { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .issue-summary ul { margin: 8px 0 0; padding-left: 18px; }
+    .severity { text-transform: uppercase; font-size: 11px; font-weight: 800; margin-right: 4px; }
     .images { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 18px; }
     figure { margin: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #f1f5f9; }
     .image-scroll { height: 420px; overflow: auto; background: white; }
@@ -27,6 +35,13 @@
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
     th, td { border: 1px solid var(--border); padding: 8px; text-align: left; vertical-align: top; }
     th { background: #f8fafc; color: #475569; position: sticky; top: 0; z-index: 1; }
+    tr.row-pass td { background: #f0fdf4; }
+    tr.row-fail td { background: #fef2f2; border-color: #fecaca; }
+    tr.row-review td { background: #fffbeb; border-color: #fde68a; }
+    .status-chip { display: inline-block; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .status-chip.row-pass { background: #dcfce7; color: #166534; }
+    .status-chip.row-fail { background: #fee2e2; color: #991b1b; }
+    .status-chip.row-review { background: #fef3c7; color: #92400e; }
     .link-btn { border: 1px solid #dc2626; color: #dc2626; background: #fff; border-radius: 6px; padding: 4px 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
     .link-btn:hover { background: #fef2f2; }
     .empty { color: #94a3b8; text-align: center; }
@@ -50,7 +65,7 @@
 <body>
   <header>
     <h1>Heading Skill Review</h1>
-    <p>Compare screenshot-only heading detection against screenshot + code heading detection.</p>
+    <p>Scan real DOM headings first, then use AI to find visual headings the DOM scan missed.</p>
   </header>
   <section class="card">
         <div class="card-header">
@@ -58,146 +73,111 @@
             <h2>page1</h2>
             <p>/Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html</p>
           </div>
-          <div class="pill">walmart-llm · claude-opus-4</div>
+          <div class="header-pills">
+            <div class="pill">walmart-llm · claude-opus-4</div>
+            <div class="pill danger">1 hierarchy issues</div>
+          </div>
         </div>
+        <div class="issue-summary alert">
+    <strong>1 heading issue detected</strong>
+    <ul>
+      <li><span class="severity">high</span> Skipped heading level before &quot;📋 IB Support&quot;: H2 to H4.</li>
+    </ul>
+  </div>
+        <div class="issue-summary alert">
+    <strong>AI visual gap pass did not complete</strong>
+    <p>WalmartLLM request failed (500): {&quot;requestId&quot;:&quot;WMTLLMGATEWAY-STG__9addc482-272d-484b-a13e-fca85c3b3797&quot;,&quot;errorCode&quot;:&quot;0&quot;,&quot;type&quot;:&quot;error&quot;,&quot;error&quot;:{&quot;type&quot;:&quot;api_error&quot;,&quot;message&quot;:&quot;Internal server error&quot;}}</p>
+  </div>
         <div class="images">
           <figure><div class="image-scroll"><img src="page1_original.png" alt="Original page screenshot"></div><figcaption>Original</figcaption></figure>
-          <figure><button class="image-open" type="button" onclick="openRunDialog(0, 0)"><div class="image-scroll"><img src="page1_screenshot_only_highlighted.png" alt="Screenshot-only highlighted headings"></div></button><figcaption>Screenshot only · 7 findings</figcaption></figure>
-          <figure><button class="image-open" type="button" onclick="openRunDialog(0, 1)"><div class="image-scroll"><img src="page1_screenshot_code_highlighted.png" alt="Screenshot plus code highlighted headings"></div></button><figcaption>Screenshot + code · 10 findings</figcaption></figure>
+          <figure><button class="image-open" type="button" onclick="openRunDialog(0, 0)"><div class="image-scroll"><img src="page1_dom_headings_highlighted.png" alt="DOM heading scan highlighted headings"></div></button><figcaption>DOM headings found · 10 findings</figcaption></figure>
+          <figure><button class="image-open" type="button" onclick="openRunDialog(0, 1)"><div class="image-scroll"><img src="page1_ai_visual_gaps_highlighted.png" alt="AI visual gaps highlighted headings"></div></button><figcaption>AI visual gaps / fake headings · 0 findings</figcaption></figure>
         </div>
         <div class="tables">
           <div>
-            <h3>Screenshot-Only Headings</h3>
-            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody><tr>
-        <td>YARD STATUS</td>
-        <td>H2</td>
-        <td>found</td>
-        <td>Section heading for yard status information</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 0)">Review</button></td>
-      </tr>
-<tr>
-        <td>EXIT Backlog</td>
-        <td>H2</td>
-        <td>found</td>
-        <td>Section heading for exit backlog data</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 1)">Review</button></td>
-      </tr>
-<tr>
-        <td>OR FLOW (TODAY - MST)</td>
-        <td>H2</td>
-        <td>found</td>
-        <td>Section heading for OR flow chart and data</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 2)">Review</button></td>
-      </tr>
-<tr>
-        <td>INBOUND EXECUTION</td>
-        <td>H2</td>
-        <td>found</td>
-        <td>Section heading for inbound execution metrics</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 3)">Review</button></td>
-      </tr>
-<tr>
-        <td>OUTBOUND EXECUTION</td>
-        <td>H2</td>
-        <td>found</td>
-        <td>Section heading for outbound execution metrics</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 4)">Review</button></td>
-      </tr>
-<tr>
-        <td>DEPARTMENT PRODUCTION</td>
-        <td>H2</td>
-        <td>found</td>
-        <td>Section heading for department production data</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 5)">Review</button></td>
-      </tr>
-<tr>
-        <td>BUILDING OVERVIEW (DRAX FORMAT)</td>
-        <td>H2</td>
-        <td>found</td>
-        <td>Section heading for building overview table</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 6)">Review</button></td>
-      </tr></tbody></table></div>
-          </div>
-          <div>
-            <h3>Screenshot + Code Headings</h3>
-            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody><tr>
+            <h3>DOM Headings Found</h3>
+            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody><tr class="row-pass">
         <td>PHX1</td>
         <td>H1</td>
-        <td>pass</td>
-        <td>Main heading present</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 0)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 0)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-pass">
         <td>🚛 Yard Status💬</td>
         <td>H2</td>
-        <td>pass</td>
-        <td>Properly nested h2</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 1)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 1)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-pass">
         <td>📊 OB Flow (Today - MST)💬</td>
         <td>H2</td>
-        <td>pass</td>
-        <td>Properly nested h2</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 2)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 2)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-pass">
         <td>Inbound Execution💬</td>
         <td>H2</td>
-        <td>pass</td>
-        <td>Properly nested h2</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 3)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 3)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-pass">
         <td>Outbound Execution💬</td>
         <td>H2</td>
-        <td>pass</td>
-        <td>Properly nested h2</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 4)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 4)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-pass">
         <td>📦 Inbound Volume Mix
             
                 (Receive paths only)
             
         💬</td>
         <td>H3</td>
-        <td>pass</td>
-        <td>Properly nested h3</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 5)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 5)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-pass">
         <td>🚚 Outbound Volume Flow
             
                 (Pick → Pack → Load)
             
         💬</td>
         <td>H3</td>
-        <td>pass</td>
-        <td>Properly nested h3</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 6)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 6)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-pass">
         <td>🏭 Department Production💬</td>
         <td>H2</td>
-        <td>pass</td>
-        <td>Properly nested h2</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 7)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 7)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-fail">
         <td>📋 IB Support</td>
         <td>H4</td>
-        <td>fail</td>
-        <td>Skipped heading level - h4 after h2, missing h3</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 8)">Review</button></td>
+        <td><span class="status-chip row-fail">fail</span></td>
+        <td>Skipped heading level: H2 is followed by H4.</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 8)">Review</button></td>
       </tr>
-<tr>
+<tr class="row-pass">
         <td>Building Overview (DRAX Format) — Day Shift · Jun 10, 2026💬</td>
         <td>H2</td>
-        <td>pass</td>
-        <td>Properly nested h2</td>
-        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 1, 9)">Review</button></td>
+        <td><span class="status-chip row-pass">pass</span></td>
+        <td>Existing semantic DOM heading found by Playwright scan</td>
+        <td><button class="link-btn" type="button" onclick="openFindingDialog(0, 0, 9)">Review</button></td>
       </tr></tbody></table></div>
+          </div>
+          <div>
+            <h3>AI Visual Gaps / Fake Headings</h3>
+            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody><tr><td colspan="5" class="empty">No findings returned.</td></tr></tbody></table></div>
           </div>
         </div>
       </section>
@@ -224,7 +204,7 @@
       </div>
     </div>
   </div>
-  <script id="review-data" type="application/json">[{"page_id":"page1","page_path":"/Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html","category":"headings","backend":"walmart-llm","model":"claude-opus-4","generated_at":"2026-06-12T17:26:08.862Z","original_image":"page1_original.png","runs":[{"skill":"heading-screenshot-only","label":"Screenshot only","findings_count":7,"findings":[{"source":"heading-screenshot-only","text":"YARD STATUS","level":"H2","reason":"Section heading for yard status information","bbox":[29,90,91,101]},{"source":"heading-screenshot-only","text":"EXIT Backlog","level":"H2","reason":"Section heading for exit backlog data","bbox":[137,91,186,100]},{"source":"heading-screenshot-only","text":"OR FLOW (TODAY - MST)","level":"H2","reason":"Section heading for OR flow chart and data","bbox":[290,90,398,101]},{"source":"heading-screenshot-only","text":"INBOUND EXECUTION","level":"H2","reason":"Section heading for inbound execution metrics","bbox":[21,356,126,368]},{"source":"heading-screenshot-only","text":"OUTBOUND EXECUTION","level":"H2","reason":"Section heading for outbound execution metrics","bbox":[347,356,463,368]},{"source":"heading-screenshot-only","text":"DEPARTMENT PRODUCTION","level":"H2","reason":"Section heading for department production data","bbox":[29,802,155,813]},{"source":"heading-screenshot-only","text":"BUILDING OVERVIEW (DRAX FORMAT)","level":"H2","reason":"Section heading for building overview table","bbox":[21,1154,212,1166]}],"highlighted_image":"page1_screenshot_only_highlighted.png","raw_response":"[\n  { \"text\": \"YARD STATUS\", \"level\": \"H2\", \"reason\": \"Section heading for yard status information\", \"bbox\": [29, 90, 91, 101] },\n  { \"text\": \"EXIT Backlog\", \"level\": \"H2\", \"reason\": \"Section heading for exit backlog data\", \"bbox\": [137, 91, 186, 100] },\n  { \"text\": \"OR FLOW (TODAY - MST)\", \"level\": \"H2\", \"reason\": \"Section heading for OR flow chart and data\", \"bbox\": [290, 90, 398, 101] },\n  { \"text\": \"INBOUND EXECUTION\", \"level\": \"H2\", \"reason\": \"Section heading for inbound execution metrics\", \"bbox\": [21, 356, 126, 368] },\n  { \"text\": \"OUTBOUND EXECUTION\", \"level\": \"H2\", \"reason\": \"Section heading for outbound execution metrics\", \"bbox\": [347, 356, 463, 368] },\n  { \"text\": \"DEPARTMENT PRODUCTION\", \"level\": \"H2\", \"reason\": \"Section heading for department production data\", \"bbox\": [29, 802, 155, 813] },\n  { \"text\": \"BUILDING OVERVIEW (DRAX FORMAT)\", \"level\": \"H2\", \"reason\": \"Section heading for building overview table\", \"bbox\": [21, 1154, 212, 1166] }\n]"},{"skill":"heading-screenshot-code","label":"Screenshot + code","findings_count":10,"findings":[{"source":"heading-screenshot-code","text":"PHX1","level":"H1","reason":"Main heading present","selector":"body > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > h1","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"🚛 Yard Status💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(1) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"📊 OB Flow (Today - MST)💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"Inbound Execution💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"Outbound Execution💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(2) > div:nth-of-type(2) > div > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"📦 Inbound Volume Mix\n            \n                (Receive paths only)\n            \n        💬","level":"H3","reason":"Properly nested h3","selector":"body > main > div:nth-of-type(3) > div > div:nth-of-type(1) > h3","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"🚚 Outbound Volume Flow\n            \n                (Pick → Pack → Load)\n            \n        💬","level":"H3","reason":"Properly nested h3","selector":"body > main > div:nth-of-type(3) > div > div:nth-of-type(2) > h3","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"🏭 Department Production💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(4) > div > div:nth-of-type(1) > h2","status":"pass","severity":"low","issue_type":"none"},{"source":"heading-screenshot-code","text":"📋 IB Support","level":"H4","reason":"Skipped heading level - h4 after h2, missing h3","selector":"body > main > div:nth-of-type(4) > div > div:nth-of-type(2) > div:nth-of-type(2) > h4","status":"fail","severity":"medium","issue_type":"skipped_level"},{"source":"heading-screenshot-code","text":"Building Overview (DRAX Format) — Day Shift · Jun 10, 2026💬","level":"H2","reason":"Properly nested h2","selector":"body > main > div:nth-of-type(5) > div > h2","status":"pass","severity":"low","issue_type":"none"}],"highlighted_image":"page1_screenshot_code_highlighted.png","raw_response":"| page_id | page_url_or_fixture | skill_name | element_type | selector | wcag_candidate | severity | status | notes | heading_text | heading_level | is_hierarchy_valid | hierarchy_issue_type |\n|---------|-------------------|------------|--------------|----------|----------------|----------|---------|--------|--------------|---------------|-------------------|---------------------|\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > h1 | 1.3.1 | low | pass | Main heading present | PHX1 | 1 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(1) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | 🚛 Yard Status💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | 📊 OB Flow (Today - MST)💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | Inbound Execution💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(2) > div:nth-of-type(2) > div > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | Outbound Execution💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(3) > div > div:nth-of-type(1) > h3 | 1.3.1 | low | pass | Properly nested h3 | 📦 Inbound Volume Mix (Receive paths only) 💬 | 3 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(3) > div > div:nth-of-type(2) > h3 | 1.3.1 | low | pass | Properly nested h3 | 🚚 Outbound Volume Flow (Pick → Pack → Load) 💬 | 3 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(4) > div > div:nth-of-type(1) > h2 | 1.3.1 | low | pass | Properly nested h2 | 🏭 Department Production💬 | 2 | true | none |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(4) > div > div:nth-of-type(2) > div:nth-of-type(2) > h4 | 1.3.1 | medium | fail | Skipped heading level - h4 after h2, missing h3 | 📋 IB Support | 4 | false | skipped_level |\n| page1 | /Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html | headings_inventory | heading | body > main > div:nth-of-type(5) > div > h2 | 1.3.1 | low | pass | Properly nested h2 | Building Overview (DRAX Format) — Day Shift · Jun 10, 2026💬 | 2 | true | none |"}]}]</script>
+  <script id="review-data" type="application/json">[{"page_id":"page1","page_path":"/Users/g0c073y/Documents/GitHub/accessibility-tool-audit/broken-pages-for-testing/page1.html","category":"headings","backend":"walmart-llm","model":"claude-opus-4","generated_at":"2026-06-12T17:48:02.987Z","original_image":"page1_original.png","heading_issues":[{"type":"skipped_level","severity":"high","message":"Skipped heading level before \"📋 IB Support\": H2 to H4."}],"ai_visual_gap_error":"WalmartLLM request failed (500): {\"requestId\":\"WMTLLMGATEWAY-STG__9addc482-272d-484b-a13e-fca85c3b3797\",\"errorCode\":\"0\",\"type\":\"error\",\"error\":{\"type\":\"api_error\",\"message\":\"Internal server error\"}}","runs":[{"skill":"dom-heading-scan","label":"DOM headings found","findings_count":10,"findings":[{"source":"dom-heading-scan","text":"PHX1","level":"H1","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > h1","status":"pass","severity":"info","issue_type":"none","bbox":[135.4375,58.5,70.21875,31]},{"source":"dom-heading-scan","text":"🚛 Yard Status💬","level":"H2","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > main > div:nth-of-type(1) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2","status":"pass","severity":"info","issue_type":"none","bbox":[32,172,150,46]},{"source":"dom-heading-scan","text":"📊 OB Flow (Today - MST)💬","level":"H2","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > main > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2","status":"pass","severity":"info","issue_type":"none","bbox":[536,173,275.015625,26]},{"source":"dom-heading-scan","text":"Inbound Execution💬","level":"H2","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > main > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2","status":"pass","severity":"info","issue_type":"none","bbox":[40,692,244.109375,23.171875]},{"source":"dom-heading-scan","text":"Outbound Execution💬","level":"H2","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > main > div:nth-of-type(2) > div:nth-of-type(2) > div > div:nth-of-type(1) > h2","status":"pass","severity":"info","issue_type":"none","bbox":[674,692,259.859375,23.171875]},{"source":"dom-heading-scan","text":"📦 Inbound Volume Mix\n            \n                (Receive paths only)\n            \n        💬","level":"H3","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > main > div:nth-of-type(3) > div > div:nth-of-type(1) > h3","status":"pass","severity":"info","issue_type":"none","bbox":[32,1291.59375,590,25]},{"source":"dom-heading-scan","text":"🚚 Outbound Volume Flow\n            \n                (Pick → Pack → Load)\n            \n        💬","level":"H3","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > main > div:nth-of-type(3) > div > div:nth-of-type(2) > h3","status":"pass","severity":"info","issue_type":"none","bbox":[662,1291.59375,590,25]},{"source":"dom-heading-scan","text":"🏭 Department Production💬","level":"H2","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > main > div:nth-of-type(4) > div > div:nth-of-type(1) > h2","status":"pass","severity":"info","issue_type":"none","bbox":[40,1522.59375,325.40625,28]},{"source":"dom-heading-scan","text":"📋 IB Support","level":"H4","reason":"Skipped heading level: H2 is followed by H4.","selector":"body > main > div:nth-of-type(4) > div > div:nth-of-type(2) > div:nth-of-type(2) > h4","status":"fail","severity":"high","issue_type":"skipped_level","bbox":[51,2027.59375,1182,21]},{"source":"dom-heading-scan","text":"Building Overview (DRAX Format) — Day Shift · Jun 10, 2026💬","level":"H2","reason":"Existing semantic DOM heading found by Playwright scan","selector":"body > main > div:nth-of-type(5) > div > h2","status":"pass","severity":"info","issue_type":"none","bbox":[40,2618.59375,1204,23.171875]}],"highlighted_image":"page1_dom_headings_highlighted.png","raw_response":"[\n  {\n    \"text\": \"PHX1\",\n    \"tag\": \"h1\",\n    \"role\": \"\",\n    \"selector\": \"body > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > h1\",\n    \"headingLevel\": \"1\",\n    \"fontSizePx\": 25.6,\n    \"fontWeight\": \"700\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      135.4375,\n      58.5,\n      70.21875,\n      31\n    ]\n  },\n  {\n    \"text\": \"🚛 Yard Status💬\",\n    \"tag\": \"h2\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(1) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2\",\n    \"headingLevel\": \"2\",\n    \"fontSizePx\": 16,\n    \"fontWeight\": \"600\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      32,\n      172,\n      150,\n      46\n    ]\n  },\n  {\n    \"text\": \"📊 OB Flow (Today - MST)💬\",\n    \"tag\": \"h2\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2\",\n    \"headingLevel\": \"2\",\n    \"fontSizePx\": 16,\n    \"fontWeight\": \"600\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      536,\n      173,\n      275.015625,\n      26\n    ]\n  },\n  {\n    \"text\": \"Inbound Execution💬\",\n    \"tag\": \"h2\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(2) > div:nth-of-type(1) > div > div:nth-of-type(1) > h2\",\n    \"headingLevel\": \"2\",\n    \"fontSizePx\": 17.6,\n    \"fontWeight\": \"600\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      40,\n      692,\n      244.109375,\n      23.171875\n    ]\n  },\n  {\n    \"text\": \"Outbound Execution💬\",\n    \"tag\": \"h2\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(2) > div:nth-of-type(2) > div > div:nth-of-type(1) > h2\",\n    \"headingLevel\": \"2\",\n    \"fontSizePx\": 17.6,\n    \"fontWeight\": \"600\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      674,\n      692,\n      259.859375,\n      23.171875\n    ]\n  },\n  {\n    \"text\": \"📦 Inbound Volume Mix\\n            \\n                (Receive paths only)\\n            \\n        💬\",\n    \"tag\": \"h3\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(3) > div > div:nth-of-type(1) > h3\",\n    \"headingLevel\": \"3\",\n    \"fontSizePx\": 15.2,\n    \"fontWeight\": \"700\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      32,\n      1291.59375,\n      590,\n      25\n    ]\n  },\n  {\n    \"text\": \"🚚 Outbound Volume Flow\\n            \\n                (Pick → Pack → Load)\\n            \\n        💬\",\n    \"tag\": \"h3\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(3) > div > div:nth-of-type(2) > h3\",\n    \"headingLevel\": \"3\",\n    \"fontSizePx\": 15.2,\n    \"fontWeight\": \"700\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      662,\n      1291.59375,\n      590,\n      25\n    ]\n  },\n  {\n    \"text\": \"🏭 Department Production💬\",\n    \"tag\": \"h2\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(4) > div > div:nth-of-type(1) > h2\",\n    \"headingLevel\": \"2\",\n    \"fontSizePx\": 17.6,\n    \"fontWeight\": \"600\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      40,\n      1522.59375,\n      325.40625,\n      28\n    ]\n  },\n  {\n    \"text\": \"📋 IB Support\",\n    \"tag\": \"h4\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(4) > div > div:nth-of-type(2) > div:nth-of-type(2) > h4\",\n    \"headingLevel\": \"4\",\n    \"fontSizePx\": 12.8,\n    \"fontWeight\": \"700\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      51,\n      2027.59375,\n      1182,\n      21\n    ]\n  },\n  {\n    \"text\": \"Building Overview (DRAX Format) — Day Shift · Jun 10, 2026💬\",\n    \"tag\": \"h2\",\n    \"role\": \"\",\n    \"selector\": \"body > main > div:nth-of-type(5) > div > h2\",\n    \"headingLevel\": \"2\",\n    \"fontSizePx\": 17.6,\n    \"fontWeight\": \"600\",\n    \"fontFamily\": \"\\\"Segoe UI\\\", Tahoma, Geneva, Verdana, sans-serif\",\n    \"bbox\": [\n      40,\n      2618.59375,\n      1204,\n      23.171875\n    ]\n  }\n]"},{"skill":"ai-visual-gaps","label":"AI visual gaps / fake headings","findings_count":0,"findings":[],"highlighted_image":"page1_ai_visual_gaps_highlighted.png","raw_response":"[]"}]}]</script>
   <script>
     const REVIEW_DATA = JSON.parse(document.getElementById('review-data').textContent);
     const modal = document.getElementById('detail-modal');
@@ -264,6 +244,7 @@
             '<h3>' + escapeHtml(finding.text || '(no text)') + '</h3>' +
             '<p><strong>Level:</strong> ' + escapeHtml(finding.level || 'n/a') + '</p>' +
             '<p><strong>Status:</strong> ' + escapeHtml(findingStatus(finding)) + '</p>' +
+            (finding.issue_type ? '<p><strong>Issue:</strong> ' + escapeHtml(finding.issue_type) + '</p>' : '') +
             (finding.selector ? '<p><strong>Selector:</strong> <code>' + escapeHtml(finding.selector) + '</code></p>' : '') +
             (finding.bbox ? '<p><strong>BBox:</strong> <code>' + escapeHtml(JSON.stringify(finding.bbox)) + '</code></p>' : '') +
             '<p><strong>Reason:</strong> ' + escapeHtml(finding.reason || '') + '</p>' +
