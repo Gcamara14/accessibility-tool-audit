@@ -24,6 +24,16 @@ This repository is the central workspace for developing, testing, and benchmarki
 
 This section tracks our progress. Update this list as we complete tasks or define new ones.
 
+## Gio's Official Accessibility Rules V1
+
+Core workspace for the rule system, component audits, remediation tracking, and presentation assets:
+
+- Rules index: `accessibility-audit-skill/rules/v1/README.md`
+- Rule template: `accessibility-audit-skill/rules/v1/_template/RULE_TEMPLATE.md`
+- Audit rollup: `accessibility-audit-skill/audits/v1/audit-results.md`
+- Remediation tracker: `accessibility-audit-skill/audits/v1/remediation-plan.md`
+- Presentation prep: `accessibility-audit-skill/audits/v1/presentation-pack.md`
+
 ### Phase 1: Foundation & MVP (Completed)
 - [x] Consolidate repository structure and create `AGENT_INDEX.md`.
 - [x] Draft initial MVP prompt variants (Baseline, Template-Aware, Pre-Generation).
