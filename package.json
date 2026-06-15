@@ -8,7 +8,11 @@
     "evaluate:headings": "node scripts/evaluate-headings.mjs",
     "evaluate:headings:all": "node scripts/evaluate-headings.mjs --all",
     "evaluate:headings:mock": "USE_MOCK_AI=true node scripts/evaluate-headings.mjs",
-    "evaluate:headings:walmart": "AI_BACKEND=walmart-llm node scripts/evaluate-headings.mjs"
+    "evaluate:headings:walmart": "AI_BACKEND=walmart-llm node scripts/evaluate-headings.mjs",
+    "evaluate:images": "node scripts/evaluate-images.mjs",
+    "evaluate:images:all": "node scripts/evaluate-images.mjs --all",
+    "evaluate:images:mock": "USE_MOCK_AI=true node scripts/evaluate-images.mjs",
+    "evaluate:images:walmart": "AI_BACKEND=walmart-llm node scripts/evaluate-images.mjs"
   },
   "repository": {
     "type": "git",

@@ -29,7 +29,8 @@ await loadEnvFile();
 
 const ROOT = process.cwd();
 const DEFAULT_PAGE = path.join(ROOT, "broken-pages-for-testing", "page1.html");
-const RESULTS_DIR = path.join(ROOT, "accessibility-audit-skill", "results");
+const RUN_ID = process.env.SCANNER_RUN_ID || new Date().toISOString().replace(/[:.]/g, "-");
+const RESULTS_DIR = path.join(ROOT, "accessibility-audit-skill", "scanner-runs", "headings", RUN_ID);
 const LEGACY_PROMPT_PATH = path.join(ROOT, "existing-skills", "01-headings.md");
 const VISUAL_GAP_PROMPT = `You are an expert accessibility auditor specializing in web heading structure.
 
@@ -41,17 +42,19 @@ Rules:
 - Include fake headings: styled div/span/card titles that visually organize content but are not semantic headings.
 - Exclude buttons, labels, data values, badges, table cell values, chart labels, and decorative text.
 - Return only a JSON array. Do not use markdown fences.
-- Each finding must include: text, level, reason, issue_type, bbox.
+- Each finding must include: text, level, reason, issue_type, bbox, confidence_score, confidence_reason.
 - Use bbox as [x, y, width, height] in screenshot pixel coordinates.
+- Use confidence_score as an integer from 0-100 describing how confident you are that this is visually acting as a heading but is missing from the DOM heading scan.
+- Use confidence_reason to briefly explain the visual evidence behind that score.
 - Return [] if the DOM heading scan already covers the visual heading structure.
 
 Example:
 [
-  { "text": "Shipping Summary", "level": "H2", "reason": "Styled card title missing from DOM heading scan", "issue_type": "fake_heading", "bbox": [24, 160, 180, 24] }
+  { "text": "Shipping Summary", "level": "H2", "reason": "Styled card title missing from DOM heading scan", "issue_type": "fake_heading", "bbox": [24, 160, 180, 24], "confidence_score": 86, "confidence_reason": "Large bold text at the top of a card visually labels the section." }
 ]`;
 const WALMART_LLM_BASE_URL =
   process.env.WALMART_LLM_BASE_URL || "https://wmtllmgateway.stage.walmart.com/wmtllmgateway";
-const DEFAULT_WALMART_MODEL = process.env.WALMART_LLM_MODEL || "claude-opus-4";
+const DEFAULT_WALMART_MODEL = process.env.WALMART_LLM_MODEL || "claude-sonnet-4-6";
 
 function resolveBackend() {
   if (process.env.USE_MOCK_AI === "true") return "mock";
@@ -154,6 +157,163 @@ async function extractHeadingCandidates(page) {
   });
 }
 
+async function reconcileVisualFindingsWithDom(page, rows) {
+  return page.evaluate((inRows) => {
+    const cssEscape = window.CSS?.escape || ((value) => String(value).replace(/["\\#.:,[\]>+~*'=]/g, "\\$&"));
+    const normalize = (value) => String(value || "").replace(/\s+/g, " ").trim().toLowerCase();
+    const selectorFor = (node) => {
+      if (node.id) return `#${cssEscape(node.id)}`;
+      const parts = [];
+      let current = node;
+      while (current && current.nodeType === Node.ELEMENT_NODE && current !== document.body) {
+        const tag = current.tagName.toLowerCase();
+        const siblings = Array.from(current.parentElement?.children || []).filter(
+          (child) => child.tagName === current.tagName,
+        );
+        const index = siblings.indexOf(current) + 1;
+        parts.unshift(siblings.length > 1 ? `${tag}:nth-of-type(${index})` : tag);
+        current = current.parentElement;
+      }
+      return `body > ${parts.join(" > ")}`;
+    };
+    const directText = (node) =>
+      Array.from(node.childNodes)
+        .filter((child) => child.nodeType === Node.TEXT_NODE)
+        .map((child) => child.textContent || "")
+        .join(" ")
+        .replace(/\s+/g, " ")
+        .trim();
+    const elementText = (node) =>
+      (node.getAttribute("aria-label") || directText(node) || node.textContent || "").replace(/\s+/g, " ").trim();
+    const textNodeMatches = (target, centerX, centerY) => {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          return normalize(node.textContent) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        },
+      });
+      const matches = [];
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        Array.from(range.getClientRects()).forEach((rect) => {
+          if (!rect.width || !rect.height) return;
+          const abs = {
+            x: rect.x + window.scrollX,
+            y: rect.y + window.scrollY,
+            width: rect.width,
+            height: rect.height,
+          };
+          const containsCenter =
+            centerX >= abs.x &&
+            centerX <= abs.x + abs.width &&
+            centerY >= abs.y &&
+            centerY <= abs.y + abs.height;
+          const overlap = overlapArea(target, abs);
+          if (!containsCenter && overlap === 0) return;
+          matches.push({
+            node: node.parentElement,
+            rect: abs,
+            text: (node.textContent || "").replace(/\s+/g, " ").trim(),
+            overlap,
+            containsCenter,
+            area: abs.width * abs.height,
+          });
+        });
+        range.detach();
+      }
+      return matches.sort((a, b) => {
+        if (a.containsCenter !== b.containsCenter) return a.containsCenter ? -1 : 1;
+        if (b.overlap !== a.overlap) return b.overlap - a.overlap;
+        return a.area - b.area;
+      });
+    };
+    const overlapArea = (a, b) => {
+      const left = Math.max(a.x, b.x);
+      const top = Math.max(a.y, b.y);
+      const right = Math.min(a.x + a.width, b.x + b.width);
+      const bottom = Math.min(a.y + a.height, b.y + b.height);
+      return Math.max(0, right - left) * Math.max(0, bottom - top);
+    };
+    const textMatches = (aiText, domText) => {
+      const ai = normalize(aiText);
+      const dom = normalize(domText);
+      if (!ai || !dom) return false;
+      return ai === dom || ai.includes(dom) || dom.includes(ai);
+    };
+
+    const elements = Array.from(document.body.querySelectorAll("*")).filter((node) => {
+      if (["SCRIPT", "STYLE", "NOSCRIPT", "TEMPLATE"].includes(node.tagName)) return false;
+      const text = elementText(node);
+      if (!text) return false;
+      const rect = node.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+
+    return inRows.map((row) => {
+      if (!Array.isArray(row.bbox) || row.bbox.length !== 4) {
+        return { ...row, dom_reconciliation_status: "no_bbox" };
+      }
+
+      const [x, y, width, height] = row.bbox;
+      const target = { x, y, width, height };
+      const centerX = x + width / 2;
+      const centerY = y + height / 2;
+      const textMatchesForBbox = textNodeMatches(target, centerX, centerY);
+      const candidates = textMatchesForBbox.length ? textMatchesForBbox : elements
+        .map((node) => {
+          const rect = node.getBoundingClientRect();
+          const abs = {
+            x: rect.x + window.scrollX,
+            y: rect.y + window.scrollY,
+            width: rect.width,
+            height: rect.height,
+          };
+          const containsCenter =
+            centerX >= abs.x &&
+            centerX <= abs.x + abs.width &&
+            centerY >= abs.y &&
+            centerY <= abs.y + abs.height;
+          const overlap = overlapArea(target, abs);
+          if (!containsCenter && overlap === 0) return null;
+          return {
+            node,
+            rect: abs,
+            text: elementText(node),
+            overlap,
+            containsCenter,
+            area: abs.width * abs.height,
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => {
+          if (a.containsCenter !== b.containsCenter) return a.containsCenter ? -1 : 1;
+          if (b.overlap !== a.overlap) return b.overlap - a.overlap;
+          return a.area - b.area;
+        });
+
+      const match = candidates[0];
+      if (!match) return { ...row, dom_reconciliation_status: "no_dom_match" };
+
+      const tag = match.node.tagName.toLowerCase();
+      const role = match.node.getAttribute("role") || "";
+      const headingLevel = match.node.getAttribute("aria-level") || (/^h[1-6]$/i.test(tag) ? tag.slice(1) : "");
+      const domTextMatchesAiText = textMatches(row.text || row.heading_text, match.text);
+      return {
+        ...row,
+        dom_reconciliation_status: domTextMatchesAiText ? "matched_text" : "nearby_dom_text_mismatch",
+        dom_nearest_text: match.text,
+        dom_nearest_selector: selectorFor(match.node),
+        dom_nearest_tag: tag,
+        dom_nearest_role: role,
+        dom_nearest_heading_level: headingLevel,
+        dom_nearest_bbox: [match.rect.x, match.rect.y, match.rect.width, match.rect.height],
+        dom_text_matches_ai_text: domTextMatchesAiText,
+      };
+    });
+  }, rows);
+}
+
 function parseMarkdownTable(text) {
   const lines = text
     .split("\n")
@@ -216,6 +376,7 @@ function buildWalmartPayload(provider, model, prompt, base64Image) {
   if (provider === "claude") {
     return {
       model,
+      system: "You are an expert accessibility auditor. Return only valid JSON or the exact structured output requested.",
       messages: [
         {
           role: "user",
@@ -231,7 +392,7 @@ function buildWalmartPayload(provider, model, prompt, base64Image) {
         },
       ],
       temperature: 0.1,
-      max_tokens: 4096,
+      max_tokens: 8192,
     };
   }
 
@@ -343,6 +504,7 @@ async function runSkillPrompt(prompt, base64Image) {
 }
 
 function normalizeDomFinding(row) {
+  const confidence = confidenceForDomFinding(row);
   return {
     source: "dom-heading-scan",
     text: row.heading_text || "",
@@ -353,11 +515,104 @@ function normalizeDomFinding(row) {
     severity: row.severity || "",
     issue_type: row.hierarchy_issue_type || "",
     bbox: Array.isArray(row.bbox) ? row.bbox : null,
+    confidence_score: confidence.score,
+    confidence_label: confidence.label,
+    evidence_type: confidence.evidenceType,
+    confidence_reason: confidence.reason,
   };
 }
 
 function normalizeText(value) {
   return String(value || "").replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+function confidenceLabel(score) {
+  if (score >= 90) return "High";
+  if (score >= 70) return "Medium";
+  return "Low";
+}
+
+function parseConfidenceScore(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const parsed = Number.parseInt(String(value).replace("%", ""), 10);
+  if (!Number.isFinite(parsed)) return null;
+  return Math.max(0, Math.min(100, parsed));
+}
+
+function confidenceForDomFinding(row) {
+  const status = String(row.status || "").toLowerCase();
+  const issueType = String(row.hierarchy_issue_type || "").toLowerCase();
+  let score = 98;
+  let reason = "Semantic DOM heading found by deterministic Playwright scan.";
+
+  if (status === "fail" || issueType === "skipped_level" || issueType === "empty_heading") {
+    score = 96;
+    reason = "Deterministic DOM heading rule detected a structural heading issue.";
+  } else if (status === "needs_review") {
+    score = 88;
+    reason = "Semantic DOM heading found, but hierarchy pattern needs human review.";
+  }
+
+  return {
+    score,
+    label: confidenceLabel(score),
+    evidenceType: status === "fail" ? "DOM rule" : "DOM",
+    reason,
+  };
+}
+
+function confidenceForVisualFinding(row) {
+  const modelScore = parseConfidenceScore(row.confidence_score ?? row.confidence ?? row.probability);
+  const hasBbox = Array.isArray(row.bbox) && row.bbox.length === 4;
+  const hasText = Boolean(String(row.text || row.heading_text || "").trim());
+  let score = modelScore;
+
+  if (score === null) {
+    if (hasBbox && hasText) score = 82;
+    else if (hasText) score = 68;
+    else score = 45;
+  }
+
+  const confidence = {
+    score,
+    label: confidenceLabel(score),
+    evidenceType: "AI visual inference",
+    reason: row.confidence_reason || (modelScore === null
+      ? "Fallback score based on whether the visual finding included text and a screenshot bounding box."
+      : "Model-provided confidence score for the visual heading inference."),
+  };
+
+  if (row.dom_reconciliation_status === "nearby_dom_text_mismatch") {
+    const adjustedScore = Math.min(confidence.score, 55);
+    return {
+      score: adjustedScore,
+      label: confidenceLabel(adjustedScore),
+      evidenceType: "AI visual + DOM mismatch",
+      reason: `AI visual text does not match the nearest DOM text. Nearest DOM text: "${row.dom_nearest_text || "none"}".`,
+    };
+  }
+
+  if (row.dom_reconciliation_status === "matched_text") {
+    const adjustedScore = Math.max(confidence.score, 78);
+    return {
+      score: adjustedScore,
+      label: confidenceLabel(adjustedScore),
+      evidenceType: "AI visual + DOM",
+      reason: row.confidence_reason || "AI visual finding reconciled to nearby DOM text.",
+    };
+  }
+
+  if (row.dom_reconciliation_status === "no_dom_match") {
+    const adjustedScore = Math.min(confidence.score, 60);
+    return {
+      score: adjustedScore,
+      label: confidenceLabel(adjustedScore),
+      evidenceType: "AI visual only",
+      reason: "AI visual finding could not be reconciled to a nearby DOM element.",
+    };
+  }
+
+  return confidence;
 }
 
 function candidateToCodeRow(candidate, sourceRow) {
@@ -482,6 +737,7 @@ function analyzeHeadingHierarchy(rows) {
 }
 
 function normalizeVisualFinding(row) {
+  const confidence = confidenceForVisualFinding(row);
   return {
     source: "ai-visual-gaps",
     text: row.text || row.heading_text || "",
@@ -491,6 +747,18 @@ function normalizeVisualFinding(row) {
     severity: row.severity || "medium",
     issue_type: row.issue_type || row.hierarchy_issue_type || "fake_heading",
     bbox: Array.isArray(row.bbox) ? row.bbox : null,
+    dom_reconciliation_status: row.dom_reconciliation_status || "",
+    dom_nearest_text: row.dom_nearest_text || "",
+    dom_nearest_selector: row.dom_nearest_selector || "",
+    dom_nearest_tag: row.dom_nearest_tag || "",
+    dom_nearest_role: row.dom_nearest_role || "",
+    dom_nearest_heading_level: row.dom_nearest_heading_level || "",
+    dom_nearest_bbox: Array.isArray(row.dom_nearest_bbox) ? row.dom_nearest_bbox : null,
+    dom_text_matches_ai_text: Boolean(row.dom_text_matches_ai_text),
+    confidence_score: confidence.score,
+    confidence_label: confidence.label,
+    evidence_type: confidence.evidenceType,
+    confidence_reason: confidence.reason,
   };
 }
 
@@ -651,7 +919,7 @@ function htmlEscape(value) {
 
 function renderFindingRows(pageIndex, runIndex, findings) {
   if (!findings.length) {
-    return '<tr><td colspan="5" class="empty">No findings returned.</td></tr>';
+    return '<tr><td colspan="8" class="empty">No findings returned.</td></tr>';
   }
 
   return findings
@@ -666,6 +934,9 @@ function renderFindingRows(pageIndex, runIndex, findings) {
         <td>${htmlEscape(finding.text)}</td>
         <td>${htmlEscape(finding.level || "n/a")}</td>
         <td><span class="status-chip ${rowClass}">${htmlEscape(finding.status || finding.severity || finding.issue_type || "found")}</span></td>
+        <td><span class="confidence-chip ${rowClass}">${htmlEscape(finding.confidence_score ?? "n/a")}${finding.confidence_score !== undefined ? "%" : ""}</span><div class="confidence-label">${htmlEscape(finding.confidence_label || "")}</div></td>
+        <td>${htmlEscape(finding.evidence_type || "n/a")}</td>
+        <td>${htmlEscape(finding.dom_nearest_text || finding.selector || "n/a")}</td>
         <td>${htmlEscape(finding.reason)}</td>
         <td><button class="link-btn" type="button" onclick="openFindingDialog(${pageIndex}, ${runIndex}, ${findingIndex})">Review</button></td>
       </tr>`;
@@ -722,11 +993,11 @@ async function writeReviewHtml(outPath, results) {
         <div class="tables">
           <div>
             <h3>DOM Headings Found</h3>
-            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody>${renderFindingRows(pageIndex, domIndex, dom.findings)}</tbody></table></div>
+            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Confidence</th><th>Evidence</th><th>DOM Evidence</th><th>Reason</th><th>Dialog</th></tr></thead><tbody>${renderFindingRows(pageIndex, domIndex, dom.findings)}</tbody></table></div>
           </div>
           <div>
             <h3>AI Visual Gaps / Fake Headings</h3>
-            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Reason</th><th>Dialog</th></tr></thead><tbody>${renderFindingRows(pageIndex, gapsIndex, gaps.findings)}</tbody></table></div>
+            <div class="table-scroll"><table><thead><tr><th>Text</th><th>Level</th><th>Status</th><th>Confidence</th><th>Evidence</th><th>DOM Evidence</th><th>Reason</th><th>Dialog</th></tr></thead><tbody>${renderFindingRows(pageIndex, gapsIndex, gaps.findings)}</tbody></table></div>
           </div>
         </div>
       </section>`;
@@ -778,6 +1049,11 @@ async function writeReviewHtml(outPath, results) {
     .status-chip.row-pass { background: #dcfce7; color: #166534; }
     .status-chip.row-fail { background: #fee2e2; color: #991b1b; }
     .status-chip.row-review { background: #fef3c7; color: #92400e; }
+    .confidence-chip { display: inline-block; min-width: 42px; border-radius: 6px; padding: 2px 6px; font-size: 11px; font-weight: 800; text-align: center; }
+    .confidence-chip.row-pass { background: #dcfce7; color: #166534; }
+    .confidence-chip.row-fail { background: #fee2e2; color: #991b1b; }
+    .confidence-chip.row-review { background: #fef3c7; color: #92400e; }
+    .confidence-label { margin-top: 3px; color: #64748b; font-size: 11px; font-weight: 700; }
     .link-btn { border: 1px solid #dc2626; color: #dc2626; background: #fff; border-radius: 6px; padding: 4px 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
     .link-btn:hover { background: #fef2f2; }
     .empty { color: #94a3b8; text-align: center; }
@@ -867,6 +1143,13 @@ async function writeReviewHtml(outPath, results) {
             '<h3>' + escapeHtml(finding.text || '(no text)') + '</h3>' +
             '<p><strong>Level:</strong> ' + escapeHtml(finding.level || 'n/a') + '</p>' +
             '<p><strong>Status:</strong> ' + escapeHtml(findingStatus(finding)) + '</p>' +
+            '<p><strong>Confidence:</strong> ' + escapeHtml((finding.confidence_score ?? 'n/a') + (finding.confidence_score !== undefined ? '%' : '') + (finding.confidence_label ? ' · ' + finding.confidence_label : '')) + '</p>' +
+            '<p><strong>Evidence:</strong> ' + escapeHtml(finding.evidence_type || 'n/a') + '</p>' +
+            (finding.confidence_reason ? '<p><strong>Confidence why:</strong> ' + escapeHtml(finding.confidence_reason) + '</p>' : '') +
+            (finding.dom_reconciliation_status ? '<p><strong>DOM reconciliation:</strong> ' + escapeHtml(finding.dom_reconciliation_status) + '</p>' : '') +
+            (finding.dom_nearest_text ? '<p><strong>Nearest DOM text:</strong> ' + escapeHtml(finding.dom_nearest_text) + '</p>' : '') +
+            (finding.dom_nearest_tag ? '<p><strong>Nearest DOM element:</strong> ' + escapeHtml(finding.dom_nearest_tag + (finding.dom_nearest_role ? '[role=' + finding.dom_nearest_role + ']' : '') + (finding.dom_nearest_heading_level ? ' H' + finding.dom_nearest_heading_level : '')) + '</p>' : '') +
+            (finding.dom_nearest_selector ? '<p><strong>Nearest DOM selector:</strong> <code>' + escapeHtml(finding.dom_nearest_selector) + '</code></p>' : '') +
             (finding.issue_type ? '<p><strong>Issue:</strong> ' + escapeHtml(finding.issue_type) + '</p>' : '') +
             (finding.selector ? '<p><strong>Selector:</strong> <code>' + escapeHtml(finding.selector) + '</code></p>' : '') +
             (finding.bbox ? '<p><strong>BBox:</strong> <code>' + escapeHtml(JSON.stringify(finding.bbox)) + '</code></p>' : '') +
@@ -962,7 +1245,7 @@ async function evaluatePage(pagePath) {
       console.warn(`AI visual gap pass failed; continuing with DOM heading report. ${error.message}`);
     }
   }
-  const gapRows = parseFirstJsonArray(gapRaw);
+  const gapRows = await reconcileVisualFindingsWithDom(page, parseFirstJsonArray(gapRaw));
 
   await highlightV1(page, domRows);
   const domHighlightedImage = `${pageId}_dom_headings_highlighted.png`;
